@@ -1,0 +1,291 @@
+\documentclass[11pt,oneside]{article}
+
+
+
+\usepackage[cp1250]{inputenc}
+\usepackage{polski}
+\usepackage{indentfirst} %wcienia od pierwszego akapitu
+\usepackage{amsfonts}    %czcionki np funkcja do pogrubienie dla np N
+\usepackage{amsmath} %zawiera np begin cases
+\usepackage[dvipsnames]{xcolor} %kolory dvipsnames wiecej kolorów
+\usepackage{graphicx} %np includeggraphics do obrazkow
+\usepackage{caption} %np caption czyli podpisy pod obrazkiem
+\usepackage{epstopdf} %np do obrazki wektorowe na pdf
+\usepackage{scrextend}
+\usepackage{geometry} %zmienia marginesy
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{multicol}
+\usepackage{listings}
+
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\R}[1]{\textcolor{red}{#1}}
+\newcommand{\G}[1]{\textcolor{OliveGreen}{#1}}
+\newcommand{\B}[1]{\textcolor{blue}{#1}}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert} 
+
+
+
+\begin{document}
+
+
+\newgeometry{margin=0.8in}
+\begin{flushright}
+\textbf{Wydzia³:} Fizyki i Informatyki Stosowanej\\
+\textbf{Kierunek:} Informatyka Stosowana\\
+\textbf{Rok:} 2020/21\\
+\textbf{Semsetr}: letni\\
+\textbf{Typ:} stacjonarne\\
+\textbf{Nr albumu:} 401984\\
+\textbf{Data:} 24.05.2021\\
+\end{flushright}
+
+
+\begin{center}
+\includegraphics[scale=0.17]{AGH}
+\\[0.3cm]
+\begin{LARGE}
+\textsf{Sprawozdanie - Laboratorium nr 11\\
+Odszumianie sygna³u przy u¿yciu FFT - splot funkcji.
+\\[1cm]}
+\end{LARGE}
+\end{center}
+
+
+\tableofcontents
+\vspace*{\fill}
+
+
+\begin{LARGE}
+\begin{flushleft}
+\textsl{opracowa³:\\
+Tomasz Szkaradek}
+\end{flushleft}
+\end{LARGE}
+
+
+
+\clearpage
+\newpage
+\restoregeometry
+\pagestyle{fancy} 
+\cfoot{\thepage\ of \pageref{LastPage}}
+\newgeometry{margin=1.28in}
+
+\section{Wstêp teoretyczny}
+\subsection{Szereg i Transformacja Fouriera}
+Szereg Fouriera - szereg pozwalaj¹cy roz³o¿yæ funkcjê okresow¹, spe³niaj¹c¹ warunki Dirichleta, na sumê funkcji trygonometrycznych.  Szeregi Fouriera zosta³y wprowadzone w 1807 roku przez Josepha Fouriera w celu rozwi¹zania równania ciep³a dla metalowej p³yty.  Dziœ maj¹ one wielkie znaczenie miêdzy innymi w fizyce, teorii drgañ oraz przetwarzaniu sygna³ów obrazu (kompresja jpeg) i dŸwiêku (kompresja mp3).\\
+Natomiast transformacja Fouriera przetwarza funkcjê z danej przestrzeni w ten sposób, ¿e
+wyeksponowane s¹ jej w³asnoœci okresowe i czêstotliwoœciowe.
+Transformacja ta jest podstawowym narzêdziem analizy harmonicznej i
+teorii analizy i przetwarzania sygna³u. Jako, ¿e jest to narzêdzie gwarantuj¹ce dok³adnoœæ i
+bezstratnoœæ przekszta³cenia, mo¿na nie tylko wyznaczaæ sam¹ transformatê funkcji, ale
+równie¿ transformatê odwrotn¹, z równie dok³adnym wynikiem.
+Jeœli funkcja $f(x)$ jest okresowa mo¿emy j¹ rozwin¹æ w Szereg Fouriera postaci:
+\begin{equation}
+\begin{array}{c}
+f(x) = \frac{a_0}{2} + \displaystyle \sum _{k=1}^{\infty}(a_k cos(kx) + b_k sin(kx)) \\ \\
+a_k = \frac{1}{\pi} \int_{-\pi}^{\pi} f(t) cos(kt) dt \\ \\ 
+b_k = \frac{1}{\pi} \int_{-\pi}^{\pi} f(t) sin(kt) dt
+\end{array}
+\end{equation}
+Funkcjê mo¿emy te¿ zapisaæ w postaci Zespolonego Szeregu Fouriera:
+\begin{equation}
+\begin{array}{c}
+f(x) \sim \displaystyle \sum _{k=-\infty}^{\infty} \hat{f}(x) e^{Ikx}\\ \\
+\hat{f}(x) = \frac{1}{2\pi} \int_{-\pi}^{\pi} f(t) e^{-Ikt} dt
+\end{array}
+\end{equation}
+Niech $x_0, \cdots , x_{N-1}$ bêd¹ liczbami zespolonymi, wtedy dyskretna transformata Fouriera (DFT) jest okreœlona wzorem
+\begin{equation}
+X_k = \displaystyle \sum_{n=0}^{N-1}x_nexp(\dfrac{2\pi i}{N}nk), \quad k=0,\cdots,N-1
+\end{equation}
+gdzie \\
+i – jednostka urojona, \\
+k – numer harmonicznej, \\
+n – numer próbki sygna³u, \\
+$x_n$ – wartoœæ próbki sygna³u,\\
+N – liczba próbek.
+\newpage
+\subsection{Szybka transformata Fouriera (FFT)}\
+Szybka transformacja Fouriera (FFT) to algorytm wyznaczania dyskretnej transformaty Fouriera oraz transformaty do niej odwrotnej.\\
+Algorytm ten mo¿na wykorzystaæ m.in. do cyfrowego przetwarzania sygna³ów (DSP) oraz kompresji danych audio-wideo.
+Liczenie transformaty Fouriera z definicji jest wyj¹tkowo pracoch³onne - z³o¿onoœæ obliczeniowa wynosi a¿ $O(n^2)$, gdzie algorytmy szybkiej transformacji Fouriera, opieraj¹ce siê w znakomitej wiêkszoœci na dzieleniu transformaty na mniejsze (zgodnie z regu³¹ “dziel i zwyciê¿aj”) potrafi¹ sprowadziæ
+z³o¿onoœæ do poziomu $O(nlog(n))$, co jest niema³¹ ró¿nic¹ przy przetwarzaniu obszernych danych. G³ównie dziêki wydajnoœci, jak¹ siê charakteryzuje FFT, zosta³a uznana za jeden z
+najwa¿niejszych algorytmów numerycznych opracowanych w XX wieku.
+Jest to zagadnienie wysoce istotne, do tego stopnia, ¿e nadal trwaj¹ próby osi¹gniêcia ni¿szej z³o¿onoœci obliczeniowej, by jeszcze bardziej usprawniæ ten algorytm.\\
+Na tych laboratoriach zajêliœmy siê jednak, odszumianiem sygna³u przy u¿yciu FFT, co jest kolejnym z zastosowañ tego narzêdzia.
+\subsection{Rozk³ad normalny, rozk³ad Gaussa}
+Rozk³ad normalny, rozk³ad Gaussa to jeden z najwa¿niejszych rozk³adów prawdopodobieñstwa, odgrywaj¹cy wa¿n¹ rolê w statystyce. Wykres funkcji prawdopodobieñstwa tego rozk³adu jest krzyw¹ w kszta³cie dzwonu (tak zwan¹ krzyw¹ dzwonow¹).\\
+Przyczyn¹ jego znaczenia jest czêstoœæ wystêpowania w naturze. Jeœli jakaœ wielkoœæ jest sum¹ lub œredni¹ bardzo wielu drobnych losowych czynników, to niezale¿nie od rozk³adu ka¿dego z tych czynników jej rozk³ad bêdzie zbli¿ony do normalnego (centralne twierdzenie graniczne) - dlatego mo¿na go bardzo czêsto zaobserwowaæ w danych. Ponadto rozk³ad normalny ma interesuj¹ce w³aœciwoœci matematyczne, dziêki którym oparte na nim metody statystyczne s¹ proste obliczeniowo. Funkcja gêstoœci prawdopodobieñstwa rozk³adu normalnego jest przyk³adem funkcji Gaussa. Dana jest ona wzorem:\\
+\begin{align}
+f_{\mu,\sigma}(x) =\dfrac{1}{\sigma\sqrt{2 \pi} } exp ^{(\dfrac{-(x-\sigma)^2}{2 \sigma ^2})}
+\end{align} 
+gdzie\\
+$\mu$ to œrednia \\
+$\sigma$ to odchylenie standardowe \\
+$\sigma ^{2}$ to wariancja \\ 
+Fakt, i¿ zmienna losowa X ma rozk³ad normalny z wartoœci¹ oczekiwan¹ $\mu$  i wariancj¹ $\sigma ^{2}$ zapisuje siê czêsto $X \sim N(\mu ,\sigma)$.
+Jeœli $\mu$=0 i $\sigma=1$ to rozk³ad ten nazywa siê standardowym rozk³adem normalnym, jego funkcja gêstoœci opisana jest wzorem:
+\begin{align}
+\phi_{0,1}(x)= \phi(x)=\dfrac{1}{\sqrt{2 \pi }} exp ^{(\dfrac{-x^2}{2})}
+\end{align}
+
+\section{Zadanie do wykonania}
+Naszym zadaniem w trakcie laboratoriów by³o zastosowanie algorytmu FFT do odszumiania sygna³u.
+Sygna³ okresowy, niezaszumiony, mia³ postaæ:
+\begin{align}
+f_0(t) = sin(1 \cdot \omega t) + sin(2 \cdot \omega t) + sin(3 \cdot \omega t)
+\end{align}
+gdzie i = $0, 1, \cdots , N_k$
+natomiast $N_k$ = $2^k$ iloœæ wygenerowanych próbek sygna³u.\\
+k = 8, 10, 12\\
+$\omega$ = $\dfrac{2 \pi}{T}$ - pulsacja, \\
+T - okres\\
+Sygna³ zaszumiony mia³ byæ wygenerowany w nastêpuj¹cy sposób. 
+\begin{align}
+f(t) = f(t)+ \Delta
+\end{align}
+$\Delta$ jest liczb¹ pseudolosow¹ z zakresu [-1/2, 1/2] jest wyznaczana dla ka¿dego indeksu i z osobna.\\
+Jako funkcjê wagow¹ przyjmiemy funkcje gaussowsk¹:
+\begin{align}
+g(t)=\dfrac{1}{\sigma \sqrt{2 \pi }} exp ^{(\dfrac{-t^2}{2 \sigma ^2})}
+\end{align}
+Splot funkcji zdefiniowany jest jako:
+\begin{align}
+(f*g)(t)=\int_{-\infty}^{\infty} f(\tau)(t-\tau)
+\end{align}
+Przyjmuj¹c f(t) jako sygna³ a funkcjê g(t) jako wagê, to splot obu funkcji mo¿na potraktowaæ
+jako uœrednienie funkcji f pewn¹ ustalon¹ funkcj¹ wagow¹ g. Fakt ten zostanie wykorzystany
+do wyg³adzenia zaszumionego sygna³u. W tym celu pos³u¿ymy siê szybk¹ transformacj¹ Fouriera:
+\begin{align}
+FFT\{f(t)*g(t)\} = FFT\{f\} \cdot FFT\{g\}= f(k) \cdot g(k)
+\end{align}
+\begin{align}
+f*g = FFT^{-1}\{f(k) \cdot g(k)\}
+\end{align}
+Poniewa¿ bêdziemy operowaæ dla chwil czasowych t $\in$ [0, 3T] wiêc funkcja g(t) bêdzie tylko ”po³ówk¹”
+pe³nej funkcji gaussowskiej (poniewa¿ jej œrodek wypada w t = 0. Dlatego w obliczeniach musimy dodaæ
+drug¹ ”po³ówkê”. Licz¹c $g_1(k)$ stosujemy wzór:\\
+$g_1(k) = FFT{g(t>0)}$\\
+Natomiast licz¹c $g_2(k)$ musimy zmieniæ znak przy t g(t) = g(-t) ze wzglêdu na symetriê:\\
+$g_2(k) = FFT{g(t < 0)}$
+\newpage
+Przyjmujemy parametry: \\
+$N_k$ = $2^k$, k = 8, 10, 12 - liczba wêz³ów, \\
+T = 1.0, \\
+$t_{max}$ = 3T - maksymalny okres czasu trwania sygna³u,\\ 
+dt = $\dfrac{t_{max}}{N_k}$ - krok czasowy,\\
+$\sigma$ = $\dfrac{T}{20}$\\
+Tworzymy pêtlê zewnêtrzn¹ po k = 8, 10, 12, wyznaczamy w niej $N_k$, i tworzymy tablice z wartoœciami dla $f_0$ oraz f (o d³ugoœci $N_k$):\\
+Pierwszym naszym zadaniem by³o odpowiednie wype³nienie tablic wartoœciami, policzenie kolejnych transformat i transformaty odwrotnej:\\
+\begin{align}
+f_k=FFT\{f\},\quad g_1(k)=FFT\{g_1\},\quad g_2(k)=FFT\{g_2\}
+\end{align}
+a nastêpnie wyznaczenie transformaty splotu\\
+\begin{align}
+(f_k(g_1(k)+g_2(k))
+\end{align}
+Po tym kroku nadpisaliœmy tablicê f transformat¹ splotu, a nastêpnie obliczyliœmy nastêpuj¹c¹ transformatê odwrotn¹:\\
+\begin{align}
+FFT^{-1}\{f(k)\}
+\end{align}
+uzyskuj¹c w ten sposób w tablicy f wyg³adzon¹ funkcjê f(t)\\
+PóŸniej dla tablicy f musimy znaleŸæ element o maksymalnym module $f_{max}$ a nastêpnie z jego pomoc¹ znormalizowaæ wartoœci w tablicy f:\\
+\begin{align}
+f \cdot \dfrac{2.5}{f_{max}}
+\end{align}
+Na sam koniec nanosimy nasze wartoœci na wykres to jest funkcja $f_0$ niezaburzona wartoœci funkcji f zaszumion¹ oraz wartoœci dla  splotu 
+\begin{align}
+f*g
+\end{align}
+\newpage
+\section{Wyniki}
+Ca³y program zosta³ napisany w jêzyku Python.
+Za pomoc¹ funkcji bibliotecznej matplotlib wyrysowaliœmy wykresy. Zosta³y one umieszczone poni¿ej na których widaæ, ¿e wraz ze wzrostem liczby wêz³ów zwiêksza siê dok³adnoœæ odszumionej funkcji. Transformaty Fouriera liczyliœmy za pomoc¹ funkcji bibliotecznej fft() oraz ifft()
+\begin{figure}[ht]
+\begin{center}
+\begin{subfigure}{1.05\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_1}  
+  \label{fig:sub-first}
+  \caption{Wykres dla funkcji $f_0(t) = sin(1 \cdot \omega t) + sin(2 \cdot \omega t) + sin(3 \cdot \omega t)$}
+\end{subfigure}
+\end{center}
+\end{figure}
+\newpage
+\newgeometry{margin=0.3in}
+\begin{figure}[ht]
+\begin{center}
+\begin{subfigure}{.9\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_2}  
+  \label{fig:sub-first}
+  \caption{Wykres dla funkcji $f_0(t) = sin(1 \cdot \omega t) + sin(2 \cdot \omega t) + sin(3 \cdot \omega t)$}
+\end{subfigure}
+\end{center}
+\end{figure}
+\begin{figure}[ht]
+\begin{center}
+\begin{subfigure}{.9\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_3}  
+  \label{fig:sub-first}
+  \caption{Wykres dla funkcji $f_0(t) = sin(1 \cdot \omega t) + sin(2 \cdot \omega t) + sin(3 \cdot \omega t)$}
+\end{subfigure}
+\end{center}
+\end{figure}
+\newgeometry{margin=1.28in}
+
+\section{Podsumowanie}
+Podsumowuj¹c mo¿na powiedzieæ ¿e Szybka Transformacja Fouriera pozwoli³a na dok³adne i szybkie przybli¿enie funkcji zaszumionej. Dla wiêkszej liczby wêz³ów przybli¿enie to by³o jeszcze bardziej dok³adne.
+Szybka Transformacja Fouriera jest narzêdziem stosowanym w wielu wa¿nych dziedzinach nauki i techniki. Jak zosta³o zaprezentowane powy¿ej, umo¿liwia miêdzy innymi szybkie i
+stosunkowo dok³adne odszumianie sygna³u wejœciowego. Na podstawie zamieszczonych w sprawozdaniu rysunków, stwierdziliœmy, ¿e zbyt ma³a iloœæ wêz³ów (zmniejszenie czêstoœci próbkowania) indukuje s³ab¹ jakoœæ odszumiania, wyg³adzania sygna³u. Niestety w ¿adnym
+z przedstawionych przypadków, niezale¿nie od iloœci wêz³ów, funkcja uzyskana w wyniku odszumienia nie stanowi³a "ca³kowicie" wiernego przybli¿enia funkcji rzeczywistej (niezaszumionego
+sygna³u) - nie dla ka¿dego momentu czasu wartoœci tych funkcji by³y sobie równe. \\
+Przyczyny takiego stanu rzeczy mo¿na szukaæ w parametrze (odchyleniu standardowym) ze wzoru. Jest on stanowczo za wielki, zmiana jego wartoœci na mniejsz¹ skutkuje lepsz¹ jakoœci¹ wyników.\\
+\begin{figure}[ht]
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_4}  
+  \label{fig:sub-first}
+  \caption{Wykres dla $\sigma=\dfrac{T}{10}$}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_5}  
+  \label{fig:sub-first}
+  \caption{Wykres dla $\sigma=\dfrac{T}{100}$}
+\end{subfigure}
+\caption{Porównanie dzia³ania programu dla ró¿nych wartoœci $\sigma$ Wykresy dla funkcji $f_0(t) = sin(1 \cdot \omega t) + sin(2 \cdot \omega t) + sin(3 \cdot \omega t)$}
+\end{figure}\\
+Dziêki zastosowaniu w naszym programie algorytmu bazuj¹cego na metodzie "dziel i zwyciê¿aj" (tj. fft), która ogranicza czas obliczeñ do $O(n log(n))$ mo¿emy powiedzieæ i¿ jest to doœc szybka metoda.\\
+Jak mo¿na zauwa¿yæ z wykresu 1 odszumiona funkcja ju¿ dla najmniejszego sprawdzanego k "wmiare" dok³adnie odzwierciedla funkcjê pierwotn¹, przez co zwiêkszenie k nie zwiêksza diametralnie
+dok³adnoœci pomiêdzy k = 10, a k = 12.\\ 
+Bior¹c pod uwagê dok³adnoœæ otrzymanych wyników oraz krótki czas obliczeñ mo¿na wysnuæ wniosek o skutecznoœci wybranej metody w rozwi¹zywaniu postawionego problemu.
+\newpage
+\section{Literatura}
+\begin{description}
+\item {[1]} Tomasz Chwiej, Szybka transformacja Fouriera
+\\
+\textit{http://home.agh.edu.pl/~chwiej/mn/fft\_1819.pdf}
+\item {[2]} Wikipedia, Rozk³ad normalny\\
+\textit{https://pl.wikipedia.org/wiki/Rozk\%C5\%82ad\_normalny}
+\item {[2]} Wikipedia, Transformacja Fouriera\\
+\textit{https://pl.wikipedia.org/wiki/Transformacja\_Fouriera}
+\end{description}
+
+
+\end{document}

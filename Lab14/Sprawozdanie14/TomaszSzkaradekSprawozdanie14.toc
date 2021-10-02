@@ -1,0 +1,11 @@
+\contentsline {section}{\numberline {1}Wst\k ep teoretyczny}{2}%
+\contentsline {subsection}{\numberline {1.1}Rozk\IeC {\l }ad prawdopodobie\'nstwa}{2}%
+\contentsline {subsection}{\numberline {1.2}Rozk\IeC {\l }ad tr\'ojk\k atny}{3}%
+\contentsline {subsection}{\numberline {1.3}Generator mieszany}{4}%
+\contentsline {subsection}{\numberline {1.4}Test $\chi ^2$}{4}%
+\contentsline {section}{\numberline {2}Zadanie do wykonania}{5}%
+\contentsline {subsection}{\numberline {2.1}Rozk\IeC {\l }ad jednorodny}{5}%
+\contentsline {subsection}{\numberline {2.2}Rozk\IeC {\l }ad tr\'ojk\k atny}{5}%
+\contentsline {section}{\numberline {3}Wyniki}{6}%
+\contentsline {section}{\numberline {4}Podsumowanie}{8}%
+\contentsline {section}{\numberline {5}Literatura}{9}%

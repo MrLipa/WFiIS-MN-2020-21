@@ -1,0 +1,291 @@
+\documentclass[11pt,oneside]{article}
+
+
+
+\usepackage[cp1250]{inputenc}
+\usepackage{polski}
+\usepackage{indentfirst} %wcienia od pierwszego akapitu
+\usepackage{amsfonts}    %czcionki np funkcja do pogrubienie dla np N
+\usepackage{amsmath} %zawiera np begin cases
+\usepackage[dvipsnames]{xcolor} %kolory dvipsnames wiecej kolorów
+\usepackage{graphicx} %np includeggraphics do obrazkow
+\usepackage{caption} %np caption czyli podpisy pod obrazkiem
+\usepackage{epstopdf} %np do obrazki wektorowe na pdf
+\usepackage{scrextend}
+\usepackage{geometry} %zmienia marginesy
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{multicol}
+\usepackage{listings}
+
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\R}[1]{\textcolor{red}{#1}}
+\newcommand{\G}[1]{\textcolor{OliveGreen}{#1}}
+\newcommand{\B}[1]{\textcolor{blue}{#1}}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert} 
+
+
+
+\begin{document}
+
+
+\newgeometry{margin=0.7in}
+\begin{flushright}
+\textbf{Wydzia³:} Fizyki i Informatyki Stosowanej\\
+\textbf{Kierunek:} Informatyka Stosowana\\
+\textbf{Rok:} 2020/21\\
+\textbf{Semsetr}: letni\\
+\textbf{Typ:} stacjonarne\\
+\textbf{Nr albumu:} 401984\\
+\textbf{Data:} 07.06.2021\\
+\end{flushright}
+
+
+\begin{center}
+\includegraphics[scale=0.17]{AGH}
+\\[0.3cm]
+\begin{LARGE}
+\textsf{Sprawozdanie - Laboratorium nr 14\\
+Generowanie ci¹gu liczb pseudolosowych o rozk³adzie jednorodnym i
+trójk¹tnym.
+\\[1cm]}
+\end{LARGE}
+\end{center}
+
+
+\tableofcontents
+\vspace*{\fill}
+
+
+\begin{LARGE}
+\begin{flushleft}
+\textsl{opracowa³:\\
+Tomasz Szkaradek}
+\end{flushleft}
+\end{LARGE}
+
+
+
+\clearpage
+\newpage
+\restoregeometry
+\pagestyle{fancy} 
+\cfoot{\thepage\ of \pageref{LastPage}}
+\newgeometry{margin=1.12in}
+
+\section{Wstêp teoretyczny}
+\subsection{Rozk³ad prawdopodobieñstwa}
+Rozk³ad prawdopodobieñstwa – miara probabilistyczna okreœlona na zbiorze wartoœci pewnej zmiennej losowej (wektora losowego), przypisuj¹ca prawdopodobieñstwa wartoœciom tej zmiennej. Formalnie rozk³ad prawdopodobieñstwa mo¿na rozpatrywaæ bez odwo³ania siê do zmiennych losowych.
+\begin{figure}[ht]
+  \includegraphics[width=1\linewidth]{Figure_1}  
+  \label{fig:sub-first}
+\caption{
+Wybrane rozk³ady gêstoœci prawdopodobieñstwa:\\
+$f_{N}(x)$ – rozk³ad normalny,\\
+$f_{E}(x)$ – rozk³ad wyk³adniczy,\\
+$f_{R}(x)$ – rozk³ad jednostajny,\\
+$f_{T}(x)$ – rozk³ad trójk¹tny,\\
+$f_{D}(x)$ – rozk³ad delty Diraca dla zmiennej pewne\\
+}
+\end{figure}
+\subsection{Rozk³ad trójk¹tny}
+Rozk³ad trójk¹tny - ten typ rozk³adu jest u¿yteczny do opisu zmiennych losowych o sta³ej gêstoœci prawdopodobieñstwa w obrêbie okreœlonego przedzia³u
+Funkcjê gêstoœci prawdopodobieñstwa dla rozk³adu trójk¹tnego $T(\mu, \Delta)$ definiujemy nastêpuj¹co:
+\begin{equation}
+f(x; \mu, \Delta) = \dfrac{-|x-\mu |}{\Delta^2}+\dfrac{1}{\Delta}
+\end{equation}
+gdzie: \\
+$\mu$ to œrodek rozk³adu,\\
+$\Delta$ to jego szerokoœæ.\\
+\begin{figure}[ht]
+  \begin{subfigure}{0.52\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_3}  
+  \label{fig:sub-first}
+	\end{subfigure}
+	\begin{subfigure}{0.52\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_4}  
+  \label{fig:sub-first}
+\end{subfigure}
+\end{figure}\\
+Jeœli $\xi_1 \in U(0, 1)$ i $\xi_2 \in U(0, 1)$ to zmienn¹ o rozk³adzie trójk¹tnym oraz parametrach $\mu$ i $\Delta$
+generujemy stosuj¹c formu³ê
+\begin{equation}
+x=\mu +(\xi_1 +\xi_2-1)\cdot \Delta
+\end{equation}
+Dystrybuanta tego rozk³adu jest nastêpuj¹ca
+\begin{equation}
+F(x) =
+  \begin{cases}
+    -\dfrac{1}{\Delta^2}(\dfrac{-x^2}{2} + \mu x) + \dfrac{x}{\Delta} - ( -\dfrac{1}{\Delta^2} \cdot (\dfrac{-(\mu - \Delta)^2}{2}  + \mu (\mu - \Delta) ) + \dfrac{( \mu - \delta)}{\delta}) \quad x < \mu \\
+    -\dfrac{1}{\delta^2} \cdot (\dfrac{x^2}{2} - \mu x) + \dfrac{x}{\Delta} - (-\dfrac{1}{\Delta^2}(\dfrac{\mu^2}{2}- \mu^2)  + \dfrac{\mu}{\Delta}) + \dfrac{1}{2} \quad x \geqslant \mu \\
+  \end{cases}
+\end{equation}
+
+\newpage
+\subsection{Generator mieszany}
+Najbardziej znanym sposobem generowania liczb pseudolosowych jest metoda opracowana przez Lehmer'a w 1951 zwana liniowym generatorem kongruentnym. Polega ona na obliczaniu kolejnych liczb pseudolosowych: $x_1, x_2, \cdots x_n$ o zakresie wartoœci $0, \cdots, m-1$.Z generatora opracowanego przez Lehmer'a mo¿emy otrzymaæ generator mieszany który wyra¿a siê wzorem:
+\begin{equation}
+x_{i+1} = ( a\cdot x_i + c )mod m
+\end{equation}
+gdzie:\\
+$x_i$ kolejne pseudolosowe wartoœci\\
+$x_1$ jest pocz¹tkow¹ wartoœci¹, któr¹ inicjuje siê generator - tzw. ziarnem\\
+a, c, m parametry generatora\\
+\subsection{Test $\chi^2$}
+Test zgodnoœci $\chi^2$ jest to najczêœciej stosowany test nieparametryczny. S³u¿y on do weryfikowania hipotezy, ¿e obserwowana cecha X w zbiorowoœci generalnej ma okreœlony typ rozk³adu, np. dwumianowy, Poissona, normalny itd.
+Postaæ statystyki sprawdzaj¹cej hipotezy $H_0$
+\begin{equation}
+\chi^2=\sum^K_{n=1}\dfrac{(n_i-n*p_i)^2}{n*p_i}
+\end{equation}
+gdzie:
+$n_i$ to iloœæ liczb znajduj¹cych siê w podprzedziale o indeksie i,\\
+$p_i$ to prawdopodobieñstwo teoretyczne ¿e zmienna losowa X znajdzie siê w i-tym przedziale\\
+\begin{equation}
+p_i = F(x_i,max) - F(x_i,min)
+\end{equation}
+F(X) jest wartoœci¹ dystrybuanty(dla np. rozk³adu trójk¹tnego obliczamy j¹ zgodnie ze wzorem [3])\\
+Liczbê stopni swobody okreœlamy jako $\upsilon = K - r - 1$\\
+gdzie: \\
+K jest liczb¹ podprzedzia³ów,\\
+r = 2 jest liczb¹ parametrów testowanego rozk³adu ($\sigma$ i $\Delta$)\\
+\newpage
+\section{Zadanie do wykonania}
+\subsection{Rozk³ad jednorodny}
+Naszym pierwszym zadaniem w trakcie laboratoriów by³o napisaæ generator mieszany dla rozk³adu jednorodnego korzystaj¹c z wzoru podanego na wstêpie teoretycznym musimy wylosowaæ $n = 10^4$ liczby pseudolosowych za pomoc¹ naszego programu, startuj¹c od liczby $x_0=10$
+\begin{equation}
+x_{i+1} = ( a\cdot x_i + c )mod m
+\end{equation}
+o parametrach:
+\begin{enumerate}
+\item
+$a = 123$\\
+$c=1$\\
+$m = 2^{15}$
+\item
+$a = 69069$\\
+$c=1$\\
+$m = 2^{32}$
+\end{enumerate}
+Nastêpnie dla obu tych przypadków rysujemy:\\
+Wykres zale¿noœci  $X_{i+1}=f(X_i)$\\
+gdzie $X_i=x_1/(m+1)$ z warunku normalizacji do rozk³adu $U(0,1)$\\
+Histogram (dla K = 12 podprzedzia³ów) rozk³adu gêstoœci prawdopodobieñstwa dla $n = 10^4$ liczb pseudolosowych o rozk³adzie równomiernym (oba przypadki).\\
+Na sam koniec zadania 1 obliczamy wartoœci $\mu$, $\sigma$ i porównujemy z teoretycznymi.
+\subsection{Rozk³ad trójk¹tny}
+W nastêpnym zadaniu bêdziemy siê zajmowaæ rozk³adem trójk¹tnym:
+Na samym pocz¹tku generujemy $n=10^3$ liczby pseudolosowych wed³ug wzoru podanego we wstêpie teoretycznym tj,
+\begin{equation}
+x=\mu +(\xi_1 +\xi_2-1)\cdot \Delta
+\end{equation}
+dla parametrów $\Delta=3$ $\sigma=4$\\
+Nastêpnie dzielimy nasz przedzia³ $[\mu-\Delta ,\mu+\Delta]$ w którym znajduj¹ siê nasze liczby na K=10 równych podprzedzia³ów a nastêpnie zliczamy ile liczb wpad³o do ka¿dego z tych podprzedzia³ów.
+\newpage
+Dla rozk³adu trójk¹tnego przeprowadzamy test $\chi^2$ czyli okreœlamy wartoœæ statystyki testowej
+\begin{equation}
+\chi^2=\sum^K_{n=1}\dfrac{(n_i-n*p_i)^2}{n*p_i}
+\end{equation}
+W wykonujemy wykres gêstoœci naszego prawdopodobieñstwa oraz histogram pokazuj¹cy wartoœci $\dfrac{n_i}{n}$ oraz $p_i$ dla ka¿dego z podprzedzia³ów. \\
+Nastêpnie testujemy hipotezê $H_0$ czy wygenerowany rozk³ad jest rozk³adem $T(\mu, \Delta)$ wobec $H_1$ ¿e nie jest to prawd¹. \\
+Korzystaj¹c z odpowiednich tabel statystycznych proszê sprawdziæ czy nasza hipoteza jest prawdziwa na poziomie istotnoœci $\alpha = 0.05$ ($\alpha$ jest prawdopodobieñstwem pierwszego rodzaju czyli prawdopodobieñstwem odrzucenia hipotezy $H_0$ gdy ta jest prawdziwa). W tym celu definiujemy obszar krytyczny testu:
+\begin{equation}
+\Phi={X: \chi^2(X)> \epsilon}
+\end{equation}
+gdzie: $X = {x_1, x_2, \cdots , x_n}$ jest ci¹giem liczb pseudolosowych, 
+$\chi^2(X)$ wartoœci¹ statystyki dla danego ci¹gu X, $\epsilon$ jest poziomem krytycznym danego rozk³adu dla okreœlonej liczby stopni
+swobody (okreœlone w wstêpie teoretycznym) i za³o¿onego poziomu istotnoœci (nale¿y odczytaæ z tabel statystycznych). Jeœli $\chi^2<\epsilon$ to stwierdzamy ¿e dla zadanego poziomu
+istotnoœci nie ma podstaw do odrzucenia hipotezy $H_0$.
+
+\section{Wyniki}
+Ca³y program zosta³ napisany w jêzyku Python.
+\begin{figure}[ht]
+\begin{subfigure}{0.5\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_5}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{0.5\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_6}  
+  \label{fig:sub-first}
+\end{subfigure}
+\caption{Wartoœci $\Delta_1=0.498$,  $\sigma_1=0.287$}
+\end{figure}
+\newpage
+\newgeometry{margin=.2in}
+\begin{figure}[ht]
+\begin{subfigure}{0.5\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_7}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{0.5\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_8}  
+  \label{fig:sub-first}
+\end{subfigure}
+\caption{Wartoœci $\Delta_2=0.503$,  $\sigma_2=0.288$}
+\end{figure}
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[scale=0.8]{Figure_9}  
+\label{fig:sub-first}
+  \caption{Histogram dla rozk³adu trójk¹tnego}
+\end{figure}
+\newgeometry{margin=1.12in}
+\section{Podsumowanie}
+Podsumowuj¹c mo¿na powiedzieæ ¿e nie jesteœmy w stanie wygenerowaæ ci¹gu liczb prawdziwie losowych z wykorzystaniem programów komputerowych wygenerowane liczby bêd¹ pseudolosowe. Pomiêdzy kolejno wygenerowanymi liczbami zawsze bêdzie istnia³a jakaœ zale¿noœæ, jednak dziêki skorzystaniu z odpowiednich parametrów i funkcji bêdzie ona bardzo
+trudna do ustalenia i w konsekwencji ci¹g liczbowy bêdzie trudny do odró¿nienia od prawdziwie losowych liczb.\\
+Mo¿emy to wywnioskowaæ na podstawie wygenerowanych wykresów 3 oraz 4 na których widaæ i¿ liczby nie pokrywaj¹ w pe³ni okreœlonego obszaru.\\
+Generator mieszany teoretycznie generuje liczby o rozk³adzie jednorodnym, jednak dla ma³ej liczby wylosowanych punktów pojawiaj¹ siê pewne odchylenia w histogramach jednak bêd¹ siê one zmniejszaæ wraz z liczb¹
+generowanych punktów.
+Wyniki obliczonych wartoœci $\Delta$ oraz $\sigma$ w obu przypadkach nieznacznie odbiega³y(dla ustalonej dok³adnoœci $\varepsilon_1$ i $\varepsilon_2$) od wartoœci teoretycznych tj.
+\begin{equation}
+\Delta=\dfrac{0+1}{2}=0.5
+\end{equation}
+\begin{equation}
+\sigma=\frac{(1-0)}{\sqrt{12}}=0,289
+\end{equation} 
+$$|\Delta-\Delta_1|=|0.5-0.498|<\varepsilon_1$$
+$$|\sigma-\sigma_1|=|0,289-0.287|<\varepsilon_2$$
+$$|\Delta-\Delta_2|=|0.5-0.503|<\varepsilon_1$$
+$$|\sigma-\sigma_2|=|0,289-0.288|<\varepsilon_2$$
+co œwiadczy o poprawnoœci zaimplementowanych generatorów które daj¹ poprawne rezultaty i jak najbardziej spe³niaj¹ swoje zadanie.\\
+Podsumowuj¹c, zalet¹ generatorów liniowych jest prosta implementacja i szybkoœæ dzia³ania. Przy odpowiednim doborze
+parametrów oraz zmiennym ziarnie mo¿na uzyskaæ liczby, które wygl¹daj¹ na losowe i na pierwszy rzut oka nie maj¹ widocznych
+zale¿noœci miêdzy kolejnymi wartoœciami. Dalej jednak uk³adaj¹ siê na hiperp³aszczyznach i aby tego unikn¹æ, nale¿a³oby
+zastosowaæ inne generatory.
+Z otrzymanych przez nas wyników z 2 zadania to jest rozk³ad trójk¹tny mo¿emy stwierdziæ iz wylosowane przez nas wartoœci wmiare dok³adnie oddaj¹ rozk³ad trójk¹tny co tylko potwierdza wykres 5 w którym kolejne wartoœci $n_i/N$ uk³adaj¹ siê w trójk¹t i nie odbiegaj¹ stanowczo od teoretycznych (tj.czerwona linia).
+Natomiast wykonany przez nas test $\chi^2$ zdaje siê to tylko potwierdzaæ prawdziwoœæ naszych wyników
+\begin{equation}
+\chi^2=\sum^K_{n=1}\dfrac{(n_i-n*p_i)^2}{n*p_i}=5.63
+\end{equation}
+Odczytuj¹c z tablic wartoœæ $\epsilon=20,28$ poziomu krytycznego naszego rozk³adu\\
+dla $K=10$,  $r=2 \Longrightarrow \nu=K-r-1$ na poziomie istotnoœci
+$\alpha = 0.05$
+Mo¿emy stwierdziæ ¿e dla zadanego poziomu
+istotnoœci nie ma podstaw do odrzucenia hipotezy $H_0$ (wygenerowany rozk³ad jest rozk³adem $T(\mu, \Delta)$) poniewa¿:
+\begin{equation}
+\chi^2<\epsilon \quad \Rightarrow \quad 5.63<20,28
+\end{equation}
+
+\section{Literatura}
+\begin{description}
+\item {[1]} Tomasz Chwiej, Generatory liczb pseudolosowych
+\\
+\textit{http://home.agh.edu.pl/~chwiej/mn/generatory\_1819.pdf}
+\item {[2]} Wikipedia, Rozk³ad prawdopodobieñstwa\\
+\textit{https://www.wikiwand.com/pl/Rozk\%C5\%82ad\_prawdopodobie\%C5\%84stwa}
+\end{description}
+
+
+\end{document}

@@ -1,0 +1,302 @@
+\documentclass[11pt,oneside]{article}
+
+
+
+\usepackage[cp1250]{inputenc}
+\usepackage{polski}
+\usepackage{indentfirst} %wcienia od pierwszego akapitu
+\usepackage{amsfonts}    %czcionki np funkcja do pogrubienie dla np N
+\usepackage{amsmath} %zawiera np begin cases
+\usepackage[dvipsnames]{xcolor} %kolory dvipsnames wiecej kolorów
+\usepackage{graphicx} %np includeggraphics do obrazkow
+\usepackage{caption} %np caption czyli podpisy pod obrazkiem
+\usepackage{epstopdf} %np do obrazki wektorowe na pdf
+\usepackage{scrextend}
+\usepackage{geometry} %zmienia marginesy
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{multicol}
+\usepackage{listings}
+
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\R}[1]{\textcolor{red}{#1}}
+\newcommand{\G}[1]{\textcolor{OliveGreen}{#1}}
+\newcommand{\B}[1]{\textcolor{blue}{#1}}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert} 
+
+
+
+\begin{document}
+
+
+\newgeometry{margin=0.8in}
+\begin{flushright}
+\textbf{Wydzia³:} Fizyki i Informatyki Stosowanej\\
+\textbf{Kierunek:} Informatyka Stosowana\\
+\textbf{Rok:} 2020/21\\
+\textbf{Semsetr}: letni\\
+\textbf{Typ:} stacjonarne\\
+\textbf{Nr albumu:} 401984\\
+\textbf{Data:} 31.05.2021\\
+\end{flushright}
+
+
+\begin{center}
+\includegraphics[scale=0.17]{AGH}
+\\[0.3cm]
+\begin{LARGE}
+\textsf{Sprawozdanie - Laboratorium nr 13\\
+Ca³kowanie numeryczne przy u¿yciu kwadratur Gaussa
+\\[1cm]}
+\end{LARGE}
+\end{center}
+
+
+\tableofcontents
+\vspace*{\fill}
+
+
+\begin{LARGE}
+\begin{flushleft}
+\textsl{opracowa³:\\
+Tomasz Szkaradek}
+\end{flushleft}
+\end{LARGE}
+
+
+
+\clearpage
+\newpage
+\restoregeometry
+\pagestyle{fancy} 
+\cfoot{\thepage\ of \pageref{LastPage}}
+\newgeometry{margin=1.28in}
+
+\section{Wstêp teoretyczny}
+\subsection{Kwadratury Gaussa}
+Rozpatrujemy kwadratury typu:
+\begin{equation}
+S(f) = \displaystyle \sum _{k=0}^N A_k f(x_k),
+\end{equation}
+których wspó³czynniki kwadratury z wag¹ $p(x)$ maj¹ postaæ:
+\begin{equation}
+A_k = \int_a ^b  p(x) \Phi_k(x) dx,
+\end{equation}
+gdzie waga $p(x)$ jest ustalona, a liczba wêz³ów wynosi $N+1$. Szukamy po³o¿enia wêz³ów oraz wspó³czynników $A_k$, tak aby rz¹d kwadratury by³ jak najwy¿szy. Taka kwadratura zwana jest kwadratur¹ Gaussa.
+\par Do wyznaczania kwadratur u¿ywa siê wielomianów ortogonalnych tzn. takich, ¿e dla ci¹gu wielomianów:
+\begin{equation}
+\{\varphi(x)\} = \{ \varphi_0(x), \varphi_1(x), . . . , \varphi_N (x)\},
+\end{equation}
+w przedziale $[a, b]$ zachodzi pomiêdzy nimi zwi¹zek:
+\begin{equation}
+\begin{array}{cc}
+(\varphi_s, \varphi_s) = \int _a ^b p(x) \varphi_r(x) \varphi_s (x) dx = 0, & r \neq s
+\end{array}
+\end{equation}
+Dla kwadratur Gaussa mo¿na wyró¿niæ 3 podstawowe twierdzenia:
+\begin{enumerate}
+\item Wielomiany ortogonalne maj¹ tylko pierwiastki rzeczywiste, le¿¹ce w przedziale $[a, b]$.
+\item Nie istnieje kwadratura Gaussa rzêdu wy¿szego ni¿ $2(N+1)$. Kwadratura Gaussa jest rzêdu $2(N+1)$ wtedy i tylko wtedy, gdy wêz³y $x_k$ s¹ pierwiastkai wielomianu $P_{n+1}(x)$.
+\item Wszystkie wspó³czynniki $A_k$ w kwadraturach Gaussa s¹ dodatnie. 
+\end{enumerate}
+Wysoki rz¹d $(2N+2)$ jest spowodowany koniecznoœci¹ ustalenia po³o¿enia $N+1$ wspólczynników kombinacji liniowej $N+1$ wielomianów. Metoda Gaussa jest zbie¿na do ka¿dej funkcji ci¹g³ej w $[a, b]$
+Nastêpnie korzystamy z to¿samoœci Christofella-Darboux:
+\begin{equation}
+\displaystyle \sum _{k=0} ^n \frac{\varphi_k(x) \varphi_k(y)}{\gamma _k} = \frac{\varphi_{n+1}(x)\varphi_n(y) - \varphi_n(x)\varphi_{n+1}(y)}{\alpha _n \gamma _n (x-y)},
+\end{equation}
+gdzie:
+\begin{equation}
+\begin{array}{c c}
+\alpha _k = \frac{\beta _{k+1}}{\beta_{k}}, & \gamma _k = \int _a ^b p(x) \varphi^2 _k(x) dx
+\end{array}
+\end{equation}
+oraz $\beta_k$ jest wspó³czynnikiem stojcym w wielomianie $\varphi_k$ przy zmiennej w najwy¿szej potêdze.
+Za y podstawiono pierwiastek wielomianu $b$-tego stopnia  - $y = d_j$ i otrzymano:
+\begin{equation}
+\displaystyle \sum _{k=0} ^n \frac{\varphi_k(x) \varphi_k(d_j)}{\gamma _k} = - \frac{\varphi_n(x)\varphi_{n+1}(d_j)}{\alpha _n \gamma _n (x-d_j)},
+\end{equation}
+a nastêpnie wykonano mno¿enie i ca³kowanie $\int dx p(x) \varphi_0(x)$, co daje:
+\begin{equation}
+\frac{\varphi_0(d_j)}{\gamma_0} \gamma_0 = - \frac{\varphi_{n+1}(d_j)}{\alpha_n\gamma_n} \int _a ^b p(x) \frac{\varphi_0(x) \varphi_n(x)}{x - d_j} dx.
+\end{equation}
+Nastêpnie korzystaj¹c z nastêpuj¹cej definicji wielomianu interpolacyjnego Lagrange'a:
+\begin{equation}
+\begin{array}{c c}
+f(x) = \displaystyle \sum _{j=0}^n f(x_j) l_j(x) & l_j (x) = \frac{\omega_n(x)}{(x - a_j)\omega_n ' (a_j)},
+\end{array}
+\end{equation}
+oraz wybranego przez nasz przypadku, ¿e $\omega_n(x) = \varphi_n(x)$, korzystamy z faktu, ¿e $\varphi_0(x) = 1$ i po przekszta³ceniach otrzymujemy wspó³czynnik $A_k$:
+\begin{equation}
+A_k = - \frac{2}{(N+1)P_{N+2}(x_k)P_{N+1}' (x_k)}
+\end{equation}
+\subsection{Kwadratura Gaussa-Laguerre'a}
+W analiza numeryczna Kwadratura Gaussa – Laguerre'a (nazwany po Carl Friedrich Gauss i Edmond Laguerre) jest rozszerzeniem Kwadratura Gaussa metoda aproksymacji wartoœci ca³ek typu:
+\begin{equation}
+\int_0 ^{+\infty }  e^{-x} f(x) dx
+\end{equation}
+\begin{equation}
+\int_0 ^{+\infty }  e^{-x} f(x) dx \approx \sum_{i=0}^n w_i(x_i)
+\end{equation}
+gdzie $x_i$ to i-ty pierwiastek Wielomian Laguerre'a $L_n(x)$ z wag¹ $w_i$
+przedzia³ ca³kowania to $(-\infty, \infty)$, a funkcja wagowa jest postaci $p(x) = e^{-x^2}$. 
+\subsection{Kwadratury Gaussa-Hermite'a}
+Kwadratury Gaussa-Hermite'a to specjalne przypadki kwadratur Gaussa gdzie przedzia³ ca³kowania to $(-\infty, \infty)$, a funkcja wagowa jest postaci $p(x) = e^{-x^2}$. Wówczas ci¹g wielomianów ortogonalnych stanowi¹ wielomiany Hermite'a:
+\begin{equation}
+H_n(x) = (-1)^n e^{x^2} \frac{d^n}{dx^n} e^{-x^2},
+\end{equation}
+dla których obowi¹zuje relacja rekurencyjna:
+\begin{equation}
+H_{n+1} = 2xH_{n} - 2nH_{n-1}.
+\end{equation}
+\newpage
+\section{Zadanie do wykonania}
+Zadaniem w trakcie laboratoriów by³o numeryczne wyznaczenie wartoœci ca³ek:\\
+Pierwsz¹ z nich musieliœmy obliczyæ numerycznie przy u¿yciu kwadratury Gaussa-Legandre’a:
+\begin{equation}
+c_1=\int_0 ^{2} \dfrac{x}{4x^2+1} dx
+\end{equation}
+przy pomocy funkcji Pythona z biblioteki numpy
+\begin{lstlisting}
+import numpy as np
+def calka_leandre(fun,a,b,n):
+    x, w = np.polynomial.legendre.leggauss(n)
+
+\end{lstlisting}
+wyznaczamy zera wielomianu Legandre’a oraz jego wspó³czynniki a nastêpnie obliczamy wartoœæ ca³ki po wczeœniejszym przeskalowaniu wektora x i w\\ (domyœlnie funkjca np.polynomial.legendre.leggauss(n) przyjmuje zakres [-1,1] )
+\begin{equation}
+c_1=\sum_{i=0}^n w_i*f(x_i)
+\end{equation}
+Kolejno obliczamy wartoœæ dok³adn¹ naszej ca³ki korzystaj¹c z rozwi¹zania analitycznego
+\begin{equation}
+c_{1,a}=\int_0 ^{2} \dfrac{x}{a^2x^2+c^2} dx=\dfrac{1}{2a^2}ln|a^2x^2+c^2|
+\end{equation}
+Na sam koniec prac zwi¹zanych z pierwsz¹ ca³k¹ rysujemy wykres:\begin{itemize}
+\item ca³kowanej funkcji
+\item $|c_1 - c_{1,a}| = f(n)$ dla wêz³ów $n=2, \cdots ,30$
+\end{itemize}
+
+Nastêpna ca³kê liczmy numerycznie przy u¿yciu kwadratury Gaussa-Laguerre’a dla k=5 a nastêpnie dla k=10:
+\begin{equation}
+c_2=\int_0 ^{\infty } x^k exp(-x) dx
+\end{equation}
+przy pomocy funkcji Pythona z biblioteki numpy
+\begin{lstlisting}
+import numpy as np
+
+x, w = np.polynomial.laguerre.laggauss(n)
+\end{lstlisting}
+wyznaczamy zera wielomianu Laguerre’a oraz jego wspó³czynniki a nastêpnie obliczamy wartoœæ ca³ki
+\begin{equation}
+c_2=\sum_{i=0}^n w_i*f(x_i)
+\end{equation}
+Kolejno obliczamy wartoœæ dok³adn¹ naszej ca³ki korzystaj¹c z rozwi¹zania analitycznego
+\begin{equation}
+c_{2,a}=\int_0 ^{\infty } x^k exp(-x) dx=k!
+\end{equation}
+Na sam koniec prac rysujemy wykres:
+\begin{itemize}
+\item ca³kowanej funkcji
+\item $|c_2 - c_{2,a}| = f(n)$ dla wêz³ów $n=2, \cdots ,30$
+\end{itemize}
+
+Ostatni¹ ca³kê liczmy numerycznie przy u¿yciu kwadratury Gaussa-Hermite’a:
+\begin{equation}
+c_3=\int_0 ^{\infty } x^k exp(-x) dx
+\end{equation}
+przy pomocy funkcji Pythona z biblioteki numpy
+\begin{lstlisting}
+import numpy as np
+
+x, w = np.polynomial.hermite.hermgauss(n)
+\end{lstlisting}
+wyznaczamy zera wielomianu Hermite’a oraz jego wspó³czynniki a nastêpnie obliczamy wartoœæ ca³ki
+\begin{equation}
+c_3=\int_{-\infty}^{-\infty}\int_{-\infty}^{-\infty} sin^2(x)sin^4(y)exp(-x^2-y^2)dxdy
+\end{equation}
+W tym przypadku za wartoœæ dok³adna przyjmujemy liczbê $c_{dok} = 0.1919832644$
+Na sam koniec prac rysujemy wykres:
+\begin{itemize}
+\item ca³kowanej funkcji
+\item $|c_3 - c_{dok}| = f(n)$ dla wêz³ów $n=2, \cdots ,30$
+\end{itemize}
+\section{Wyniki}
+Ca³y program zosta³ napisany w jêzyku Python. Umieœciliœmy obliczone dane na poni¿szych wykresach na których widzimy dok³adnoœæ ca³ki oraz wykres funkcji ca³kowanej.
+\newpage
+\newgeometry{margin=0.1in}
+\vspace*{\fill}
+\begin{figure}[ht]
+\begin{subfigure}{0.51\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_2}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{0.51\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_1}  
+  \label{fig:sub-first}
+\end{subfigure}
+\caption{Wykres funkcji(lewo) oraz jej dok³adnoœci(prawo) dla ca³ki z funkcji $\dfrac{x}{4x^2+1}$}
+\end{figure}
+\vspace*{\fill}
+\begin{figure}[ht]
+\begin{subfigure}{0.5\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_3}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{0.5\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_4}  
+  \label{fig:sub-first}
+\end{subfigure}\\
+\begin{center}
+\begin{subfigure}{0.8\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_5}  
+  \label{fig:sub-first}
+\end{subfigure}
+\end{center}
+\caption{Wykres funkcji(œrodek) oraz jej dok³adnoœci(prawo k=5, lewo k=10) dla ca³ki z funkcji $ x^k exp(-x)$}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{subfigure}{0.51\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_7}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{0.51\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_6}  
+  \label{fig:sub-first}
+\end{subfigure}
+\caption{Wykres funkcji (lewo) oraz jej dok³adnoœci (prawo) dla ca³ki z funkcji $sin^2(x)sin^4(y)exp(-x^2-y^2)$}
+\end{figure}
+\newgeometry{margin=1.28in}
+\section{Podsumowanie}
+Podsumowuj¹c mo¿na powiedzieæ ¿e wykorzystanie kwadratur Gaussa pozwala nam na dok³adne wyznaczenie wartoœci podanej ca³ki a dok³adnoœæ zale¿y od liczby wêz³ów.\\
+Ka¿da z wersji, niezale¿nie od n, zmierza³a do b³êdu wzglêdnego ca³kowania równego 0. Iloœæ wêz³ów mia³a znaczacy wp³yw na pocz¹tkowe wartoœci b³êdu przy ma³ych n.\\
+Dok³adnoœæ obliczonej ca³ki bardzo szybko wzrasta mo¿emy to zauwa¿yæ na przyk³adnie z Rysunek 1 oraz 2 na którym widzimy. ¿e ju¿ dla 5 wêz³ów
+dok³adnoœæ jest rzêdu 6 znaków po przecinku.\\
+Dla przyk³adu 2 (k=5) wystarcz¹ niespe³na 3 wêz³y aby modu³ spad³ z $\approx100$ do 0. Podobne zjawisko wyst¹pi³o w drugim przypadku.\\
+Na podstawie wykresów widzimy, ¿e metoda Legendre’a szybciej ni¿ metoda Laguerre’a zbiega do dok³adnej wartoœci.\\
+Dla przyk³adu 3 z ca³k¹ podwójna widzimy i¿ dok³adnoœæ uzyskujemy ju¿ po 2 wêz³ach jednak dla wêz³ów $[1,9]/\{4\}$ nie jest ona zadowalaj¹ca dopiero dla $>9$ metoda osi¹ga po¿¹dan¹ dok³adnoœæ .\\
+Ca³kowanie przy u¿yciu kwadratur Gaussa okaza³o siê bardzo skuteczne w tym przypadku. Niezale¿nie od
+wartoœci n wyniki osi¹gnê³y zbie¿noœæ dla podobnej wartoœci.
+
+\section{Literatura}
+\begin{description}
+\item {[1]} Tomasz Chwiej, Ca³kowanie numeryczne przy u¿yciu kwadratur
+\\
+\textit{http://home.agh.edu.pl/~chwiej/mn/calkowanie\_1819.pdf}
+\item {[2]} Wikipedia, Kwadratury Gaussa\\
+\textit{https://www.wikiwand.com/pl/Kwadratury\_Gaussa}
+\end{description}
+
+
+\end{document}

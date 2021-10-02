@@ -1,0 +1,286 @@
+\documentclass[11pt,oneside]{article}
+
+
+
+\usepackage[cp1250]{inputenc}
+\usepackage{polski}
+\usepackage{indentfirst} %wcienia od pierwszego akapitu
+\usepackage{amsfonts}    %czcionki np funkcja do pogrubienie dla np N
+\usepackage{amsmath} %zawiera np begin cases
+\usepackage[dvipsnames]{xcolor} %kolory dvipsnames wiecej kolorów
+\usepackage{graphicx} %np includeggraphics do obrazkow
+\usepackage{caption} %np caption czyli podpisy pod obrazkiem
+\usepackage{epstopdf} %np do obrazki wektorowe na pdf
+\usepackage{scrextend}
+\usepackage{geometry} %zmienia marginesy
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{multicol}
+\usepackage{listings}
+
+
+\DeclareMathOperator{\di}{d\!}
+\newcommand*\Eval[3]{\left.#1\right\rvert_{#2}^{#3}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\R}[1]{\textcolor{red}{#1}}
+\newcommand{\G}[1]{\textcolor{OliveGreen}{#1}}
+\newcommand{\B}[1]{\textcolor{blue}{#1}}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert} 
+
+
+
+\begin{document}
+
+
+\newgeometry{margin=0.8in}
+\begin{flushright}
+\textbf{Wydzia³:} Fizyki i Informatyki Stosowanej\\
+\textbf{Kierunek:} Informatyka Stosowana\\
+\textbf{Rok:} 2020/21\\
+\textbf{Semsetr}: letni\\
+\textbf{Typ:} stacjonarne\\
+\textbf{Nr albumu:} 401984\\
+\textbf{Data:} 31.05.2021\\
+\end{flushright}
+
+
+\begin{center}
+\includegraphics[scale=0.17]{AGH}
+\\[0.3cm]
+\begin{LARGE}
+\textsf{Sprawozdanie - Laboratorium nr 12\\
+Ca³kowanie numeryczne metod¹ Simpsona
+\\[1cm]}
+\end{LARGE}
+\end{center}
+
+
+\tableofcontents
+\vspace*{\fill}
+
+
+\begin{LARGE}
+\begin{flushleft}
+\textsl{opracowa³:\\
+Tomasz Szkaradek}
+\end{flushleft}
+\end{LARGE}
+
+
+
+\clearpage
+\newpage
+\restoregeometry
+\pagestyle{fancy} 
+\cfoot{\thepage\ of \pageref{LastPage}}
+\newgeometry{margin=1.13in}
+
+\section{Wstêp teoretyczny}
+Ca³kowanie numeryczne – metoda numeryczna polegaj¹ca na przybli¿onym obliczaniu ca³ek oznaczonych. Termin kwadratura numeryczna, czêsto po prostu kwadratura, jest synonimem ca³kowania numerycznego, w szczególnoœci w odniesieniu do ca³ek jednowymiarowych. Dwu- i wielowymiarowe ca³kowania nazywane s¹ czasami kubaturami, choæ nazwa kwadratura odnosi siê równie¿ do ca³kowania w wy¿szych wymiarach.
+Proste metody ca³kowania numerycznego polegaj¹ na przybli¿eniu ca³ki za pomoc¹ odpowiedniej sumy wa¿onej wartoœci ca³kowanej funkcji w kilku punktach. Aby uzyskaæ dok³adniejsze przybli¿enie dzieli siê przedzia³ ca³kowania na niewielkie fragmenty. Ostateczny wynik jest sum¹ oszacowañ ca³ek w poszczególnych podprzedzia³ach. Najczêœciej przedzia³ dzieli siê na równe podprzedzia³y, ale bardziej wyszukane algorytmy potrafi¹ dostosowywaæ krok do szybkoœci zmiennoœci funkcji.
+\subsection{Metody Newtona-Cotesa}
+S¹ to metody obliczania wartoœci ca³ek oznaczonych. Nazwa pochodzi od Isaaca Newtona i Rogera Cotesa. W tych metodach przyjmujemy, ¿e wartoœci funkcji $f$ s¹ znane w równoodleg³ych punkach $x_i$. W zale¿noœci od
+danej ”podmetody” i znanych nam jeszcze innych wartoœci opisuj¹cych funkcjê, mo¿emy przybli¿yæ wartoœæ
+ca³ki oznaczonej.\\
+Numerycznie ca³kê policzyæ mo¿na z nastêpuj¹cego wzoru:
+\begin{equation}
+S(f)=\sum_{k=0}^N A_kf(x_k), \quad x\in [a,b]
+\end{equation}
+Powy¿szy wzór nosi nazwê kwadratury, a punkty $x_1, x_2, \cdots ,x_n$ nazywamy wêz³ami kwadratury.
+Kwadraturê wyprowadza siê ze wzoru na wielomian interpolacyjny Lagrange’a:
+\begin{equation}
+\varphi(x)=L_N(x)=\sum_{k=0}^N \phi_k(x)F(x_k)
+\end{equation}
+Wspó³czynnik $A_k$ wyra¿a siê nastêpuj¹cym wzorem:
+\begin{equation}
+A_k=h\dfrac{(-1)^{N-k}}{k!(N-k)!} \int_0^N\frac{t(t-1)\cdots (t-N)}{(t-k)}
+\end{equation}
+gdzie:\\
+$h=\dfrac{b-a}{N}$\\
+$f_k=f(a+kh)$\\
+\newpage
+\subsection{Metoda trapezów}
+Metoda trapezów jest jedn¹ z metod Newtona-Cotesa. Polega ona na przybli¿aniu funkcji $f$ funkcj¹ liniow¹, na podprzedzia³ach, i obliczaniu pó³ powsta³ych w ten sposób trapezów.\\
+\begin{figure}[ht]
+\centering
+\includegraphics[width=6cm]{Figure_2}
+\caption{Wizualizacja metody trapezów}
+\end{figure}\\
+Ca³kê mo¿na obliczyæ wiêc w nastêpuj¹cy sposób:
+\begin{equation}
+\int_a^b f(x) dx \approx \frac{h}{2} \displaystyle \sum_{i=0}^{N-1}(f(x_i) + f(x_{i+1})),
+\end{equation}
+gdzie $N$ to liczba podprzedzia³ów o d³ugoœci $h = \frac{b-a}{N}$.
+
+\subsection{Metoda Simpsona}
+Metod¹ Simpsona – jest jedn¹ z metod przybli¿ania wartoœci ca³ki oznaczonej funkcji rzeczywistej.
+Metoda ma zastosowanie do funkcji stablicowanych w nieparzystej liczbie równo odleg³ych punktów (wliczaj¹c koñce przedzia³u ca³kowania). Metoda opiera siê na przybli¿aniu funkcji ca³kowanej przez interpolacjê wielomianem drugiego stopnia. Funkcja interpolowana jest
+wielomianem Lagrange’a który ma 3 wêz³y. Dlatego:
+\begin{equation}
+h=\dfrac{b-a}{2} \quad A_0=\dfrac{1}{3}h, \quad A_1=\dfrac{1}{12}h, \quad A_2=\dfrac{1}{3}h
+\end{equation}
+\begin{equation}
+S(f)=\dfrac{1}{3}h(f_0+4f_1+f_2)
+\end{equation}
+\begin{figure}[ht]
+\begin{center}
+  \includegraphics[width=0.2\linewidth]{Figure_3}  
+  \label{fig:sub-first}
+  \caption{Wizualizacja metody Simpsona}
+\end{center}
+\end{figure}\\
+Pos³uguj¹c siê metod¹ Simpsona musimy liczyæ sie z b³êdem wyliczanym ze wzoru na b³¹d wzoru interpolacyjnego dostajemy 
+\begin{equation}
+E(f)=-\dfrac{1}{90}h^5f^{(4)}(\xi)
+\end{equation}
+\newpage
+\section{Zadanie do wykonania}
+Naszym zadaniem w trakcie laboratoriów by³o obliczenie podanej ni¿ej ca³ki metoda Simpsona oraz korzystaj¹c z rozwiniêcia funkcji w szereg
+\begin{equation}
+I=\int_0^\pi x^m sin(kx) dx
+\end{equation}
+Pierwsza czeœæ naszych laboratoriów to rozwiniecie naszej funkcji w szereg. Na pocz¹tku zaczêliœmy od rozwiniêcia funkcji sin(x) w szereg:
+\begin{equation}
+sin(x)=\sum_{i=0}^\infty(-1)^i\dfrac{x^{2i+1}}{(2i+1)!}
+\end{equation}
+Wstawiaj¹c powy¿sze rozwiniêcie pod ca³kê i wykonuj¹c ca³kowanie ka¿dego elementu szeregu
+dostajemy:
+\begin{equation}
+I=\int_a^b x^m sin(kx) dx= \int_a^b \sum_{i=0}^\infty(-1)^i\dfrac{(kx)^{2i+1}}{(2i+1)!}x^m=\Eval{ \sum_{i=0}^\infty(-1)^i\dfrac{(kx)^{2i+m+2}}{k^{m+1}(2i+1)!(2i+m+2)}}{a}{b} \
+\end{equation}
+Na podstawie otrzymanych danych wykonaliœmy wykresy zale¿noœci wartoœci sumy w kolejnych iteracji od 1 do 30 oraz modu³ ró¿nicy pomiêdzy wartoœci¹ obliczon¹ a dok³adn¹ $|C-I|$
+gdzie:\\
+I jest wartoœci¹ dok³adn¹ ca³ki,\\
+C jest wartoœci¹ ca³ki obliczon¹ numerycznie.\\
+Aby to uczyniæ potrzebujemy wspó³czynników m i k oraz dok³adna wartoœæ I
+\begin{itemize}
+\item 
+m = 0, k = 1 (I = 2)
+\item 
+m = 1, k = 1 (I = $\pi$)
+\item 
+m = 5, k = 5 (I = 56.363569)
+\end{itemize}
+W drugim etapie mieliœmy obliczyæ wartoœæ ca³ki metod¹ Simpsona opisan¹ we wstêpie teoretycznym dla nastêpuj¹cej liczby wêz³ów
+n = 2p + 1 = 11, 21, 51, 101, 201 oraz poni¿szych przypadków:
+\begin{itemize}
+\item 
+m = 0, k = 1 (I = 2)
+\item 
+m = 1, k = 1 (I =$\pi$)
+\item 
+m = 5, k = 5 (I = 56.363569)
+\end{itemize}
+W sprawozdaniu sporz¹dziliœmy odpowiednie wykresy zale¿noœci $|C-I|$
+od iloœci wêz³ów.
+\newpage
+\newgeometry{margin=1.15in}
+\section{Wyniki}
+Ca³y program zosta³ napisany w jêzyku Python.
+\begin{figure}[ht]
+\begin{center}
+\begin{subfigure}{0.52\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_4}  
+  \label{fig:sub-first}
+\end{subfigure}
+\caption{Wykres zale¿noœci $|C–I|$ od iloœci wyrazów dla m = 0, k = 1 (I = 2)}
+\end{center}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{center}
+\begin{subfigure}{0.52\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_5}  
+  \label{fig:sub-first}
+  
+\end{subfigure}
+\caption{Wykres wartoœci ca³ki obliczonej za pomoc¹ rozwiniêcia w szereg dla m = 0, k = 1 (I = 2)}
+\end{center}
+\end{figure}
+\newgeometry{margin=0.2in}
+\begin{figure}[ht]
+\begin{subfigure}{0.5\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_6}  
+  \label{fig:sub-first}
+  \caption{Wykres $|C–I|$ od iloœci iteracji}
+\end{subfigure}
+\begin{subfigure}{0.5\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_7}  
+  \label{fig:sub-first}
+  \caption{Wykres $|C–I|$ od iloœci iteracji}
+\end{subfigure}
+\caption{Wykresy dla m = 1 k = 1 (I = $\pi$)}
+\end{figure}
+\begin{figure}[ht]
+\begin{subfigure}{0.5\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_8}  
+  \label{fig:sub-first}
+  \caption{Wykres $|C–I|$ od iloœci iteracji}
+\end{subfigure}
+\begin{subfigure}{0.5\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_9}  
+  \label{fig:sub-first}
+  \caption{Wykres wartoœci ca³ki od k}
+\end{subfigure}
+\caption{Wykresy dla m = 5 k = 5 (I = 56.363569)}
+\end{figure}
+\newpage
+\begin{figure}[ht]
+\begin{subfigure}{0.5\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_10}  
+  \label{fig:sub-first}
+  \caption{Wykres $|C–I|$ od iloœci iteracji dla m = 0 k = 1 }
+\end{subfigure}
+\begin{subfigure}{0.5\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_11}  
+  \label{fig:sub-first}
+  \caption{Wykres $|C–I|$ od iloœci iteracji dla m = 1 k = 1}
+\end{subfigure}
+\end{figure}
+\begin{figure}[ht]
+\begin{center}
+\begin{subfigure}{0.5\textwidth}
+  \includegraphics[width=1\linewidth]{Figure_12}  
+  \label{fig:sub-first}
+  \caption{Wykres $|C–I|$ od iloœci iteracji dla m = 5 k = 5}
+\end{subfigure}
+\end{center}
+\end{figure}
+\newgeometry{margin=1.28in}
+\section{Podsumowanie}
+Podsumowuj¹c mo¿na powiedzieæ i¿ dziêki metodzie Simpsona która jest stosunkowo prosta mo¿emy szybko obliczyæ dan¹ ca³ek oznaczon¹.\\
+Jak widaæ dla Wykresu 3 obliczone przybli¿enie jest równe dok³adnej wartoœci (z dok³adnoœci¹ do 6 miejsc po przecinku) po 8 iteracjach.\\
+Dla przypadku 5a) dzieje siê to po 9 iteracjach, a dla
+przypadku 6a) po 26 iteracjach dochodzimy do dok³adnoœci do 5 miejsc po przecinku.
+Przybli¿enie dla pierwszych dwóch przypadków jest bardzo szybkie. Zauwa¿yæ mo¿na pewne skoki
+oraz oscyluj¹ce wokó³ dok³adnego wyniku na otrzymanych wykresach. Najlepiej widaæ to w przypadku 6.
+W przypadkach 7a), 7b) oraz 7c) mo¿emy zauwa¿yæ, ¿e najwiêkszy wzrost przybli¿enia obserwujemy do 21 wêz³a. Potem im dok³adniejsze przybli¿enie mamy tym wolniej dochodzimy do
+dok³adnego wyniku. Dla przypadków 7a) oraz 7b) po 51 wêŸle obliczona wartoœæ w ogóle równa³a
+siê wartoœci rzeczywistej.
+Ogólny wniosek w zadaniu jest taki, ¿e metoda Simpsona dzia³a bardzo dobrze nawet dla niewielkiej
+(dobrze ju¿ nawet dla 21 wêz³ów) iloœci wêz³ów, oczywiœcie zwiêkszaj¹c ich iloœæ mo¿na zwiêkszyæ
+dok³adnoœæ obliczeñ.
+Metoda ta jest szybka, a jej implementacja jest stosunkowo ³atwa
+Przy rozwijaniu funkcji w szereg dla kolejnych iteracji funkcja zmierza do punktu zbie¿noœci.Dodatkowo bior¹c pod uwagê krótki czas obliczeñ, mo¿na wysnuæ wniosek o
+du¿ej skutecznoœci wybranej metody w rozwi¹zywaniu postawionego problemu.
+\section{Literatura}
+\begin{description}
+\item {[1]} Tomasz Chwiej, Ca³kowanie numeryczne przy u¿yciu kwadratur
+\\
+\textit{http://home.agh.edu.pl/~chwiej/mn/calkowanie\_1819.pdf}
+\item {[2]} Wikipedia, Metody Newtona-Cotesa\\
+\textit{https://www.wikipedia.com/pl/Metody\_Newtona-Cotesa}
+\end{description}
+
+
+\end{document}
