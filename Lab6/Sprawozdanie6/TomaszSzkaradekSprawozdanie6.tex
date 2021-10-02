@@ -1,0 +1,279 @@
+\documentclass[11pt,oneside]{article}
+
+
+
+\usepackage[cp1250]{inputenc}
+\usepackage{polski}
+\usepackage{indentfirst} %wcienia od pierwszego akapitu
+\usepackage{amsfonts}    %czcionki np funkcja do pogrubienie dla np N
+\usepackage{amsmath} %zawiera np begin cases
+\usepackage[dvipsnames]{xcolor} %kolory dvipsnames wiecej kolorów
+\usepackage{graphicx} %np includeggraphics do obrazkow
+\usepackage{caption} %np caption czyli podpisy pod obrazkiem
+\usepackage{epstopdf} %np do obrazki wektorowe na pdf
+\usepackage{scrextend}
+\usepackage{geometry} %zmienia marginesy
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{multicol}
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\R}[1]{\textcolor{red}{#1}}
+\newcommand{\G}[1]{\textcolor{OliveGreen}{#1}}
+\newcommand{\B}[1]{\textcolor{blue}{#1}}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert} 
+
+
+
+\begin{document}
+
+
+\newgeometry{margin=0.8in}
+\begin{flushright}
+\textbf{Wydzia³:} Fizyki i Informatyki Stosowanej\\
+\textbf{Kierunek:} Informatyka Stosowana\\
+\textbf{Rok:} 2020/21\\
+\textbf{Semsetr}: letni\\
+\textbf{Typ:} stacjonarne\\
+\textbf{Nr albumu:} 401984\\
+\textbf{Data:} 12.04.2021\\
+\end{flushright}
+
+
+\begin{center}
+\includegraphics[scale=0.17]{AGH}
+\\[0.3cm]
+\begin{LARGE}
+\textsf{Sprawozdanie - Laboratorium nr 6\\
+Wyznaczanie pierwiastków uk³adu równañ nieliniowych metod¹
+Newtona\\[1cm]}
+\end{LARGE}
+\end{center}
+
+
+\tableofcontents
+\vspace*{\fill}
+
+
+\begin{LARGE}
+\begin{flushleft}
+\textsl{opracowa³:\\
+Tomasz Szkaradek}
+\end{flushleft}
+\end{LARGE}
+
+
+
+\clearpage
+\newpage
+\restoregeometry
+\pagestyle{fancy} 
+\cfoot{\thepage\ of \pageref{LastPage}}
+\newgeometry{margin=1.19in}
+
+\section{Wstêp teoretyczny}
+Za³ó¿my, ¿e mamy do rozwi¹zania uk³ad równañ nieliniowych czyli taki, który przybiera postaæ.
+\begin{align}
+f_j(\xi_1,\xi_2, \cdots ,\xi_n)=0 , j=(1,2,3, \cdots ,n)
+\end{align}
+zapisujemy w postaci wektorowej:\\
+$
+\textbf{f}(x)=0 \\
+\textbf{f}=(f_1,f_2,\cdots ,f_n) \\
+\textbf{x}=(\xi_1,\xi_2, \cdots ,\xi_n) \\
+$
+Dla takiej postaci uk³adu wyprowadza siê wzory iteracyjne. Ogólny wzór
+iteracyjny:\\
+$
+\textbf{F}=(F_1,F_2, \cdots ,F_n)\\
+\boldsymbol{x_{i+1}}=F(x_{i}, x_{i-1}, \cdots ,x_{i-n+1})\\
+$
+Zak³adamy ¿e funkcja wektorowa $\textbf{f}$ ma w otoczeniu rozwi¹zania:\\
+$
+\boldsymbol{\alpha }=( \alpha_1 , \alpha _2, \cdots , \alpha _n)\\
+$
+funkcjê odwrotn¹\\
+$
+\textbf{g}=(g_1,g_2, \cdots , g_n)\\
+$
+Jeœli punkt \\
+$
+\textbf{y}=(y^{(1)},y^{(2)}, \cdots , y^{(n)})\\
+$
+jest odwrotny do punktu x (wektora przybli¿onych rozwi¹zañ)\\
+Ca³y problem polega jednak na tym, ¿e nasz uk³ad jest tak du¿y i¿ rozwi¹zanie go "metod¹ tradycyjn¹" przy u¿yciu kartki i d³ugopisu nie wchodzi w grê. Trzeba wiêc do tego celu skorzystaæ z dobrodziejstw techniki czyli komputera. Nale¿y jednak przy tym pamiêtaæ, ¿e uk³ad równañ nieliniowych charakteryzuje siê tym, ¿e mo¿e nie mieæ ¿adnego rozwi¹zania lub te¿ mo¿e mieæ ich wiele. Nie mo¿emy wiêc tak po prostu zastosowaæ znanej wszystkim metody Newtona. Bêdziemy musieli wprowadziæ tutaj pewne modyfikacje. Ró¿nica w stosunku do znajdywania pierwiastków równania nieliniowego polega na tym, ¿e w tym przypadku dzia³amy na zmiennych macierzowych, a zamiast pochodnej liczymy jakobian macierzy.\\
+W przypadku równania skalarnego, f: $\mathbb{R}\rightarrow\mathbb{R}$, metoda stycznych (zwana te¿ metod¹ Newtona) rozwi¹zywania równania f(x)=0 jest zadana wzorem
+\begin{align}
+x_{{k+1}}=x_{k}-\dfrac{f(x_{k})}{f^{{\prime}}(x_{k})}
+\end{align}
+Przez analogiê, gdy F: $\mathbb{R}^{N}\supset D\rightarrow\mathbb{R}^{N}$ mo¿na wiêc by³oby zdefiniowaæ wielowymiarow¹ metodê Newtona wzorem
+\begin{align}
+\displaystyle x_{{k+1}}=x_{k}-F^{{\prime}}(x_{k})^{{-1}}F(x_{k})
+\end{align}
+gdzie $F^{{\prime}}(x_{k})$ oznacza³oby macierz pochodnej F w punkcie $x_{k}$. Jak za chwilê siê przekonamy, jest to rzeczywiœcie bardzo dobry pomys³, a tak okreœlona metoda zachowuje (z zachowaniem w³aœciwych proporcji) wszystkie cechy metody Newtona znane nam z przypadku skalarnego!
+Dla n=2 otrzymujemy 
+\begin{align}
+x_{i+1}=x_i-
+\begin{bmatrix}
+\frac{\partial f_1}{\partial \xi_1} & \frac{\partial f_1}{\partial \xi_2}\\
+\frac{\partial f_2}{\partial \xi_1} & \frac{\partial f_2}{\partial \xi_2}
+\end{bmatrix}^{-1}
+\cdot 
+\begin{bmatrix}
+f_1\\
+f_2
+\end{bmatrix}_{x=x_i}
+\end{align}
+Rz¹d zbie¿noœci metody Newtona wynosi p=2. Zazwyczaj zbie¿noœæ uzyskujemy tylko jeœli
+startujemy ju¿ z dobrym przybli¿eniem rozwi¹zania.
+
+\section{Zadanie do wykonania}
+Podczas naszych 6 laboratoriów byliœmy zobowi¹zani do wyznaczenia wektora rozwi¹zañ zadanego uk³adu równañ nieliniowych metod¹ Newtona:
+
+\begin{align}
+\begin{cases}
+2xy^2 - 3x^2y - 2 = 0\\
+x^2y^3 + 2xy - 12 = 0 
+\end{cases}
+\end{align}
+Do otrzymania wyniku pos³ugujemy siê metoda opisana na wstêpie tj. metod¹ Newtona w dowolnej k-tej iteracji otrzymujemy przybli¿ony wektor rozwi¹zañ $[x_k,y_k]$ który jest zale¿ny od poprzedniego przybli¿enia:\\
+\begin{align}
+r_k=r_{k-1}+\Delta r
+\end{align}
+gdzie w tym przypadku $\Delta r$ jest odwrotn¹ macierz¹ Jacobiego pomno¿on¹ przez wektor kolumnowy ze znakiem minus.
+
+\begin{align}
+\Delta r = -
+\begin{bmatrix}
+2y^2 - 6xy & 4xy-3x^2\\
+2xy^3+2y & 3x^2y^2 + 2x 
+\end{bmatrix}^{-1}_{r=r_{k-1}}
+\cdot 
+\begin{bmatrix}
+2xy^2 - 3x^2y - 2\\
+x^2y^3 + 2xy - 12 
+\end{bmatrix}
+\end{align}
+w naszym przypadku rozmiar macierzy Jacobiego jest równy 2 wiec mo¿emy rêcznie policzyæ odpowiednie pochodne bez wykorzystywania ogólnego algorytmu na obliczenie macierzy Jacobiego.
+Kolejne wartoœci wektora kolumnowego to wartoœci kolejnych 2 równañ dla poprzedniego przybli¿enia wartoœci wektora rozwi¹zañ.
+Nastêpnie wykonujemy ten algorytm dla dwóch punktów pocz¹tkowych:\\
+\begin{itemize}
+\item $r_0=[10,10]$\\
+\item $r_0=[10,-4]$
+\end{itemize}
+natomiast naszym eps czyli warunkiem zbie¿noœci bêdzie liczba $eps=10^{-6}$ tj.\\
+\begin{align}
+\norm{\Delta r} = \norm{r_k - r_{k-1}} < 10^{-6}
+\end{align}
+Oczekiwan¹ wartoœci¹ wektora rozwi¹zañ w obu przypadkach to r=[1,2]. \\
+Nastêpnie narysowaliœmy 2 wykresy dla ka¿dego z punktów startowych.
+Pierwszy z nich to wykres normy d³ugoœci ró¿nicy wektorów po³o¿enia punktów w zale¿noœci od
+numeru iteracji k (na wykresie $\Delta x \equiv \norm{\Delta r})$.\\
+Drugi wykres reprezentuje punkty poœrednie, przez które
+przechodzi algorytm, zmierzaj¹c do rozwi¹zania uk³adu równañ (dla lepszego zilustrowania zbiegania siê algorytmu na wykresie umieœciliœmy strza³ki).\\
+Punkt koñcowy tak¿e zaznaczymy na wykresie.
+
+\section{Wyniki}
+Ca³y program zosta³ napisany w jêzyku Python obliczenia zosta³y prowadzone na liczbach zmiennoprzecinkowych.
+Tak jak by³o to napisane powy¿ej aby zacz¹æ program musimy obraæ punkt od którego zaczynamy iteracje Chcemy sprawdziæ ró¿nice w dzia³aniu programu dla dwóch ro¿nych punktach pocz¹tkowych. Algorytm zapewnia nas ¿e dla zadanego uk³adu znajdziemy dok³adnie jeden i ten sam(w obu przypadkach) wektor rozwi¹zañ
+\begin{itemize}
+\item Wektor startowy $r_0$ = [10, 10]\\
+Dla tego wektora pocztowego od którego zaczynamy iterowaæ otrzymaliœmy wektor rozwi¹zañ równy dok³adnie r=[1,2].
+Potrzebowa³ do tego 13 iteracji co mo¿emy zauwa¿yæ na wykresach poni¿ej
+
+\begin{figure}[ht]
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_1}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_2} 
+  \label{fig:sub-second}
+\end{subfigure}
+ \caption{Z lewej: wykres normy d³ugoœci ró¿nicy wektorów po³o¿enia punktów w zale¿noœci od
+numeru iteracji k;\\
+z prawej: wykres punktów poœrednich, przez które przechodzi algorytm, zmierzaj¹c do rozwi¹zania uk³adu równañ. \\
+Punkt koñcowy zaznaczony jest czerwonym markerem.}
+\end{figure}
+\newpage
+\item Wektor startowy $r_0$ = [10, -4]\\
+Dla tego wektora pocztowego od którego zaczynamy iterowaæ otrzymaliœmy wektor rozwi¹zañ równy dok³adnie r=[1,2].
+Potrzebowa³ do tego 16 iteracji co mo¿emy zauwa¿yæ na wykresach poni¿ej 
+
+\begin{figure}[ht]
+\begin{subfigure}{.5\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{Figure_3}  
+  \caption{wykres normy $\norm{r_k - r_{k-1}}$ od numeru iteracji k}
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_4} 
+  \caption{wykres punktów poœrednich} 
+  \label{fig:sub-second}
+\end{subfigure}
+\end{figure}
+
+\end{itemize}
+
+\section{Podsumowanie}
+Korzystaj¹c z metody Newtona znaleŸliœmy wektor rozwi¹zañ uk³adu równañ nieliniowych (b¹dŸ te¿ dok³adne przybli¿enie) w niewielkiej iloœci iteracji. 
+W celu uzyskania poprawnego wektora rozwi¹zañ algorytm po przekroczeniu przez normê (z wektora ró¿nicy kolejnych przybli¿eñ) pewnej zadanej z góry liczby zatrzymuje siê z b³êdem.\\
+\begin{align}
+\norm{\Delta r} = \norm{r_k - r_{k-1}} < 10^{-6}
+\end{align}
+Jednak zastosowany przez nas algorytm w tym zadaniu jest ma³o ogólny tj. w momencie obliczania macierzy Jacobiego skorzystaliœmy z faktu i¿ z góry znamy nasz uk³ad równañ który dodatkowo by³ stosunkowo niewielkich rozmiarów n=2 dziêki czemu mogliœmy skorzystaæ z gotowych przepisów na pochodne cz¹stkowe w macierzy Jacobiego na etapie pisania programu a nie na etapie wywo³ania. To uproszczenie mocno wp³ywa na czas oraz wydajnoœæ algorytmu.\\
+Porównuj¹c wykres 2 oraz 4 mo¿emy wywnioskowaæ i¿ na iloœæ iteracji potrzebnych do uzyskania wektora rozwi¹zañ ma dobór punktu startowego dla punktu [10,10] jest to 13 iteracji 
+natomiast dla [10,-4] 16 iteracji.\\
+Wykresy pokazuj¹ nam i¿ najlepszym punktem startowym jest oczywiœcie ten najbli¿szy rozwi¹zaniu ale te¿ taki który jest w tej samej æwiartce uk³adu wspó³rzêdnych. Widzimy to na podstawie wektora startowego r=[10,-4] którego kierunek zbie¿noœci nie jest tak jednoznaczny jak dla wektora r=[10,10]
+Podsumowuj¹c mo¿emy stwierdziæ i¿ jedn¹ z wad metody Newtona przy rozwi¹zywaniu uk³adu równañ nielinowych jest mocna zale¿noœæ od punktu pocz¹tkowego dla którego zaczynamy iterowaæ. Musimy zapewniæ by by³ on jak najbli¿szy prawid³owemu rozwi¹zaniu oraz aby odpowiednie wspó³rzêdne by³y tego samego znaku.\\
+\begin{figure}[ht]
+\begin{subfigure}{.5\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{Figure_5}  
+  \caption{wektor startowy r=[50,50] \\
+  liczba iteracji 20}
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{Figure_6}  
+  \caption{wektor startowy r=[-30,-30] \\
+  liczba iteracji 57}
+  \label{fig:sub-first}
+\end{subfigure}
+  \caption{wykres normy $\norm{r_k - r_{k-1}}$ od numeru iteracji k} 
+\end{figure}
+
+Charakterystyczna cech¹ dla uk³adu równañ nieliniowych jest to i¿ mo¿e byæ sprzeczny przez co nie posiada rozwi¹zania czy te¿ nieoznaczony czyli posiada wiêcej ni¿ jedno rozwi¹zanie. Nie mo¿emy wiêc tak po prostu zastosowaæ metody Newtona.
+Jednak metoda Newtona to stabilny algorytm w przeciwieñstwie to wielu innych którego, rz¹d zbie¿noœci \\
+jest równy p = 2 wiêc jest wiêkszy od rzêdu zbie¿noœci np.metody siecznych (p $\approx$ 1.618).
+\section{Literatura}
+\begin{description}
+\item {[1]} Tomasz Chwiej, Rozwi¹zywanie równañ nieliniowych i ich uk³adów. Wyznaczanie zer wielomianów.
+\\
+$http://home.agh.edu.pl/~chwiej/mn/ukl_nieliniowe_1819.pdf$
+\item {[2]} Wikipedia, Metoda Newtona\\
+$https://pl.wikipedia.org/wiki/Metoda_Newtona$
+\item {[3]} Uk³ady równañ nieliniowych. Metoda Newtona\\
+$http://mst.mimuw.edu.pl/lecture.phplecturemopartCh9$
+\end{description}
+
+
+\end{document}

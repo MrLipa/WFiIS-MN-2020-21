@@ -1,0 +1,276 @@
+\documentclass[11pt,oneside]{article}
+
+
+
+\usepackage[cp1250]{inputenc}
+\usepackage{polski}
+\usepackage{indentfirst} %wcienia od pierwszego akapitu
+\usepackage{amsfonts}    %czcionki np funkcja do pogrubienie dla np N
+\usepackage{amsmath} %zawiera np begin cases
+\usepackage[dvipsnames]{xcolor} %kolory dvipsnames wiecej kolorów
+\usepackage{graphicx} %np includeggraphics do obrazkow
+\usepackage{caption} %np caption czyli podpisy pod obrazkiem
+\usepackage{epstopdf} %np do obrazki wektorowe na pdf
+\usepackage{scrextend}
+\usepackage{geometry} %zmienia marginesy
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{caption}
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\R}[1]{\textcolor{red}{#1}}
+\newcommand{\G}[1]{\textcolor{OliveGreen}{#1}}
+\newcommand{\B}[1]{\textcolor{blue}{#1}}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert} 
+
+
+
+\begin{document}
+
+
+\newgeometry{margin=0.8in}
+\begin{flushright}
+\textbf{Wydzia³:} Fizyki i Informatyki Stosowanej\\
+\textbf{Kierunek:} Informatyka Stosowana\\
+\textbf{Rok:} 2020/21\\
+\textbf{Semsetr}: letni\\
+\textbf{Typ:} stacjonarne\\
+\textbf{Nr albumu:} 401984\\
+\textbf{Data:} 22.03.2021\\
+\end{flushright}
+
+
+\begin{center}
+\includegraphics[scale=0.17]{AGH}
+\\[0.3cm]
+\begin{LARGE}
+\textsf{Sprawozdanie - Laboratorium nr 4\\
+Obliczanie wektorów i wartoœci w³asnych za pomoc¹ bisekcji\\[1cm]}
+\end{LARGE}
+\end{center}
+
+
+\tableofcontents
+\vspace*{\fill}
+
+
+\begin{LARGE}
+\begin{flushleft}
+\textsl{opracowa³:\\
+Tomasz Szkaradek}
+\end{flushleft}
+\end{LARGE}
+
+
+
+\clearpage
+\newpage
+\restoregeometry
+\pagestyle{fancy} 
+\cfoot{\thepage\ of \pageref{LastPage}}
+\newgeometry{margin=1.22in}
+
+
+\section{Wstêp teoretyczny}
+\subsection{Wektor, wartoœæ oraz problem w³asny}
+Niech A bêdzie kwadratow¹ macierz¹ $n\times n$. Wówczas A wyznacza przekszta³cenie liniowe przestrzeni $\mathbb{R}$ w siebie. Niech $v \in R_n$  bêdzie  pewnym  niezerowym  wektorem  oraz  niech $L = { t \cdot v:t \in \mathbb{R} }$ bêdzie  prost¹ wyznaczon¹ przez ten wektor. Je¿eli przekszta³cenie A przekszta³ca prost¹ L w siebie, to mówimy, ¿e v jest wektorem w³asnym przekszta³cenia A. Oznacza to ¿e problem w³asny macierzy mo¿emy zapisaæ w postaci równania liniowego
+$$
+A \cdot v =\lambda  \cdot v
+$$
+dla pewnej liczby rzeczywistej $\lambda$ zwanej wartoœci¹ w³asn¹ zwi¹zan¹ z wektorem w³asnym v.\\ 
+Obliczenie tego równania jest zwykle skomplikowane. W przypadku macierzy symetrycznej oraz hermitowskiej mo¿emy skorzystaæ z metody bisekcji. Dziêki w³asnoœciom i wektorom w³asnym mo¿emy np. dokonaæ diagonalizacji, która z kolei mo¿e byæ przydatna do rozwi¹zywania uk³adów równañ ró¿niczkowych.
+Czêsto przy tworzeniu modeli matematycznych  wykorzystywanych do symulacji zjawisk fizycznych czy zachowania siê uk³adu, zachodzi potrzeba rozwi¹zania problemu w³asnego
+
+\subsection{Metoda bisekcji}
+
+Metoda bisekcji zwana równie¿ metod¹ po³owienia lub wyszukiwaniem binarnym pozwala stosunkowo szybko znaleŸæ pierwiastek dowolnej funkcji w zadanym przedziale poszukiwañ [a,b]. Aby mo¿na by³o zastosowaæ metodê bisekcji dla poszukiwania wartoœci w³asnej w macierzy, musz¹ byæ spe³nione warunki pocz¹tkowe tj. macierz jest trójdiagonalna oraz hermitowska za³ó¿my ¿e:
+
+\begin{align}
+J=
+\begin{bmatrix}
+\delta_1 & \gamma_2 & \quad  & 0\\
+\gamma_2 & \ddots & \ddots  & 0\\
+\quad & \ddots & \ddots  & \gamma_n\\
+0 & \quad & \gamma_n  & \delta_n\\
+\end{bmatrix}
+\end{align}
+\newline
+Szukamy wielomianu charakterystycznego $J_i$: W($\lambda$) rozwijaj¹c wyznacznik wzglêdem kolejnych kolumn macierzy.\\
+Na pocz¹tku $\omega_0=1$ nastêpne wartoœci obliczamy wed³ug wzoru
+\begin{align}
+\omega_i(\lambda) = det(J_i-\lambda I)
+\end{align}
+\begin{enumerate}
+\item  je¿eli $\omega_i(\lambda )=0$  dla pewnego $i<n$, to
+$$\omega_{i-1} \omega_{i+1} <0$$
+\item je¿eli $w_n(\lambda)=w(\lambda)$    jest ró¿ne od 0, to liczba zmian znaków s¹siednich liczb $\omega_0(\lambda),\omega_0(\lambda), \cdots \omega_b(\lambda)$jest równa liczbie wartoœci w³asnych macierzy J mniejszych od $\lambda$.
+\item Je¿eli $w_n(\lambda)=0$, to $\lambda$ jest wartoœci¹ w³asn¹ macierzy J, a ponadto jest tyle wartoœci  w³asnych mniejszych ni¿ $\lambda$, ile nast¹pi³o zmian znaków w ci¹gu $\omega_0(\lambda),\omega_0(\lambda), \cdots \omega_b(\lambda)$
+
+\end{enumerate}
+Metoda bisekcji jest bardzo dok³adna. Wad¹ jest uzyskiwanie du¿ych wartoœci ci¹gu: $\omega_0(\lambda),\omega_0(\lambda), \cdots \omega_b(\lambda)$,  jeœli $\lambda$ znacznie ró¿ni siê od wartoœci w³asnych J. Zalet¹ natomiast mo¿liwoœæ obliczenia wartoœci w³asnej o okreœlonym indeksie k. Liczba iteracji potrzebna do wyznaczenia $\lambda_k$ wynosi:
+$$IT=log_2 \dfrac{\beta_0-\alpha_0}{\rho}$$
+$\alpha _0 ,\beta _0 $ - przedzia³ poszukiwañ wartoœci w³asnej\\
+$\rho$ – dok³adnoœæ wyznaczenia wartoœci w³asnej
+
+\subsection{Twierdzenie Gershgorina}
+
+Twierdzenie Gerszgorina – twierdzenie pozwalaj¹ce na³o¿yæ ograniczenia na wartoœci w³asne macierzy o wspó³czynnikach rzeczywistych lub zespolonych. 
+Je¿eli $A_{[n,n]}$  jest  macierz¹,  a  , $O_j$ j=1,2,$\cdots$,n  okrêgami  o  œrodkach  w  $a_{jj}$  i  promieniach  równych  odpowiednio
+$$ r_j=\sum ^n_{k=1\\k \ne j}|a_{jk}|$$
+to wszystkie wartoœci w³asne tej macierzy le¿¹ we wnêtrzu sumy okrêgów $O_j$ , czyli:
+$$
+\lambda_{min} \geqslant min_j ( a_{jj} - \sum ^n_{k=1\\k \ne j}|a_{jk}|)
+$$
+$$
+\lambda_{max} \geqslant max_j ( a_{jj} - \sum ^n_{k=1\\k \ne j}|a_{jk}|)
+$$
+Twierdzenie to pozwala na szybkie wyznaczenie przedzia³u, w którym znajduj¹ siê wartoœci w³asne danej macierzy.
+
+
+\section{Zadanie do wykonania}
+Podczas 4 laboratoriów byliœmy zobligowani do poszukiwania rozwi¹zanie równania Schrodingera czyli typowym problemu w³asnym w fizyce bêd¹cego równaniem w³asnym operatora energii:
+\begin{align}
+-\dfrac{h}{2m} \triangledown ^2 \psi(\textbf{r})+V(\textbf{r})\psi(\textbf{r}) = E \psi (\textbf{r})
+\end{align}
+
+gdzie V(r)— jest energi¹ potencjaln¹, $\psi$(r)— funkcj¹ falow¹ zaœ E - energi¹ odpowiadaj¹c¹ funkcji $\psi$(r). Spróbujmy znaleŸæ poziomy energii i odpowiadaj¹ce im funkcje falowe dla cz¹stki o masie m umieszczonej w potencjale jednowymiarowego oscylatora harmonicznego V(x)=$\dfrac{kx^2}{2}$. Jeœli za jednostkê energii przyjmiemy h$ \omega $ (gdzie $\omega ^2$=k/m) a jednostkê d³ugoœci $\sqrt{h/m\omega}$ to równanie (3) przyjmie postaæ:
+
+\begin{align}
+- \dfrac{1}{2} \dfrac{d^2}{dx^2}\psi (x) \dfrac{1}{2} x^2 \psi (x) = E \psi (x)
+\end{align}
+
+Zastêpuj¹c drug¹ pochodn¹ po lewej stronie równania ilorazem ró¿nicowym:
+
+\begin{align}
+\dfrac{d^2\psi}{dx^2}(x=x_i)\approx \dfrac{\psi(x_{i+1})-2\psi(x_i)+\psi (x_{i-1})}{(\Delta x)^2}
+\end{align}
+mo¿emy ustawiæ równanie iteracyjne na $\psi_i = \psi(x_i)$
+
+\begin{align}
+- \dfrac{1}{2} \dfrac{\psi_{i+1} -2 \psi_i +\psi_{i-1} }{(\Delta x)^2}+\dfrac{1}{2}x_i^2 \psi _i =E
+\end{align}
+
+¿¹daj¹c zerowania siê funkcji falowej $\psi$(x) w nieskoñczonoœciach \\
+$\psi (x= L \longrightarrow -\inf) = \psi_0 = 0$ 
+i $\psi (x = +L \longrightarrow + \inf) = \psi_N = 0$ równanie (6) mo¿na przedstawiæ w postaci macierzowej jako:
+
+
+$$
+\begin{bmatrix}
+h_{1,1} & h_{1,2} & 0 & 0 &\cdots & 0 & 0 & 0 & 0\\
+h_{2,1} & h_{2,2} & h_{2,3} & 0 &\cdots & 0 & 0 & 0 & 0\\
+0 & h_{3,2} & h_{3,3} & h_{3,4} &\cdots & 0 & 0 & 0 & 0\\
+\quad & \quad & \quad & \quad &\vdots & \quad & \quad & \quad & \quad\\
+0 & 0 & 0 & 0 &\cdots & h_{N-3,N-4} & h_{N-3,N-3} & h_{N-3,N-2} & 0\\
+0 & 0 & 0 & 0 &\cdots & 0 & h_{N-2,N-3} & h_{N-2,N-2} & h_{N-2,1}\\
+0 & 0 & 0 & 0 &\cdots & 0 & 0 & h_{N-1,N-2} & h_{N-1,N-1}\\
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+\psi_1\\
+\psi_2\\
+\psi_3\\
+\vdots \\
+\psi_{N-3}\\
+\psi_{N-2}\\
+\psi_{N-1}\\
+\end{bmatrix}
+= E 
+\begin{bmatrix}
+\psi_1\\
+\psi_2\\
+\psi_3\\
+\vdots \\
+\psi_{N-3}\\
+\psi_{N-2}\\
+\psi_{N-1}\\
+\end{bmatrix}
+$$
+gdzie $h_{i,i-1} = h_{i-1,1}, i= -1/[2(\vartriangle x)2]$ dla i= 2,...,N-1, $h_{i,i} = (\vartriangle x)^{-2}+x^2_i/2, \quad x_i=-L+i \vartriangle$ x dla i= 1,...,N-1 oraz $\vartriangle x= 2L/N$
+\section{Wyniki}
+Ca³y program zosta³ napisany w jêzyku Python obliczenia zosta³y prowadzone na liczbach zmiennoprzecinkowych.
+Wykorzystujemy napisane funkcje do obliczenia kolejnych wartoœci w³asnych to jest:
+\begin{center}
+$\lambda_1$=0.499 \\
+$\lambda_2$=1.494 \\
+$\lambda_3$=2.484 \\
+$\lambda_4$=3.468 \\
+$\lambda_5$=4.448 \\
+$\vdots$
+\end{center}
+
+A nastêpnie na ich podstawie wyliczyliœmy wektory w³asne które nanieœliœmy na wykresy narysowane równie¿ w Pythonie za pomoc¹ biblioteki matplotlib.  Wyniki programu mo¿emy zaobserwowaæ na wykresach poni¿ej:
+\newgeometry{margin=0.2in}
+\begin{figure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{Figure_1}  
+  \caption{$\lambda_1$=0.499}
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_2}  
+  \caption{$\lambda_2$=1.494}
+  \label{fig:sub-second}
+\end{subfigure}
+
+\begin{subfigure}{.5\textwidth}
+  \centering
+  % include third image
+  \includegraphics[width=1\linewidth]{Figure_3}  
+  \caption{$\lambda_3$=2.484}
+  \label{fig:sub-third}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  % include fourth image
+  \includegraphics[width=1\linewidth]{Figure_4}  
+  \caption{$\lambda_4$=3.468}
+  \label{fig:sub-fourth}
+\end{subfigure}
+
+\begin{subfigure}{.5\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{Figure_5}  
+  \caption{$\lambda_1$=0.499}
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_6}  
+  \label{fig:sub-second}
+\end{subfigure}
+\end{figure}
+\restoregeometry
+
+
+\section{Podsumowanie}
+Znalezienie wartoœci w³asnych i wektorów w³asnych dla macierzy, nawet stosunkowo ma³ej i symetrycznej, jest niezwykle
+skomplikowane. Dziêki metodzie bisekcji i jej implementacji uda³o nam siê szybko znaleŸæ w³asnoœci w³asne. Innymi zaletami obliczania w³asnoœci w³asnych za pomoc¹ bisekcji jest to i¿ jest mo¿e byæ ona bardzo dok³adna oraz to i¿ za jej pomoc¹ jesteœmy w stanie obliczyæ dowolny k -t¹ wartoœæ w³asn¹, wad¹ jest uzyskiwanie du¿ych wartoœci ci¹gu $w_n(\lambda)$,  jeœli $\lambda$ znacznie ró¿ni siê od wartoœci w³asnych.
+Warto zauwa¿yæ, ¿e funkcja eigenvalue nie operuje na ca³ej macierzy, a jedynie na okreœlonych wartoœciach na wstêdze (co wynika z warunku stosowania tego algorytmu) dziêki czemu oszczêdzana jest pamiêæ i z³o¿onoœæ.
+
+
+\section{Literatura}
+\begin{description}
+\item {[1]} Tomasz Chwiej, Wyznaczanie wartoœci i wektorów w³asnych macierzy\\
+$http://home.agh.edu.pl/~chwiej/mn/diagonalizacja\_2018.pdf$
+\item {[2]} Micha³ Pazdanowski, Twierdzenie Gerszgorina macierzy\\
+$https://www.cce.pk.edu.pl/~michal/pdfy/Metody13.pdf$
+\item {[3]} Krzysztof Malarz, Wektory i wartoœci w³asne\\
+$https://www.cce.pk.edu.pl/~michal/pdfy/Metody13.pdf$
+\end{description}
+
+
+\end{document}

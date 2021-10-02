@@ -1,0 +1,7 @@
+\contentsline {section}{\numberline {1}Wst\k ep teoretyczny}{2}%
+\contentsline {subsection}{\numberline {1.1}Metoda Eliminacji Gaussa}{2}%
+\contentsline {subsection}{\numberline {1.2}Metoda Gaussa-Jordana}{4}%
+\contentsline {section}{\numberline {2}Zadanie do wykonania}{4}%
+\contentsline {subsection}{\numberline {2.1}Opis problemu (1):}{4}%
+\contentsline {subsection}{\numberline {2.2}Opis problemu (2):}{5}%
+\contentsline {section}{\numberline {3}Wnioski}{6}%

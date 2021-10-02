@@ -1,0 +1,5 @@
+\contentsline {section}{\numberline {1}Wst\k ep teoretyczny}{2}%
+\contentsline {section}{\numberline {2}Zadanie do wykonania}{3}%
+\contentsline {section}{\numberline {3}Wyniki}{4}%
+\contentsline {section}{\numberline {4}Podsumowanie}{5}%
+\contentsline {section}{\numberline {5}Literatura}{6}%

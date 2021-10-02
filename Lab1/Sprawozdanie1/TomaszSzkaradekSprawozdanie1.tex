@@ -1,0 +1,317 @@
+\documentclass[11pt,oneside]{article}
+
+
+
+\usepackage[cp1250]{inputenc}
+\usepackage{polski}
+\usepackage{indentfirst} %wcienia od pierwszego akapitu
+\usepackage{amsfonts}    %czcionki np funkcja do pogrubienie dla np N
+\usepackage{amsmath} %zawiera np begin cases
+\usepackage[dvipsnames]{xcolor} %kolory dvipsnames wiecej kolorów
+\usepackage{graphicx} %np includeggraphics do obrazkow
+\usepackage{caption} %np caption czyli podpisy pod obrazkiem
+\usepackage{epstopdf} %np do obrazki wektorowe na pdf
+\usepackage{scrextend}
+\usepackage{geometry} %zmienia marginesy
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{amssymb}
+
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\R}[1]{\textcolor{red}{#1}}
+\newcommand{\G}[1]{\textcolor{OliveGreen}{#1}}
+\newcommand{\B}[1]{\textcolor{blue}{#1}}
+
+
+
+\begin{document}
+
+
+\newgeometry{margin=0.8in}
+
+
+\begin{flushright}
+\textbf{Wydzia³:} Fizyki i Informatyki Stosowanej\\
+\textbf{Kierunek:} Informatyka Stosowana\\
+\textbf{Rok:} 2020/21\\
+\textbf{Semsetr}: letni\\
+\textbf{Typ:} stacjonarne\\
+\textbf{Nr albumu:} 401984\\
+\textbf{Data:} 01.03.2021\\
+\end{flushright}
+
+
+\begin{center}
+\includegraphics[scale=0.17]{"AGH"}
+\\[0.3cm]
+\begin{LARGE}
+\textsf{Sprawozdanie - Laboratorium nr 1\\
+Rozwi¹zywanie uk³adu równañ liniowych metodami bezpoœrednimi \\[1cm]}
+\end{LARGE}
+\end{center}
+
+
+\tableofcontents
+\vspace*{\fill}
+
+
+\begin{LARGE}
+\begin{flushleft}
+\textsl{opracowa³:\\
+Tomasz Szkaradek}
+\end{flushleft}
+\end{LARGE}
+
+
+\pagestyle{fancy} 
+\cfoot{\thepage\ of \pageref{LastPage}}
+\clearpage
+\newpage
+\restoregeometry
+\newgeometry{margin=1.50in}
+
+
+\section{Wstêp teoretyczny}
+Tematem laboratorium numer 1 by³y uk³ady algebraicznych równañ liniowych i rozwi¹zywanie ich metodami bezpoœrednimi. Uk³ady równañ czêsto zapisujemy w poni¿szej formie:
+
+\begin{align}
+\begin{cases}
+a_1x_1+b_1x_2+c_1x_3+d_1x_4=e_1\\
+a_2x_1+b_2x_2+c_2x_3+d_2x_4=e_2\\
+a_3x_1+b_3x_2+c_3x_3+d_3x_4=e_3\\
+a_4x_1+b_4x_2+c_4x_3+d_4x_4=e_4
+\end{cases}
+\end{align}
+
+jednak o wiele wygodniejsz¹ form¹ zapisu jest postaæ macierzowa.
+
+\begin{align}
+\begin{bmatrix}
+a_1 & b_1 & c_1 & d_1\\
+a_2 & b_2 & c_2 & d_2\\
+a_3 & b_3 & c_3 & d_3\\
+a_4 & b_4 & c_4 & d_4\\
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+x_1\\
+x_2\\
+x_3\\
+x_4\\
+\end{bmatrix}
+=
+\begin{bmatrix}
+e_1\\
+e_2\\
+e_3\\
+e_4\\
+\end{bmatrix}
+\end{align}
+
+\begin{align}
+A \cdot x = b
+\end{align}
+
+Dziêki tej postaci mo¿emy skorzystaæ z pewnych metod by rozwi¹zaæ uk³ad np. metody Gaussa-Jordana.
+
+
+\subsection{Metoda Eliminacji Gaussa}
+Metoda eliminacji Gaussa s³u¿y do rozwi¹zywania uk³adów równañ pierwszego stopnia. Polega na sprowadzeniu macierzy A do postaci macierzy trójk¹tnej, czyli o uzyskanie zer pod przek¹tn¹ (przyjê³o siê, ¿e pod przek¹tn¹ jednak mo¿na te¿ nad przek¹tn¹) macierzy, u³atwieniem mo¿e te¿ byæ utworzenie jedynki na przek¹tnej jednak to nie jest konieczne.
+Postêpowanie przy rozwi¹zywaniu uk³adu równañ za pomoc¹ eliminacji Gausa przedstawia siê nastêpuj¹co 
+
+\begin{align}
+\begin{cases}
+a_{11}^{(1)}x_1+a_{12}^{(1)}x_2+\cdots+a_{1n}^{(1)}x_n & = \quad b_1^{(1)}\\
+a_{21}^{(1)}x_1+a_{22}^{(1)}x_2+\cdots+a_{2n}^{(1)}x_n & = \quad b_1^{(2)}\\
+\cdots \cdots \cdots \cdots \cdots \cdots \cdots \cdots & = \quad  \cdots\\
+a_{n1}^{(1)}x_1+a_{n2}^{(1)}x_2+\cdots+a_{nn}^{(1)}x_n & = \quad b_1^{(n)}\\
+\end{cases}
+\end{align}
+
+\newpage
+
+w pierwszej iteracji odejmujemy od i tego wiersza (i = 2, 3, 4, 
+$\cdots$, n) pierwszy wiersz przemno¿ony przez
+
+\begin{align}
+l_{i1} = \dfrac{a_{i1}^{(1)}}{a_{11}^{(1)}}
+\end{align}
+
+nastêpnie w drugiej iteracji odejmujemy od i tego wiersza (i=3,4,5, $\cdots$, n) drugi wiersz przemno¿ony przez
+
+\begin{align}
+l_{i1} = \dfrac{a_{i2}^{(2)}}{a_{22}^{(2)}} 
+\end{align}
+
+nastêpnie dla trzeciej iteracji, czwartej i tak dalej a¿ dochodzimy do postaci macierzy górnotrójk¹tnej
+
+\begin{alignat*}{8}
+a_{11}^{(n)}x_1 \quad &+ \quad a_{12}^{(n)}x_2 \quad & &+ \quad \cdots \quad &+ \quad a_{1n}^{(n)}x_n  \quad &= \quad b_1^{(n)}\\
+0               \quad &+ \quad a_{22}^{(n)}x_2 \quad & &+ \quad \cdots \quad &+ \quad a_{2n}^{(n)}x_n  \quad &= \quad b_2^{(n)}\\
+\cdots          \quad &+ \quad \quad \cdots      \quad     & &+ \quad \cdots \quad &+ \quad \cdots  \quad &= \quad \cdots\\
+0               \quad &+ \quad 0     \quad           & &+ \quad \cdots \quad &+ \quad a_{nn}^{(n)}x_n  \quad &= \quad b_n^{(n)}
+\end{alignat*}
+
+z której jesteœmy (w miarê prosto) policzyæ
+wektor rozwi¹zañ x 
+
+\begin{align}
+x_{n}=\dfrac{b_{(n)}^{n}}{x_{nn}^{n}}
+\end{align}
+\begin{align}
+x_{i}=\dfrac{b_{i}^{n}-\sum_{j=i+1}^{n}a_{ij}^{n}x_{j}}{x_{ij}^{(n)}}
+\end{align}
+
+\newpage
+
+\subsection{Metoda Gaussa-Jordana}
+Metoda Gaussa-Jordana jest metod¹ dosyæ ¿mudn¹, ale bez porównania mniej ¿mudn¹ ni¿ próba obliczania z wykorzystaniem dope³nieñ algebraicznych macierzy odwrotnych wymiaru 4*4 i wiêkszych. Opiera siê ona na zastosowaniu sztuczek wykorzystywanych ju¿ w metodzie Gaussa, ale musimy doprowadzamy macierz $A^{(1)}$ (macierz w pierwszym kroku) do macierzy jednostkowej 
+w kroku $A^{(n)}$.
+Przekszta³camy macierz wejœciow¹ A do postaci macierzy jednostkowej operuj¹c na wierszach(dodaj¹c i skaluj¹c je)
+Z uk³adu równañ 
+\begin{align}
+A\cdot x = b
+\end{align}
+otrzymujemy
+\begin{align}
+I \cdot x =b'
+\end{align}
+ostatecznie otrzymujemy od razu wektor niewiadomych $x_{i}$
+
+\begin{align}
+\begin{bmatrix}
+x_1\\
+x_2\\
+\cdots\\
+x_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+b_1^{(n)}\\
+b_2^{(n)}\\
+\cdots\\
+b_n^{(n)}
+\end{bmatrix}
+\end{align}
+
+\section{Zadanie do wykonania}
+\subsection{Opis problemu (1):}
+Jednym ze Ÿróde³ UARL mog¹ byæ równania ró¿niczkowe.  Dla prostego oscylatora harmonicznego z drugiej zasady dynamiki Newtona mamy:
+
+\begin{align}
+\dfrac{d^{2}x(t)}{dt^{2}}=-\dfrac{k}{m}x(t)=-\omega^{2}x(t)
+\end{align}
+
+Przybli¿aj¹c wystêpuj¹c¹ po lewej stronie równania drug¹ pochodn¹ po³o¿enia $x_w$ chwili t ilorazem ró¿nicowym:
+
+\begin{align}
+\dfrac{d^{2}x(t)}{dt^{2}}=\frac{x(t+\Delta t)-2x(t)+x(t-\Delta t}{(\Delta t)^2}
+\end{align}
+
+i wprowadzaj¹c oznaczenia $\Delta t=h, x_{1}=x(ih)$ otrzymujemy z równania (1) iteracyjny przepis pozwalaj¹cy na wyznaczenie $x_{i+1}$ w zale¿noœci od $x_{i} i x_{i+1}$:
+
+\begin{align}
+x_{i+1}+(\omega^2h^2-2)x_{1}+x{i-1}=0
+\end{align}
+
+Do jednoznacznego rozwi¹zania potrzeba jeszcze informacji o wartoœciach \\$x_0=1, A=1$ czyli maksymalne wychylenie z po³o¿enia równowagi i $x_1$ obliczaj¹c ze wzoru na pocz¹tkowa wartoœæ prêdkoœci $(x_1-x_0)/h=v_0$ dla $v_0=0$.
+Naszym problemem do rozwi¹zania by³o najpierw zapisaæ w postaci macierzowej równania dla N=100 
+
+\begin{align}
+\begin{bmatrix}
+1 & 0 & 0 & 0 & 0 & 0 & 0\\
+-1 & 1 & 0 & 0 & 0 & 0 & 0\\
+1 & (\omega^2h^2-2) & 0 & 0 & 0 & 0 & 0\\
+0 & 1 & (\omega^2h^2-2) & 1 & 0 & 0 & 0\\
+0 & 0 & 1 & (\omega^2h^2-2) & 1 & 0 & 0\\
+0 & 0 & 0 & 1 & (\omega^2h^2-2) & 1 & 0\\
+0 & 0 & 0 & 0 & 1 & (\omega^2h^2-2) & 1\\
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+x_0\\
+x_1\\
+x_2\\
+x_3\\
+x_4\\
+x_5\\
+x_6\\
+\end{bmatrix}
+=
+\begin{bmatrix}
+A\\
+\upsilon_0h\\
+0\\
+0\\
+0\\
+0\\
+0\\
+\end{bmatrix}
+\end{align}
+
+a nastêpnie rozwi¹zanie uk³adu metod¹ Gaussa-Jordana, narysowaæ zale¿noœæ wychylenia z po³o¿enia równowagi dla k/m= 1 i kroku ca³kowemu h= 0.1
+\subsection{Opis problemu (2):}
+W nastêpnym zadaniu byliœmy zobligowani do rozwi¹zania UARL metodami bezpoœrednimi a mianowicie wyliczyæ wektor x z podanego ni¿ej uk³ad równañ \\
+$A\cdot x=b$ gdzie: 
+
+\begin{align}
+a=\begin{bmatrix}
+2q\cdot 10^{-4} & 1 & 6 & 9 & 10 &\\
+2\cdot 10^{-4} & 1 & 6 & 9 & 10 &\\
+1 & 6 & 6 & 8 & 6 &\\
+5 & 9 & 10 & 7 & 10 &\\
+3 & 4 & 9 & 7 & 9 &\\
+\end{bmatrix}
+, \text{  oraz } b=\begin{bmatrix}
+10\\
+2\\
+9\\
+9\\
+3
+\end{bmatrix}
+\end{align}
+
+nastêpnie musimy policzyæ iloraz $c=A\cdot x$ 
+warto zauwa¿yæ dla q=1 uk³ad bêdzie sprzeczny a dla wartoœci q bliskich jedynce macierz A bêdzie bliska osobliwoœci i wyst¹pi problem niejednoznacznoœci
+Dlatego dla ka¿dej kolejnej wartoœci \\q (od 1/5 do 5) obliczamy b³¹d œredniokwadratowy tego  iloczynu ($c=A\cdot x$) od wektora b wed³ug podanego wzoru
+
+\begin{align}
+o(q)=\dfrac{1}{5}\sqrt{\sum^{5}_{i-1}(c_i-b_i)^2}
+\end{align}
+\newpage
+
+\section{Wnioski}
+Dane wejœciowe:
+\begin{itemize}
+  \item A = 1
+  \item $v_0$ = 0
+  \item k/m = 1
+  \item h = 0.1 krok ca³kowania
+  \item N=100 wymiar
+\end{itemize}
+
+W pierwszym zadaniu skorzystaliœmy z funkcji ustaw() która ustawia nam wartoœci macierzy A tak jak w równaniu (16) nastêpnie wywo³ujemy funkcje policz która rozwi¹zywania uk³adów równañ liniowych $A\cdot x=b$ metod¹
+Gaussa-Jordana. Wyniki przedstawiliœmy na wykresie razem ze znanymi ju¿ zale¿noœciami analitycznymi.
+
+\begin{center}
+\includegraphics[scale=0.87]{Figure_1.png}
+\end{center}
+\captionof{figure}{Wykres zale¿noœæ x(t) od t}
+
+\newpage
+
+W drugim zadaniu wywo³ujemy funkcje mean\_squared\_error() dla zmiennej q w zakresie od 1/5 do 5 z krokiem 0.1 Funkcja ta ustawia nam macierz a, b i rozwi¹zuje równanie $A\cdot x=b$ przez co otrzymujemy wektor x który mno¿ymy przez kopie A(pierwotna macierz A) dziêki czemu otrzymujemy wartoœci c które porównujemy z b wykorzystuj¹c b³¹d œredniokwadratowy. Licz¹c b³¹d w ten sposób dla q z zakresu (1/5,5) z krokiem 0.1 otrzymujemy wartoœci o(q) które nanosimy na wykres
+
+\begin{center}
+\includegraphics[scale=0.9]{Figure_2.png}
+\end{center}
+\captionof{figure}{Wykres o(q)}\
+
+\end{document}

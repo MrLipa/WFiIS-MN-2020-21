@@ -1,0 +1,233 @@
+\documentclass[11pt,oneside]{article}
+
+
+
+\usepackage[cp1250]{inputenc}
+\usepackage{polski}
+\usepackage{indentfirst} %wcienia od pierwszego akapitu
+\usepackage{amsfonts}    %czcionki np funkcja do pogrubienie dla np N
+\usepackage{amsmath} %zawiera np begin cases
+\usepackage[dvipsnames]{xcolor} %kolory dvipsnames wiecej kolorów
+\usepackage{graphicx} %np includeggraphics do obrazkow
+\usepackage{caption} %np caption czyli podpisy pod obrazkiem
+\usepackage{epstopdf} %np do obrazki wektorowe na pdf
+\usepackage{scrextend}
+\usepackage{geometry} %zmienia marginesy
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{amssymb}
+
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\R}[1]{\textcolor{red}{#1}}
+\newcommand{\G}[1]{\textcolor{OliveGreen}{#1}}
+\newcommand{\B}[1]{\textcolor{blue}{#1}}
+
+
+
+\begin{document}
+
+
+\newgeometry{margin=0.8in}
+\begin{flushright}
+\textbf{Wydzia³:} Fizyki i Informatyki Stosowanej\\
+\textbf{Kierunek:} Informatyka Stosowana\\
+\textbf{Rok:} 2020/21\\
+\textbf{Semsetr}: letni\\
+\textbf{Typ:} stacjonarne\\
+\textbf{Nr albumu:} 401984\\
+\textbf{Data:} 08.03.2021\\
+\end{flushright}
+
+
+\begin{center}
+\includegraphics[scale=0.17]{AGH}
+\\[0.3cm]
+\begin{LARGE}
+\textsf{Sprawozdanie - Laboratorium nr 2\\
+Rozwi¹zywanie UARL metodami bezpoœrednimi \\[1cm]}
+\end{LARGE}
+\end{center}
+
+
+\tableofcontents
+\vspace*{\fill}
+
+
+\begin{LARGE}
+\begin{flushleft}
+\textsl{opracowa³:\\
+Tomasz Szkaradek}
+\end{flushleft}
+\end{LARGE}
+
+
+
+\clearpage
+\newpage
+\restoregeometry
+\pagestyle{fancy} 
+\cfoot{\thepage\ of \pageref{LastPage}}
+\newgeometry{margin=1.3in}
+
+
+\section{Wstêp teoretyczny}
+
+\subsection{Metoda LU}
+Metoda LU (lower – dolny, upper górny) – metoda rozwi¹zywania uk³adu równañ liniowych. Nazwa pochodzi od u¿ytych w tej metodzie macierzy trójk¹tnych, tj. L dolnotrójk¹tnej i U górnotrójk¹tnej. Proces rozk³adania macierzy na macierz L oraz U nazywamy dekompozycj¹. Dekompozycja  LU polega na zamianie macierzy A na jej odpowiednik, z³o¿ony z dwóch macierzy trójk¹tnych L i U. Metoda pozwala tak¿e na szybkie wyliczenie macierzy odwrotnej oraz wyznacznika macierzy.
+Aby rozwi¹zaæ taki uk³ad równañ gdzie wektor x jest niewiadoma postêpujemy z nastêpuj¹cy sposób
+$$A \cdot x=b$$
+aby obliczyæ macierz L i U pos³ugujemy siê Metoda Doolittle’a:
+Z definicji iloczynu macierzy mo¿na wyznaczyæ nastêpuj¹ce wzory na elementy macierzy L i U
+$$
+l_{i,j}=\dfrac{1}{u_{j,j}} \cdot (A_{i,j}- \sum_{k=1}^{j-1}L_{i,k} \cdot u_{k,j}) , \quad u_{i,j}= A_{i,j}- \sum_{k=1}^{i-1}L_{i,k} \cdot u_{k,j}
+$$
+$$A=L \cdot U$$
+gdzie 
+\begin{align}
+L=
+\begin{bmatrix}
+1 & 0 & \cdots  & 0\\
+l_{21} & 1 & \cdots  & 0\\
+\vdots & \vdots & \ddots & \vdots \\
+l_{n1} & l_{n2} & \cdots & 1\\
+\end{bmatrix}
+, \quad U=
+\begin{bmatrix}
+u_{11} & u_{12} & \cdots  & u_{1n}\\
+0 & u_{22} & \cdots  & u_{1n}\\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & u_{nn}\\
+\end{bmatrix}
+\end{align}
+$$A=L \cdot U \cdot x=b$$
+³atwo mo¿emy policzyæ tymczasowy wektor z
+$$L \cdot z =b$$
+nastêpnie z drogiego równania wyliczmy wektor x
+$$U \cdot x =z$$
+\newpage
+
+\subsection{Obliczanie wyznacznika macierzy}
+Pos³uguj¹c siê metoda LU za³o¿yliœmy ze macierz A mo¿na zapisaæ jako $A=L \cdot U$ oraz pamiêtaj¹c fakt z algebry i¿ $det(A)=det(L \cdot U) \Rightarrow det(A)=det(L) \cdot det(U)$.Bêd¹c w posiadaniu macierzy L oraz macierzy U jesteœmy w ³atwy sposób wyznaczyæ wyznacznik macierzy A. Na pierwszy rzut oka mo¿na uznaæ ¿e zamiast jednego wspó³czynnika wyliczamy 2 jednak pamiêtajmy ¿e wyznacznik macierzy trójk¹tnej jest iloczynem liczb na diagonalnej a w przypadku L samych jedynek
+$$det(A)=det(L \cdot U) \Rightarrow det(A)=det(L) \cdot det(U)$$
+$$det(L)=1 \cdot 1 \cdots 1=1, \quad det(U)= u_{1,1} \cdot u_{2,2} \cdots  u_{n,n}$$
+$$det(A)=det(U)$$
+
+\subsection{Odwracanie macierzy}
+Rozk³ad LU jest równie¿ przydatny do odwracania macierzy. By to zrobiæ, trzeba rozwi¹zaæ N uk³adów równañ z wektorami wyrazów wolnych postaci:
+\begin{align}
+b_1=\begin{bmatrix}
+1\\
+0\\
+0\\
+\vdots\\
+0\\
+\end{bmatrix}
+, \quad
+b_2=\begin{bmatrix}
+0\\
+1\\
+0\\
+\vdots\\
+0\\
+\end{bmatrix}
+, \quad
+b_3=\begin{bmatrix}
+0\\
+0\\
+1\\
+\vdots\\
+0\\
+\end{bmatrix}
+, \quad \cdots \quad
+b_n=\begin{bmatrix}
+0\\
+0\\
+0\\
+\vdots\\
+1\\
+\end{bmatrix}
+\end{align}
+Nastêpnie po rozwi¹zaniu n uk³adów otrzymujemy n wektorów c które tworz¹ kolumny macierzy odwrotnej A
+
+
+\subsection{WskaŸnik uwarunkowania}
+WskaŸnik uwarunkowania okreœla, w jakim stopniu b³¹d reprezentacji numerycznej danych wejœciowych danego problemu wp³ywa na b³¹d wyniku. WskaŸnik uwarunkowania definiuje siê jako maksymalny stosunek b³êdu wzglêdnego rozwi¹zania do b³êdu wzglêdnego danych. Problem o niskim wskaŸniku uwarunkowania nazywamy dobrze uwarunkowanym, zaœ problemy o wysokim wskaŸniku uwarunkowania – Ÿle uwarunkowanymi. Dane o  zbyt  du¿ym  wskaŸniku  uwarunkowania  nie  bardzo  siê  nadaj¹ do rozwi¹zywania 
+numerycznego, poniewa¿ sam b³¹d, który wynika z numerycznej reprezentacji liczb, wprowadza nieproporcjonalnie du¿y b³¹d w wynikach obliczeñ\\
+WskaŸnik wyra¿amy wzorem:
+$$ \kappa (A)=||A|| \cdot ||A^{-1}||$$
+gdzie $||A||$ to norma macierzy A.Jak obliczyæ normê?
+Aby ja wyliczyæ musimy znaleŸæ max z sum wartoœci bezwzglêdnych kolumn
+$$||A||_{1, \infty }=max|a_{i,j}|,gdzie \quad 1\leqslant i,j \leqslant n$$
+
+\subsection{Schemat Hornera}
+Schemat Hornera jest algorytmem s³u¿¹cym do bardzo szybkiego obliczania wartoœci wielomianu. Redukuje on iloœæ mno¿eñ do minimum. Przeanalizujmy nastêpuj¹cy wielomian:
+$$W(x)=3x^3+3x^2-2x+11$$
+Zapisany schematem Hornera:
+$$W(x)=((3x+3)x-2)+11$$
+a wiêc gdy nasz wielomian jest tej postaci:
+$$ W(x)=\sum_{i=0}^{N-1}c_ix^i=( \cdots ((c_{N-1}x+c_{N-2})x+c_{N-3})x+ \cdots +c_1)x+c_0$$
+mo¿emy znacz¹co zredukowaæ liczbê wykonanych mno¿eñ
+
+
+\section{Zadanie do wykonania}
+Naszym zadaniem w trakcie laboratoriów by³o wykonanie ró¿nych operacji na macierzy A, oraz rozwi¹zaæ uk³ad równañ$A \cdot x =b$ w naszym przypadku postaci:
+\begin{align}
+\begin{bmatrix}
+1 & x_1 & x_1^2 & \cdots & x_1^{N-1}\\
+1 & x_2 & x_2^2 & \cdots & x_2^{N-1}\\
+\vdots &  &  &  & \vdots\\
+1 & x_N & x_N^2 & \cdots & x_N^{N-1}\\
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+c_0\\
+c_1\\
+\vdots\\
+c_n\\
+\end{bmatrix}
+=
+\begin{bmatrix}
+y_0\\
+y_1\\
+\vdots\\
+y_n\\
+\end{bmatrix}
+\end{align}
+gdzie A to to tak zwana macierz Vandermonde’a Podczas laboratoriów wykonywaliœmy nastêpuj¹c kroki:
+\begin{enumerate}
+
+\item Losujemy wektor x (z którego tworzymy macierz A),oraz c oba o wymiarze [N],gdzie N=20. Do tego zadania skorzystaliœmy z funkcji uniform w przedziale od -1 do 1 
+\item Nastêpnym krokiem by³o obliczenie ilorazu macierzy A oraz wektora x korzystaj¹c z schematu Hornera
+\item Kolejno zak³adaj¹c i¿ znamy macierz A oraz wektor wyrazów wolnych y ale nie znamy wektora c1 rozwi¹zujemy uk³ad równañ (3) korzystaj¹c z metody LU
+\item Tworzymy teraz wektor x1 w przedziale od (-1,1) o wymiarze [N1], gdzie N=200 korzystaj¹c ze schematu Hornera o otrzymujemy y1 o wymiarze [N1]
+\item Rysujemy wykres punktowy y(x) który wyliczyliœmy w kroku 2 oraz y1(x) który policzyliœmy w korku 4 odpowiednio je zaznaczaj¹c 
+\item Nastêpnym zadaniem by³o obliczenie macierzy odwrotnej uzyskaliœmy j¹ poprzez rozwi¹zywanie n uk³adów równañ z kolejnymi wektorami bazy  kanonicznej,  otrzymuj¹c  w  taki  sposób  odpowiednie kolumny  macierzy  odwrotnej.  Do rozwi¹zywania wszystkich uk³adów zosta³a u¿yta jedna dekompozycja.
+\item Obliczalnie wyznacznika macierzy by³o kolejnym zadaniem do rozwi¹zania Posiadaj¹c dekompozycje macierzy A by³o to stosunkowo proste poniewa¿ uzyskujemy go poprzez pomno¿enie wartoœci na diagonali macierzy U
+\item Pozostaje kwestia wyliczenia wskaŸnika uwarunkowania macierzy uzyskujemy go poprzez pomno¿enie normy macierz A oraz nomy macierzy do niej odwrotnej, innymi s³owy znaleŸliœmy kolumnê w której suma bezwzglêdna poszczególnych komórek macierzy A jest najwiêksza a nastêpnie mno¿ymy t¹ sumê razy  maksymaln¹ sumê bezwzglêdn¹ komórek w danej kolumnie macierzy odwrotnej A
+\end{enumerate}
+
+
+\section{Wyniki}
+Wyniki programu przedstawiaj¹ siê nastêpuj¹co:
+\begin{center}
+\includegraphics[scale=0.87]{Figure_1.png}
+\end{center}
+\captionof{figure}{Wykres zale¿noœæ y(x) od x}
+Wyznacznik macierzy:
+$$det(A)=-3.658225385675001e-66$$
+Wspó³czynnik uwarunkowania macierzy:
+$$\kappa(A)=35369100588094.5$$
+
+\section{Podsumowanie}
+Metoda LU pozwala uzyskaæ wyznacznik macierzy, odwróciæ j¹, obliczyæ wskaŸnik uwarunkowania macierzy czy rozwi¹zaæ uk³ad równañ w ³atwy sposób. Liczenie wyznacznika macierzy A jest trywialne, gdy posiadamy rozk³ad LU jest on równy wyznacznikowi macierzy trójk¹tnej U, czyli iloczynowi elementów na przek¹tnej macierzy U.WskaŸnik uwarunkowania okreœla wra¿liwoœæ wyniku na zaburzenia danych. Zadanie dobrze uwarunkowane, czyli z niskim wskaŸnikiem powoduje i¿ niewielkie zmiany danych powoduj¹ niewielkie zmiany wyniku.W naszym przypadku ten wskaŸnik najczêœciej jest rzêdu 13 $\kappa(A)=35369100588094.5$. Tak  jak  pokazuje  nam wskaŸnik  uwarunkowania,  nasza  macierz  jest  niestabilna  i rozwi¹zanie  obarczone  jest b³êdem  obliczeñ  komputerowych.
+
+
+
+\end{document}

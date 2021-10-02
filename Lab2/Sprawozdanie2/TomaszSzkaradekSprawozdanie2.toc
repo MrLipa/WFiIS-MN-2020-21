@@ -1,0 +1,9 @@
+\contentsline {section}{\numberline {1}Wst\k ep teoretyczny}{2}%
+\contentsline {subsection}{\numberline {1.1}Metoda LU}{2}%
+\contentsline {subsection}{\numberline {1.2}Obliczanie wyznacznika macierzy}{3}%
+\contentsline {subsection}{\numberline {1.3}Odwracanie macierzy}{3}%
+\contentsline {subsection}{\numberline {1.4}Wska\'znik uwarunkowania}{3}%
+\contentsline {subsection}{\numberline {1.5}Schemat Hornera}{4}%
+\contentsline {section}{\numberline {2}Zadanie do wykonania}{4}%
+\contentsline {section}{\numberline {3}Wyniki}{5}%
+\contentsline {section}{\numberline {4}Podsumowanie}{6}%

@@ -1,0 +1,382 @@
+\documentclass[11pt,oneside]{article}
+
+
+
+\usepackage[cp1250]{inputenc}
+\usepackage{polski}
+\usepackage{indentfirst} %wcienia od pierwszego akapitu
+\usepackage{amsfonts}    %czcionki np funkcja do pogrubienie dla np N
+\usepackage{amsmath} %zawiera np begin cases
+\usepackage[dvipsnames]{xcolor} %kolory dvipsnames wiecej kolorów
+\usepackage{graphicx} %np includeggraphics do obrazkow
+\usepackage{caption} %np caption czyli podpisy pod obrazkiem
+\usepackage{epstopdf} %np do obrazki wektorowe na pdf
+\usepackage{scrextend}
+\usepackage{geometry} %zmienia marginesy
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{multicol}
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\R}[1]{\textcolor{red}{#1}}
+\newcommand{\G}[1]{\textcolor{OliveGreen}{#1}}
+\newcommand{\B}[1]{\textcolor{blue}{#1}}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert} 
+
+
+
+\begin{document}
+
+
+\newgeometry{margin=0.8in}
+\begin{flushright}
+\textbf{Wydzia³:} Fizyki i Informatyki Stosowanej\\
+\textbf{Kierunek:} Informatyka Stosowana\\
+\textbf{Rok:} 2020/21\\
+\textbf{Semsetr}: letni\\
+\textbf{Typ:} stacjonarne\\
+\textbf{Nr albumu:} 401984\\
+\textbf{Data:} 29.03.2021\\
+\end{flushright}
+
+
+\begin{center}
+\includegraphics[scale=0.17]{AGH}
+\\[0.3cm]
+\begin{LARGE}
+\textsf{Sprawozdanie - Laboratorium nr 5\\
+Obliczanie wektorów i wartoœci w³asnych za pomoc¹ rozk³adu QR metod¹ Hauseholdera\\[1cm]}
+\end{LARGE}
+\end{center}
+
+
+\tableofcontents
+\vspace*{\fill}
+
+
+\begin{LARGE}
+\begin{flushleft}
+\textsl{opracowa³:\\
+Tomasz Szkaradek}
+\end{flushleft}
+\end{LARGE}
+
+
+
+\clearpage
+\newpage
+\restoregeometry
+\pagestyle{fancy} 
+\cfoot{\thepage\ of \pageref{LastPage}}
+\newgeometry{margin=1.22in}
+
+
+\section{Wstêp teoretyczny}
+\subsection{Wektor, wartoœæ oraz problem w³asny}
+Niech A bêdzie kwadratow¹ macierz¹ $n\times n$. Wówczas A wyznacza przekszta³cenie liniowe przestrzeni $\mathbb{R}$ w siebie. Niech $v \in R_n$  bêdzie  pewnym  niezerowym  wektorem  oraz  niech $L = { t \cdot v:t \in \mathbb{R} }$ bêdzie  prost¹ wyznaczon¹ przez ten wektor. Je¿eli przekszta³cenie A przekszta³ca prost¹ L w siebie, to mówimy, ¿e $v$ jest wektorem w³asnym przekszta³cenia A. Oznacza to ¿e problem w³asny macierzy mo¿emy zapisaæ w postaci równania liniowego
+\begin{align}
+A \cdot v =\lambda  \cdot v
+\end{align}
+dla pewnej liczby rzeczywistej $\lambda$ zwanej wartoœci¹ w³asn¹ zwi¹zan¹ z wektorem w³asnym $v$.\\ 
+Obliczenie tego równania jest zwykle skomplikowane. Dziêki w³asnoœciom i wektorom w³asnym mo¿emy np. dokonaæ diagonalizacji, która z kolei mo¿e byæ przydatna do rozwi¹zywania uk³adów równañ ró¿niczkowych.
+Czêsto przy tworzeniu modeli matematycznych  wykorzystywanych do symulacji zjawisk fizycznych czy zachowania siê uk³adu, zachodzi potrzeba rozwi¹zania problemu w³asnego
+
+\subsection{Metoda Hauseholdera}
+
+Metoda Householdera umo¿liwia znaleŸæ rozk³ad QR dowolnej macierzy prostok¹tnej $m \times n$. Pozwala na zredukowanie
+symetrycznej macierzy A do tridiagonalnej formy w n-2 ortogonalnych przekszta³ceniach
+Wówczas transformacj¹ Householdera nazywamy macierz postaci:
+\begin{align}
+H= I-W \upsilon \upsilon^T \text{, gdzie } W=\dfrac{2}{\upsilon^T \upsilon}
+\end{align}
+Macierz H jest macierz¹ symetryczn¹ i ortogonaln¹ (transformacja nie zmienia d³ugoœci wektora) oraz ma tak¹ w³asnoœæ, ¿e dowolny wektor x wymiaru m jest odbiciem lustrzanym wektora Hx wzglêdem hiperp³aszczyzny (wymiaru m-1) prostopad³ej do wektora $v$.Wektor $\upsilon$ jest rzeczywistym wektorem spe³niaj¹cym warunek $\norm{\upsilon}=1$ a macierz H jest równie¿ ortogonalna poniewa¿ $H^2=1$ a wiec:
+\begin{align}
+H=I-\dfrac{2}{\upsilon \upsilon^T} \upsilon \upsilon^T
+\end{align}
+gdzie $\upsilon$ jet wektorem powsta³ym wed³ug wzoru:
+\begin{align}
+\upsilon = x \pm \norm{x} e_i,
+\end{align}
+x jest wektorem powsta³ym na pocz¹tku z pierwszej kolumny macierzy A\\
+$e_1$ jest wektorem jednostkowym $[1, 0, ..., 0]^T$
+
+
+\newpage
+\subsection{Rozk³ad QR oraz szukanie wartoœci i wektorów w³asnych}
+\subsubsection{Rozk³ad QR}
+
+Rozk³ad QR to rozk³ad macierzy do postaci iloczynu macierzy Q i R, gdzie Q jest macierz¹
+ortogonaln¹, a R jest macierz¹ trójk¹tn¹ górn¹. Transformacja Householdera mo¿e zostaæ wykorzystana w celu przeprowadzenia rozk³adu QR macierzy A. Metoda polega na iteracyjnym szukaniu transformacji Householdera dla kolejnych wektorów pod diagonal¹ macierzy A.
+Zdefiniujemy macierz Householdera:
+\begin{align}
+H=I-\dfrac{2}{\upsilon \upsilon^T} \upsilon \upsilon^T \\
+\upsilon = z - \alpha \norm{z}_2 e_1
+\end{align}
+gdzie: \\
+$z = [z_1, z_2, ..., z_n]^T,\\
+\alpha = \pm 1 = -sign(z_1), \\
+e_i$ wektor jednostkowy z jedynka na i tym miejscu\\
+Gdy ju¿ wiemy jak otrzymaæ macierz Householdera w kolejnych iteracji mo¿emy przejœæ do omówienia algorytmu który pos³u¿y nam do wyznaczania macierzy Q i R.\\
+Zaczynaj¹c iterowaæ warto skopiowaæ macierz A do macierzy R\\
+W i-tej iteracji obliczamy wektor $v$ korzystaj¹c ze wzoru numer (6) \\
+gdzie wektor z to i-ta kolumna macierzy R z zerami od 1 do i \\
+nastêpnie obliczamy macierz $H_i$ wed³ug wzoru (5) 
+a na sam koniec obliczamy nasza macierz R w danej iteracji:
+$$
+R_i=H_i \cdot A
+$$
+po n (rozmiar macierzy) iteracjach nasza macierz R powinna nabraæ kszta³tu macierzy górnotrójk¹tnej. Natomiast nasza macierz Q to iloczynu kolejnych macierzy H czyli:
+$$
+Q=H_1 \cdot H_2 \cdot \cdots \cdot H_{n}
+$$
+
+\subsubsection{Wartoœci i wektory w³asne}
+Korzystaj¹c z rozk³adu QR macierzy A mo¿emy wyznaczyæ jej wartoœci i wektory w³asne. 
+W nastêpuj¹cej metodzie aby obliczyæ wektory i w³asnoœci w³asne musimy przeprowadziæ  iter iteracji im wiêcej wykonamy tym dok³adniejsze wyniki otrzymamy\\
+W pierwszej iteracji dokonujemy rozk³adu macierzy A na macierz Q oraz macierz R jako:\\
+$A_1=Q_1 \cdot R_1$\\
+Nastêpnie obliczamy macierz $A_2$ jako\\
+$A_2 = R_1 \cdot Q_1$\\
+W ka¿dej kolejnej iteracji k\\
+Rozk³adamy macierz $A_k$ na macierz Q oraz macierz R jako $A_k=Q_k \cdot R_k$\\
+a nastêpnie obliczamy macierz $A_{k+1}$ jako\\
+$A_{k+1} = R_k \cdot Q_k$
+\newpage
+Po przeprowadzeniu iter iteracji mo¿emy obliczyæ macierz wynikowa P jako \\
+$P = P_k = Q_1 \cdot Q_2 \cdot Q_3 \cdots Q_{iter}$\\
+natomiast $P^{-1}=P_k^{-1}=Q_1^{-1} \cdot Q_2^{-1} \cdot Q_3^{-1} \cdots Q_{iter}^{-1}$\\
+Wówczas prawdziwe jest równanie:
+\begin{align}
+P^{-1} \cdot A \cdot P = A_{k+1} = H
+\end{align}
+gdzie: macierz H jest macierz¹ górn¹-trójk¹tn¹ z wartoœciami w³asnymi na diagonali.
+$$
+\lambda_i=h_{ii}
+$$ 
+Wektor w³asny $y_k$ macierzy H odpowiadaj¹cy wartoœci w³asnej $\lambda_k$ wyznaczamy stosuj¹c wzory:\\
+\begin{align}
+\left\{ \begin{array}{ll}
+x_j^{i} = 0 & \textrm{gdy } j=n,n-1, \cdots ,i+1\\
+x_j^{i} = 1 & \textrm{gdy } j=i\\
+x_j^{i} = - \dfrac{\sum_{k=j+1}^i h_{jk}x_k^{(i)}}{h_{jj}-h_{ii}} & \textrm{gdy } j=i-1,i-2, \cdots ,1
+\end{array} \right.
+\end{align}
+Dysponuj¹c wektorami $x_k$ mo¿emy wyznaczyæ wektory w³asne $y_k$ wyjœciowego problemu
+\begin{center}
+$
+H=P^{-1}AP
+$
+\\
+$
+Hx=\lambda x
+$
+\\
+$
+P^{-1}APx=Hx=\lambda x
+$
+\\
+$
+A(Px)=\lambda Px
+$
+\\
+$
+y=Px
+$
+\\
+$
+Ay= \lambda y
+$
+\end{center}
+Algorytm ten mo¿na zmodyfikowaæ do postaci QL, gdzie L to macierz trójk¹tna dolna
+\newpage
+
+\section{Zadanie do wykonania}
+Podczas 5 laboratoriów byliœmy zobligowani do poszukiwania rozwi¹zanie równania Schrodingera czyli typowym problemu w³asnym w fizyce bêd¹cego równaniem w³asnym operatora energii:
+\begin{align}
+-\dfrac{h}{2m} \triangledown ^2 \psi(\textbf{r})+V(\textbf{r})\psi(\textbf{r}) = E \psi (\textbf{r})
+\end{align}
+
+gdzie V(r)— jest energi¹ potencjaln¹, $\psi$(r)— funkcj¹ falow¹ zaœ E - energi¹ odpowiadaj¹c¹ funkcji $\psi$(r). Spróbujmy znaleŸæ poziomy energii i odpowiadaj¹ce im funkcje falowe dla cz¹stki o masie m umieszczonej w potencjale jednowymiarowego oscylatora harmonicznego V(x)=$\dfrac{kx^2}{2}$. Jeœli za jednostkê energii przyjmiemy h$ \omega $ (gdzie $\omega ^2$=k/m) a jednostkê d³ugoœci $\sqrt{h/m\omega}$ to równanie (3) przyjmie postaæ:
+
+\begin{align}
+- \dfrac{1}{2} \dfrac{d^2}{dx^2}\psi (x) \dfrac{1}{2} x^2 \psi (x) = E \psi (x)
+\end{align}
+
+Zastêpuj¹c drug¹ pochodn¹ po lewej stronie równania ilorazem ró¿nicowym:
+
+\begin{align}
+\dfrac{d^2\psi}{dx^2}(x=x_i)\approx \dfrac{\psi(x_{i+1})-2\psi(x_i)+\psi (x_{i-1})}{(\Delta x)^2}
+\end{align}
+mo¿emy ustawiæ równanie iteracyjne na $\psi_i = \psi(x_i)$
+
+\begin{align}
+- \dfrac{1}{2} \dfrac{\psi_{i+1} -2 \psi_i +\psi_{i-1} }{(\Delta x)^2}+\dfrac{1}{2}x_i^2 \psi _i =E
+\end{align}
+
+¿¹daj¹c zerowania siê funkcji falowej $\psi$(x) w nieskoñczonoœciach \\
+$\psi (x= L \longrightarrow -\inf) = \psi_0 = 0$ 
+i $\psi (x = +L \longrightarrow + \inf) = \psi_N = 0$ równanie (6) mo¿na przedstawiæ w postaci macierzowej jako:
+
+
+$$
+\begin{bmatrix}
+h_{1,1} & h_{1,2} & 0 & 0 &\cdots & 0 & 0 & 0 & 0\\
+h_{2,1} & h_{2,2} & h_{2,3} & 0 &\cdots & 0 & 0 & 0 & 0\\
+0 & h_{3,2} & h_{3,3} & h_{3,4} &\cdots & 0 & 0 & 0 & 0\\
+\quad & \quad & \quad & \quad &\vdots & \quad & \quad & \quad & \quad\\
+0 & 0 & 0 & 0 &\cdots & h_{N-3,N-4} & h_{N-3,N-3} & h_{N-3,N-2} & 0\\
+0 & 0 & 0 & 0 &\cdots & 0 & h_{N-2,N-3} & h_{N-2,N-2} & h_{N-2,1}\\
+0 & 0 & 0 & 0 &\cdots & 0 & 0 & h_{N-1,N-2} & h_{N-1,N-1}\\
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+\psi_1\\
+\psi_2\\
+\psi_3\\
+\vdots \\
+\psi_{N-3}\\
+\psi_{N-2}\\
+\psi_{N-1}\\
+\end{bmatrix}
+= E 
+\begin{bmatrix}
+\psi_1\\
+\psi_2\\
+\psi_3\\
+\vdots \\
+\psi_{N-3}\\
+\psi_{N-2}\\
+\psi_{N-1}\\
+\end{bmatrix}
+$$
+gdzie $h_{i,i-1} = h_{i-1,1}, i= -1/[2(\vartriangle x)2]$ dla i= 2,...,N-1, $h_{i,i} = (\vartriangle x)^{-2}+x^2_i/2, \quad x_i=-L+i \vartriangle$ x dla i= 1,...,N-1 oraz $\vartriangle x= 2L/N$
+\section{Wyniki}
+Ca³y program zosta³ napisany w jêzyku Python obliczenia zosta³y prowadzone na liczbach zmiennoprzecinkowych.
+Pos³uguj¹c siê funkcjami do rozk³adu macierzy na Q i R obliczeniem wartoœci w³asnych oraz wektorów w³asnych napisanymi wed³ug zasad opisanych powy¿ej obliczamy kolejne wartoœci i wektory w³asne macierzy wejœciowej A
+\begin{center}
+$\lambda_1$=0.50 \\
+$\lambda_2$=1.49 \\
+$\lambda_3$=2.48 \\
+$\lambda_4$=3.48 \\
+$\lambda_5$=4.51 \\
+$\vdots$
+\end{center}
+W tym zadaniu obliczaliœmy wartoœci i wektory w³asne od ty³u to jest 
+$\lambda_1$ to 50 wartoœæ w³asna itd.
+Czasy wykonywania algorytmu zale¿ne od ustalonej iloœci iteracji
+
+\begin{itemize}
+\begin{multicols}{2}
+\item iter=20\\
+
+Czas wykonania dla $\lambda_1$ równy 0.28 [s]\\
+Czas wykonania dla $\lambda_2$ równy 0.23 [s]\\
+Czas wykonania dla $\lambda_3$ równy 0.23 [s]\\
+Czas wykonania dla $\lambda_4$ równy 0.26 [s]\\
+Czas wykonania dla $\lambda_5$ równy 0.23 [s]
+
+\item iter=100
+
+Czas wykonania dla $\lambda_1$ równy 1.32 [s]\\
+Czas wykonania dla $\lambda_2$ równy 1.18 [s]\\
+Czas wykonania dla $\lambda_3$ równy 1.23 [s]\\
+Czas wykonania dla $\lambda_4$ równy 1.23 [s]\\
+Czas wykonania dla $\lambda_5$ równy 1.21 [s]
+
+\end{multicols}
+
+\begin{center}
+\item $\bullet$ iter=200
+
+Czas wykonania dla $\lambda_1$ równy 2.78 [s]\\
+Czas wykonania dla $\lambda_2$ równy 2.85 [s]\\
+Czas wykonania dla $\lambda_3$ równy 2.79 [s]\\
+Czas wykonania dla $\lambda_4$ równy 2.93 [s]\\
+Czas wykonania dla $\lambda_5$ równy 3.21 [s]
+\end{center}
+
+\end{itemize}
+
+A nastêpnie na ich podstawie wyliczyliœmy wektory w³asne które nanieœliœmy na wykresy narysowane równie¿ w Pythonie za pomoc¹ biblioteki matplotlib.  Wyniki programu (dla iter=50) mo¿emy zaobserwowaæ na wykresach poni¿ej:
+\newgeometry{margin=0.2in}
+\begin{figure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{Figure_1}  
+  \caption{$\lambda_1$=0.5}
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_2}  
+  \caption{$\lambda_2$=1.49}
+  \label{fig:sub-second}
+\end{subfigure}
+
+\begin{subfigure}{.5\textwidth}
+  \centering
+  % include third image
+  \includegraphics[width=1\linewidth]{Figure_3}  
+  \caption{$\lambda_3$=2.48}
+  \label{fig:sub-third}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  % include fourth image
+  \includegraphics[width=1\linewidth]{Figure_4}  
+  \caption{$\lambda_4$=3.48}
+  \label{fig:sub-fourth}
+\end{subfigure}
+
+\begin{subfigure}{.5\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{Figure_5}  
+  \caption{$\lambda_1$=4.51}
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_6}  
+  \label{fig:sub-second}
+\end{subfigure}
+\end{figure}
+\restoregeometry
+
+
+\section{Podsumowanie}
+Znalezienie wartoœci w³asnych i wektorów w³asnych dla macierzy, nawet stosunkowo ma³ej i symetrycznej, jest niezwykle
+skomplikowane.
+Z³o¿onoœæ obliczeniowa wyznaczania rozk³adu QR macierzy n$\times$n jest równa 
+$$
+M=\dfrac{2}{3}n^3+O(n^2)
+$$
+jest zatem w przybli¿eniu dwukrotnie wiêksza ni¿ np. metoda 
+eliminacja Gaussa. Decyduj¹cy wp³yw na czas obliczeñ ma
+efektywnoœæ wykorzystania pamiêci podrêcznej (cache’a) procesora przez implementacjê algorytmu, dlatego nie mo¿na powiedzieæ z góry, ¿e eliminacja Gaussa dzia³a dwukrotnie szybciej.\\
+Dziêki rozk³adowi QR i metodzie Hauseholdera mo¿emy stosunkowo szybko znaleŸæ wektory i wartoœci w³asne. Czas jak widaæ po wynikach jest zale¿ny od liczby iteracji który dla ma³ej liczby nie jest wielki.
+
+
+\section{Literatura}
+\begin{description}
+\item {[1]} Tomasz Chwiej, Wyznaczanie wartoœci i wektorów w³asnych macierzy\\
+$http://home.agh.edu.pl/~chwiej/mn/diagonalizacja\_2018.pdf$
+\item {[2]} Wikipedia, Rozk³ad QR\\
+$https://pl.wikipedia.org/wiki/Rozk\%C5\%82ad_QR$
+\item {[3]} Krzysztof Malarz, Wektory i wartoœci w³asne\\
+$https://www.cce.pk.edu.pl/~michal/pdfy/Metody13.pdf$
+\end{description}
+
+
+\end{document}

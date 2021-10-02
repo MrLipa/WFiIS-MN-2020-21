@@ -1,0 +1,239 @@
+\documentclass[11pt,oneside]{article}
+
+
+
+\usepackage[cp1250]{inputenc}
+\usepackage{polski}
+\usepackage{indentfirst} %wcienia od pierwszego akapitu
+\usepackage{amsfonts}    %czcionki np funkcja do pogrubienie dla np N
+\usepackage{amsmath} %zawiera np begin cases
+\usepackage[dvipsnames]{xcolor} %kolory dvipsnames wiecej kolorów
+\usepackage{graphicx} %np includeggraphics do obrazkow
+\usepackage{caption} %np caption czyli podpisy pod obrazkiem
+\usepackage{epstopdf} %np do obrazki wektorowe na pdf
+\usepackage{scrextend}
+\usepackage{geometry} %zmienia marginesy
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{enumitem}
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\R}[1]{\textcolor{red}{#1}}
+\newcommand{\G}[1]{\textcolor{OliveGreen}{#1}}
+\newcommand{\B}[1]{\textcolor{blue}{#1}}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert} 
+
+
+
+\begin{document}
+
+
+\newgeometry{margin=0.8in}
+\begin{flushright}
+\textbf{Wydzia³:} Fizyki i Informatyki Stosowanej\\
+\textbf{Kierunek:} Informatyka Stosowana\\
+\textbf{Rok:} 2020/21\\
+\textbf{Semsetr}: letni\\
+\textbf{Typ:} stacjonarne\\
+\textbf{Nr albumu:} 401984\\
+\textbf{Data:} 15.03.2021\\
+\end{flushright}
+
+
+\begin{center}
+\includegraphics[scale=0.17]{AGH}
+\\[0.3cm]
+\begin{LARGE}
+\textsf{Sprawozdanie - Laboratorium nr 3\\
+Rozwi¹zywanie algebraicznych uk³adów równañ liniowych metodami iteracyjnymi\\[1cm]}
+\end{LARGE}
+\end{center}
+
+
+\tableofcontents
+\vspace*{\fill}
+
+
+\begin{LARGE}
+\begin{flushleft}
+\textsl{opracowa³:\\
+Tomasz Szkaradek}
+\end{flushleft}
+\end{LARGE}
+
+
+
+\clearpage
+\newpage
+\restoregeometry
+\pagestyle{fancy} 
+\cfoot{\thepage\ of \pageref{LastPage}}
+\newgeometry{margin=1.22in}
+
+
+\section{Wstêp teoretyczny}
+\subsection{Macierz wstêgowa}
+Macierz wstêgowa lub pasmowa – kwadratowa macierz rzadka, której wszystkie elementy s¹ zerowe poza diagonal¹ i wstêg¹ wokó³ niej.
+\begin{align}
+\begin{bmatrix}
+A_{11} & A_{12} & 0 & \cdots & \cdots & 0\\
+A_{21} & A_{22} & A_{22} & \ddots & \ddots & \vdots\\
+0 & A_{32} & A_{33} & A_{34} & \ddots & \vdots\\
+\vdots & \ddots & A_{43} & A_{44} & A_{45} & 0\\
+\vdots & \ddots & \ddots & A_{54} & A_{55} & A_{56}\\
+0 & \cdots & \cdots & 0 & A_{65} & A_{66}\\
+\end{bmatrix}
+\end{align}
+Maj¹c dana macierz $n \times n$,jej elementy $a_{i,j}$ s¹
+niezerowe, gdy
+$$i-k_{1} \leqslant j \leqslant i+k_2, \quad gdzie \quad  k_{1,2} \geqslant 0  $$ okreœlaj¹ tzw. szerokoœæ wstêgi.
+Macierz wstêgowa mo¿na zapisaæ na  $n \cdot (k_1 + k_2 +1)$ zamiast na $n^2$ komórkach pamiêci.
+\subsection{Norma euklidesowa}
+W przestrzeni wektorowej $\mathbb{R}^N$ na $\mathbb{R}$ mo¿emy sprawdziæ normê euklidesow¹ 
+\begin{align}
+\norm{x}_2=\sqrt{x_1^2+x_2^2+x_2^2+ \cdot + x_n^2}
+\end{align}
+definiujemy j¹ w skrócie jako pierwiastek z sumy kwadratów poszczególnych wspó³rzêdnych
+Normê euklidesowa mo¿emy tez zapisaæ jako 
+\begin{align}
+\norm{x}_2=\sqrt{r_k^T \cdot r_k}
+\end{align}
+\newpage
+\subsection{Metoda najwiêkszego spadku}
+Metoda ta jest gradientowym algorytmem, w której wielkoœæ kroku jest dobierana tak, aby otrzymaæ najwiêksz¹ wartoœæ spadku wartoœci funkcji, w ka¿dym kolejnym punkcie.
+\begin{align}
+\alpha_k=arg\textbf{  } min f(x^{(k)}- \alpha \triangledown f(x^{(k)})
+\end{align}
+W metodzie tej przybli¿one rozwi¹zanie w i + 1 iteracji ma  postaæ:
+$$x_{i+1}=x_i+\alpha v_i$$
+Jako $v_i$ wybieramy kierunek gradientu Q gdzie:
+$$\triangledown Q =Ax_i -b =-r_i \Rightarrow v_i=-r_i$$
+Nastêpnie aby obliczyæ $\alpha _i$ musimy obliczyæ Q($x_{i+1}$)
+$$Q(x_{i+1})=Q(x_i-\alpha _i r_i) = -\dfrac{1}{2} x_i^Tr-\dfrac{1}{2}x_i^Tb+ \dfrac{1}{2} \alpha _i^2 r_i^T A r_i+\alpha r_i^Tr_i$$
+i ró¿niczkujemy je po parametrze wariacyjnym w celu znalezienia minimum
+$$\dfrac{\partial Q}{\partial \alpha _i}=r_i^Tr_i+\alpha _i r_i^TAr_i$$
+jednak $\dfrac{\partial Q}{\partial \alpha _i}=0$ 
+$$\alpha _i =\dfrac{r_i^Tr_i}{r_i^TAr_i}$$
+
+Implementacja metody najwiêkszego spadu na pseudokod wygl¹da nastêpuj¹co
+\begin{center}
+\includegraphics[scale=1]{pseudokod}
+\captionof{figure}{Pseudokod Metody najwiêkszego spadku}
+\end{center}
+
+gdzie:
+\begin{itemize}
+\item  k- liczba iteracji\\
+\item x aktualnie najbli¿sze przybli¿enie prawid³owego rozwi¹zania\\
+\item b wektor wyrazów obcych\\
+\item A macierz 1000x1000 \\
+\item r wektor reszt z ka¿da iteracj¹ zbli¿a siê do 0\\
+\end{itemize}
+
+Algorytm koñczy zwoje dzia³anie kiedy norma wektora r jest dostatecznie ma³a w tym przypadku $10^{-6}$
+\subsection{Metoda sprzê¿onego gradientu}
+Metoda sprzê¿onego gradientu jest algorytmem numerycznym s³u¿¹cym do rozwi¹zywania niektórych uk³adów równañ liniowych. Pozwala rozwi¹zaæ te, których macierz jest symetryczna i dodatnio okreœlona. Metoda gradientu sprzê¿onego jest metod¹ iteracyjn¹, wiêc mo¿e byæ zastosowana do uk³adów o rzadkich macierzach, które mog¹ byæ zbyt du¿e dla algorytmów bezpoœrednich takich jak np. rozk³ad LU.Metoda polega na wielokrotnego wykonywania sekwencji dzia³añ, które wyniku bêd¹ przybli¿aæ oszacowanie dok³adnego rozwi¹zania.
+\begin{center}
+\includegraphics[scale=1]{pseudokod1}
+\captionof{figure}{Pseudokod Metody sprzê¿onego gradientu}
+\end{center}
+Z ka¿dym obiegiem wektor  x  bêdzie   coraz   dok³adniejszym   przybli¿eniem   rozwi¹zania.   Operacja   bêdzie powtarzana dopóki nie zostanie uzyskana zbie¿noœæ
+\newpage
+\section{Zadanie do wykonania}
+Podczas naszych 3 laboratoriów naszym zadaniem by³o rozwi¹zanie uk³adu równañ liniowych $A \cdot x = b$ korzystaj¹c z metody najwiêkszego spadku oraz metoda sprzê¿onego gradientu a nastêpnie porównaæ te dwie metody ze sob¹.
+Na pocz¹tku musieliœmy stworzyæ macierz A o wymiarze n=1000 oraz zaincjalizowaæ elementy na "wstêdze" zgodnie z poni¿szym wzorem:
+$$
+A[i][j] = \left\{ \begin{array}{ll}
+\dfrac{1}{1+|i-j|} & \textrm{gdy $  \quad |i-j|<m$}\\
+0 & \textrm{gdy $ \quad |i-j|<m$}\\
+\end{array} \right.
+$$
+
+gdzie m=5 oraz $i, j= 0,\cdots ,n-1 $
+Nastêpnie inicjalizujemy wektor wyrazów wolnych b wed³ug poni¿szego wzoru
+\begin{align}
+b[i]=i+1 \quad gdzie \quad i=0, \cdots ,n-1
+\end{align}
+wektor startowy x inicalizujemy na 2 sposoby samymi 0 albo samymi 1
+Nastêpnie dla metody najwiêkszego spadku oraz metody sprzê¿onego gradientu  sprawdzamy iloœci iteracji.Dla poszczególnych iteracji zapisujemy aktualny numer iteracji, normê wektora $r_k$ - $\norm{r_k}$, wartoœæ alfa oraz wartoœæ normy euklidesowej wektora rozwi¹zañ $x_k$ - $\norm{x_k}$na koniec zapisujemy ca³kowity czas dzia³ania algorytmu.
+Wykonywamy nastêpuj¹ce algorytmy dla podanych parametrów
+\begin{itemize}
+\item metoda najwiêkszego spadku x=0 eps=$10^{-3}$
+\item metoda najwiêkszego spadku x=0 eps=$10^{-6}$
+\item metoda najwiêkszego spadku x=1 eps=$10^{-6}$
+\item metoda sprzê¿onego gradientu x=0 eps=$10^{-6}$
+\end{itemize}
+Na koniec wygenerowaliœmy w Pythonie odpowiednie wykresy podsumowuj¹ce nasze wyniki.
+\newpage
+\section{Wyniki}
+Wszystkie metody zosta³y zaimplementowane w Pythonie prowadz¹c obliczenia na liczbach zmiennoprzecinkowych.
+Koñcowym warunkiem zakoñczenia programu by³o uzyskanie przez wektor $r_k$ normy euklidesowej mniejszej od eps
+Wykresy zosta³y narysowane równie¿ w Pythonie za pomoc¹ biblioteki matplotlib 
+\begin{enumerate}[label=(\alph*)]
+
+\item
+\begin{center}
+Metoda najwiêkszego spadku
+\includegraphics[scale=0.85]{1}
+\captionof{figure}{x = 0, eps = $10^{-3}$}
+\medskip
+Czas dzia³ania programu: 15.26 sekund\\
+Liczba iteracji k: 76
+\end{center}
+\newgeometry{margin=0.7in}
+\item
+\begin{center}
+Metoda najwiêkszego spadku
+\includegraphics[scale=0.73]{2}
+\captionof{figure}{x = 0, eps = $10^{-6}$}
+\medskip
+Czas dzia³ania programu: 25.91 sekund\\
+Liczba iteracji k: 130
+\end{center}
+
+\item
+\begin{center}
+Metoda najwiêkszego spadku
+\includegraphics[scale=0.73]{3}
+\captionof{figure}{x = 1, eps = $10^{-6}$}
+\medskip
+Czas dzia³ania programu: 26.16 sekund\\
+Liczba iteracji k: 130
+\end{center}
+\newgeometry{margin=1.3in}
+\item
+\begin{center}
+Metoda sprzê¿onego gradientu
+\includegraphics[scale=0.8]{4}
+\captionof{figure}{x = 0, eps = $10^{-6}$}
+\medskip
+Czas dzia³ania programu: 8.21 sekund\\
+Liczba iteracji k: 40
+\end{center}
+
+\item
+\begin{center}
+Metoda bezpoœrednia Gaussa-Jordana\\
+Czas dzia³ania programu: 116.76 sekund\\
+\end{center}
+
+\end{enumerate}
+\medskip
+Jak widaæ z wykresów w podpunktach a) b) c) i d) norma euklidesowa wektor $\norm{r_k}$ zbiega do naszego ustalonego eps natomiast $\norm{x_k}$  zbiega asymptotycznie do wyniku koñcowego. Mo¿emy tez zauwa¿yæ ¿e czas dla wektora x=0 oraz x=1 s¹ ró¿ne poniewa¿ ustaliliœmy inne warunki pocz¹tkowe i jak widaæ wektorowi x=0 jest bli¿ej do rozwi¹zania koñcowego.
+Nastêpnie przechodzimy do najciekawszego czyli czasu wykonania obliczeñ  przy pomocy biblioteki time zmierzyliœmy czas dla ka¿dej z metod. Widaæ wyraŸnie ¿e metoda sprê¿onego gradientu jest lepsza ni¿ metoda najwiêkszego spadku natomiast obie s¹ znacz¹co efektywniejsze dla naszej macierzy ni¿ metoda bezpoœrednia Gausa
+\newpage
+\section{Podsumowanie}
+Otrzymane wyniki prowadza nas do jednoznacznego stwierdzenia ¿e metody iteracyjne s¹ znacznie bardziej optymalne dla danej w tym zadaniu macierzy od metod bezpoœrednich oraz ¿e metoda sprzê¿onego gradientu jest szybsza (potrzebuje mniej iteracji) ni¿ metoda najwiêkszego spadku\\
+Wyniki które nanieœliœmy na wykresy powy¿ej wyraŸniej wskazuj¹ na wy¿szoœæ metod iteracyjnych pod wzglêdem czasu wykonywania obliczeñ. Stosuj¹c metody iteracyjne wykorzystujemy mniejszy zakres pamiêci potrzebny do zapisania oraz przeprowadzenia obliczeñ przez co s¹ znacznie szybsze jednak ma to swoje wady metody iteracyjne mo¿na stosowaæ w doœæ rzadkich i specyficznych przypadkach a mianowicie kiedy macierz A jest macierz¹ rzadka, dodatnio okreœlon¹ oraz symetryczn¹ w innym przypadku jesteœmy zmuszeni u¿yæ metod bezpoœrednich. Kolejna doœæ powa¿n¹ wada jest to i¿ metody iteracyjne z teorii nie daj¹ nam 100\% poprawnego wyniku tylko pewne przybli¿enie poprawnego rozwi¹zania
+
+
+
+\end{document}
