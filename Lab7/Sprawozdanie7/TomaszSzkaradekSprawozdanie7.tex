@@ -1,0 +1,373 @@
+\documentclass[11pt,oneside]{article}
+
+
+
+\usepackage[cp1250]{inputenc}
+\usepackage{polski}
+\usepackage{indentfirst} %wcienia od pierwszego akapitu
+\usepackage{amsfonts}    %czcionki np funkcja do pogrubienie dla np N
+\usepackage{amsmath} %zawiera np begin cases
+\usepackage[dvipsnames]{xcolor} %kolory dvipsnames wiecej kolorów
+\usepackage{graphicx} %np includeggraphics do obrazkow
+\usepackage{caption} %np caption czyli podpisy pod obrazkiem
+\usepackage{epstopdf} %np do obrazki wektorowe na pdf
+\usepackage{scrextend}
+\usepackage{geometry} %zmienia marginesy
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{multicol}
+\usepackage{listings}
+
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\R}[1]{\textcolor{red}{#1}}
+\newcommand{\G}[1]{\textcolor{OliveGreen}{#1}}
+\newcommand{\B}[1]{\textcolor{blue}{#1}}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert} 
+
+
+
+\begin{document}
+
+
+\newgeometry{margin=0.8in}
+\begin{flushright}
+\textbf{Wydzia³:} Fizyki i Informatyki Stosowanej\\
+\textbf{Kierunek:} Informatyka Stosowana\\
+\textbf{Rok:} 2020/21\\
+\textbf{Semsetr}: letni\\
+\textbf{Typ:} stacjonarne\\
+\textbf{Nr albumu:} 401984\\
+\textbf{Data:} 19.04.2021\\
+\end{flushright}
+
+
+\begin{center}
+\includegraphics[scale=0.17]{AGH}
+\\[0.3cm]
+\begin{LARGE}
+\textsf{Sprawozdanie - Laboratorium nr 7\\
+Interpolacja Newtona z optymalizacj¹ po³o¿eñ wêz³ów\\[1cm]}
+\end{LARGE}
+\end{center}
+
+
+\tableofcontents
+\vspace*{\fill}
+
+
+\begin{LARGE}
+\begin{flushleft}
+\textsl{opracowa³:\\
+Tomasz Szkaradek}
+\end{flushleft}
+\end{LARGE}
+
+
+
+\clearpage
+\newpage
+\restoregeometry
+\pagestyle{fancy} 
+\cfoot{\thepage\ of \pageref{LastPage}}
+\newgeometry{margin=1.28in}
+
+\section{Wstêp teoretyczny}
+\subsection{Interpolacja}
+Interpolacja jest to metoda numeryczna, która polega na wyznaczaniu w danym przedziale tzw. funkcji interpolacyjnej F, która przyjmuje w nim z góry zadane wartoœci w ustalonych punktach nazywanych wêz³ami. Stosowana jest zarówno w metodach numerycznych (np. przy obliczaniu ca³ek ze skomplikowanych funkcji), jak i w naukach doœwiadczalnych przy budowaniu funkcji na podstawie danych pomiarowych w skoñczonej liczbie punktów.\\
+Niech bêdzie dany przedzia³ [a,b] $\subset R^1$ oraz skoñczony ci¹g  n + 1 ró¿nych punktów 
+\begin{equation}
+a=x_{0}<x_{1}< \dots <x_{n}=b
+\end{equation}\\
+Wyrazy $x_{0},\dots ,x_{n}$ powy¿szego ci¹gu nazywane bêd¹ wêz³ami.\\
+Wartoœci funkcji y=f(x) w tych punktach to:
+\begin{align*}\label{eq:pareto mle2}
+f(x_0)=y_0, \\
+f(x_1)=y_1, \\
+\cdots, \\
+f(x_n)=y_n
+\end{align*}
+Problem interpolacji sprowadza siê do znalezienia funkcji interpoluj¹cej F(x),
+która w wêz³ach przyjmuje wartoœci takie jak funkcja y=f(x)
+czyli funkcja interpolowana
+(której postaæ funkcyjna mo¿e nie byæ nawet znana).
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=0.40\linewidth]{Figure_n}  
+\caption{Przyk³adowa interpolacja F(x)}
+\end{center}
+\end{figure}
+
+Interpolacja wykorzystywana jest do zagêszczania tablic i efektywniejszego rozwi¹zywania równañ nieliniowych dla stablicowanych wartoœci funkcji z okreœlonymi po³o¿eniami wêz³ów, w postaci wielomianowej do
+lokalnego przybli¿ania dowolnych funkcji, co u³atwia rozwi¹zywanie modeli fizycznych, a tak¿e do ca³kowania
+numerycznego i modelowania powierzchni w dwóch i trzech wymiarach.
+
+
+\newpage
+\subsection{Interpolacja Newtona}
+Istnieje dok³adnie jeden wielomian interpolacyjny stopnia co najwy¿ej n(n $\geqslant$ 0 ), który w punktach $x_{0},\dots ,x_{n}$  przyjmuje wartoœci $y_{0},\dots ,y_{n}$
+Szukamy wielomianu interpolacyjnego w postaci:
+\begin{equation}
+W_n(x)=a_0+a_1x+a_2x^2+ \cdots + a_nx^n
+\end{equation}
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=0.40\linewidth]{Figure_n1}  
+\caption{Przyk³adowa interpolacja F(x)}
+\end{center}
+\end{figure}
+
+Korzystaj¹c z faktu, ¿e znamy wartoœci tego wielomianu w n+1 punktach mo¿emy wielomian interpolacyjny zapisaæ przy u¿yciu formu³y opisuj¹cej n-ty iloraz ró¿nicowy:
+$$
+W_n(x)=f(x_0)+f(x_0,x_1)\omega_0(x)+f(x_0,x_1,x_2)\omega_1(x)+ \cdots +f(x_0,x_1, \cdots , x_n)\omega_{n-1}(x)
+$$
+gdzie:
+$$
+\omega_n(x)=(x-x_0)(x-x_1) \cdots (x-x_n)
+$$
+mo¿emy zapisaæ jako:
+\begin{equation}
+W_n(x)=\sum_{j=0}^n f^{(j)}(x_0) \cdot \prod_{i=0}^{j-1}(x-x_i)
+\end{equation}
+gdzie: $f^{(j)}(x_0)$ to iloraz rzêdu j liczony dla wêz³a $x_0$, a $x_i$ s¹ po³o¿eniami wêz³ów.
+Aby wykorzystaæ powa¿ysz wzór musimy wiedzieæ jak obliczyæ iloraz ró¿nicowy którego wartoœci wyznaczamy zgodnie z poni¿sz¹  zasad¹
+\newpage
+Funkcja f(x) przyjmuje w punktach $x_i$ gdzie $i=1,2,3,\cdots , n$
+wartoœci
+$f(x_0),f(x_1),f(x_2), \cdots f(x_n)$
+oraz 
+$\Delta x_i= x_{i+1}-x_i$
+Ilorazy ró¿nicowe definiujemy nastêpuj¹co:
+\begin{enumerate}
+\item 1-go rzêdu
+\begin{equation}
+f(x_{n-1},x_{n})=\dfrac{f(x_n)- f(x_{n-1})}{x_n-x_{n-1}}
+\end{equation}\\
+\item 2-go rzêdu
+\begin{equation}
+f(x_{n-2},x_{n-1},x_{n})=\dfrac{f(x_{n-1},x_n)- f(x_{n-2},x_{n-1})}{x_n-x_{n-2}}
+\end{equation}\\
+\item n-go rzêdu
+\begin{equation}
+f(x_{i},x_{i+1}, \cdots ,x_{i+n})=\dfrac{f(x_{i+1},x_{i+2}, \cdots ,x_{i+n})- f(x_{i},x_{i+1}, \cdots ,x_{i+n-1})}{x_{i+n}-x_{i}}
+\end{equation}\\
+\end{enumerate}
+Zazwyczaj tworzy siê tablicê z ilorazami ró¿nicowymi(³atwe do zaprogramowania na komputerze)
+\begin{table}[ht]
+\centering
+\begin{tabular}{|r|c|c|c|c|c|}
+\hline
+$y_0$ & 0 & 0 & 0 & 0 & 0 \\ \hline
+$y_1$ & $f_{x_0}^{(1)}$ & 0 & 0 & 0 & 0 \\ \hline
+$y_2$ & $f_{x_1}^{(1)}$ & $f_{x_0}^{(2)}$ & 0 & 0 & 0 \\ \hline
+$y_3$ & $f_{x_2}^{(1)}$ & $f_{x_1}^{(2)}$ & $f_{x_0}^{(3)}$ & 0 & 0 \\ \hline
+$\cdots$ & $\cdots$ & $\cdots$ & $\cdots$ & $\ddots$ & 0 \\ \hline
+$y_n$ & $f_{x_{n-1}}^{(1)}$ & $f_{x_{n-2}}^{(2)}$ & $f_{x_{n-3}}^{(3)}$ & 0 & $f_{x_0}^{(n)}$ \\ \hline
+\end{tabular}
+$\Rightarrow$
+\begin{tabular}{|r|c|c|c|c|c|}
+\hline
+$f_{0,0}$ & 0 & 0 & 0 & 0 & 0 \\ \hline
+$f_{1,0}$ & $f_{1,1}$ & 0 & 0 & 0 & 0 \\ \hline
+$f_{2,0}$ & $f_{2,1}$ & $f_{2,2}$ & 0 & 0 & 0 \\ \hline
+$f_{3,0}$ & $f_{3,1}$ & $f_{3,2}$ & $f_{3,3}$ & 0 & 0 \\ \hline
+$\cdots$ & $\cdots$ & $\cdots$ & $\cdots$ & $\ddots$ & 0 \\ \hline
+$f_{n,0}$ & $f_{n,1}$ & $f_{n,2}$ & $f_{n,3}$ & 0 & $f_{n,n}$ \\ \hline
+\end{tabular}
+\label{table1}
+\caption{Ogólna przyk³adowa tabela}
+\end{table} 
+
+gdzie: zerowa kolumna $(y_i)$ to wartoœci funkcji w wêz³ach, a elementy $f_{j,j}$ to ilorazy ró¿nicowe
+rzêdu j wystêpuj¹ce we wzorze (3).\\
+Interpolacja wielomianowa nie jest zbyt efektywna,
+poniewa¿ interpolacja wielomianami wysokich stopni przy sta³ych odleg³oœciach wêz³ów prowadzi do powa¿nych odchyleñ od interpolowanej funkcji
+zw³aszcza na koñcach przedzia³u. Interpolacja na œrodkowych
+czêœciach przedzia³u jest natomiast bardzo dobra i u¿yteczna 
+\newpage
+
+\subsection{Wielomian Czebyszewa}
+Wielomiany Czebyszewa – uk³ad wielomianów ortogonalnych tworz¹cy bazê przestrzeni wielomianów; nazwa pochodzi od nazwiska Pafnutija Czebyszowa.\\
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=0.6\linewidth]{Figure_n2}  
+\caption{Przyk³adowe wêz³y Czebyszowa}
+\end{center}
+\end{figure}\\
+Wielomiany Czebyszewa s¹ okreœlone wzorem:
+\begin{equation}
+\begin{array}{l}
+T_n(x) = \cos[n \cdot arccos(x)], \\
+x \in [-1, 1].
+\end{array}
+\end{equation}
+W postaci rekurencyjnej:
+
+\begin{equation}
+\begin{array}{l}
+T_0(x) = 1\\
+T_1(x) = \cos[n \cdot arccos(x)] = x \\
+T_n(x) = 2xT_{n-1}(x) - T_{n-2}(x), n \geq 2.
+\end{array}
+\end{equation}
+Z tak zapisanych zale¿noœci mo¿na wyliczyæ zera wielomianów, które s¹ nastêpuj¹cej postaci:
+\begin{equation}
+x_m = cos(\pi \frac{2m +1}{2n + 2}), m=0,1,2, . . . , n.
+\end{equation}
+Po przeskalowaniu przedzia³u $[-1, 1]$ na $[a, b]$ otrzymujemy:
+\begin{equation}
+x_m = \frac{1}{2} [(b -a) cos(\pi \frac{2m +1}{2n + 2}) + (b + a) ]
+\end{equation}
+W analizie numerycznej wêz³y Czebyszewa s¹ specyficznymi rzeczywistymi liczbami algebraicznymi, mianowicie pierwiastkami wielomianów Czebyszewa pierwszego rodzaju. S¹ czêsto u¿ywane jako wêz³y w interpolacji wielomianowej, poniewa¿ wynikowy wielomian interpolacyjny minimalizuje efekt Rungego, czyli du¿e oscylacje wielomianu interpolacyjnego przy krañcach przedzia³u. Fakt, ¿e miejsca zerowe wielomianów Czebyszewa zagêszczaj¹ siê ku krañcom przedzia³u, pozwala lepiej zwi¹zaæ wielomian zapobiegaj¹c naturalnym dla wielomianów wysokiego rzêdu oscylacjom.
+\subsection{Efekt Rungego}
+Dok³adnoœæ interpolacji zale¿y od dobranych do niej wêz³ów oraz ich iloœci. Pozornie wydaje siê, ¿e wiêksza liczba
+wêz³ów zawsze zwiêksza dok³adnoœæ. W przypadku wêz³ów równo odleg³ych ju¿ tak nie jest - Efektu Rungego. 
+
+Jest to pogorszenie jakoœci interpolacji wielomianowej, mimo zwiêkszenia liczby jej wêz³ów. Pocz¹tkowo ze wzrostem liczby wêz³ów n przybli¿enie poprawia siê, jednak po dalszym wzroœcie n, zaczyna siê pogarszaæ, co jest szczególnie widoczne na koñcach przedzia³ów.
+
+Takie zachowanie siê wielomianu interpoluj¹cego jest zjawiskiem typowym dla interpolacji za pomoc¹ wielomianów wysokich stopni przy sta³ych odleg³oœciach wêz³ów. Wystêpuje ono równie¿, jeœli interpolowana funkcja jest nieci¹g³a albo odbiega znacz¹co od funkcji g³adkiej.
+
+Jednym ze sposobów które niweluj¹ ten efekt jest wykorzystanie zer z wielomianów Czebyszewa zamiast wêz³ami równoodleg³ymi.
+
+
+\section{Zadanie do wykonania}
+Na zajêciach mieliœmy samodzielnie zaimplementowaæ procedurê znajduj¹c¹ wielomian interpolacyjny Newtona
+$W_n(x)$ dla funkcji:
+\begin{equation}
+f(x)=\dfrac{1}{1+x^2}
+\end{equation}
+w przedziale x$\in$[5, 5] wybieramy n+1 wêz³ów. W pierwszej czêœci zadania wêz³y sa równo odleg³e od siebie (wykorzystanie linspace). Natomiast w drugiej czêœci wêz³y wybieramy jako zera wielomianu Czebyszewa tj:
+\begin{equation}
+x_m = \frac{1}{2} [(b -a) cos(\pi \frac{2m +1}{2n + 2}) + (b + a) ]
+\end{equation}
+Po wybraniu wêz³ów obliczamy wartoœci funkcji dla tych argumentów
+Nastêpnie uzupe³niamy tabelkê (1) pos³uguj¹c siê napisan¹ przez na funkcj¹ w Pythonie
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+    
+def matrix_derivative(n,x):
+    f=np.zeros((n+1,n+1))
+    for i in range(n+1):
+        f[i,0]=fun(x[i])
+    for j in range(1,n+1):
+        for i in range(j,n+1):
+            f[i,j]=(f[i,j-1]-f[i-1,j-1])/(x[i]-x[i-j])
+    return f
+\end{lstlisting}
+Nastêpnie nale¿a³o napisaæ program z zaimplementowan¹ metod¹ wyznaczaj¹c¹ przybli¿one wartoœæ funkcji w po³o¿eniu miêdzywêz³owym wykorzystuj¹c wielomianu interpolacyjnego Newtona. Argumentami dla tej funkcji mia³y byæ wektor wêz³ów stopieñ wielomianu oraz wektor argumentów dla którego obliczamy wartoœci\\
+Nastêpnie korzystaj¹c z powy¿szego programu nale¿a³o przeprowadziæ interpolacje funkcji dla n =
+5, 10, 15, 20 równoodleg³ych wêz³ów oraz sporz¹dziæ wykresy funkcji oraz wielomianu interpolacyjnego na
+jednym rysunku, dla ka¿dego n.
+Kolejn¹ czêœci¹ zadania by³o zoptymalizowanie po³o¿eñ wêz³ów poprzez okreœlenie ich jako zer wielomianów
+Czebyszewa.
+Dla tak zoptymalizowanych wêz³ów nale¿a³o ponownie przeprowadziæ interpolacjê, dla tych samych wartoœci n co
+poprzednio, a nastêpnie sporz¹dziæ wykresy funkcji f(x) oraz $W_n(x)$.
+
+\section{Wyniki}
+Ca³y program zosta³ napisany w jêzyku Python.
+\begin{figure}[ht]
+\begin{subfigure}{.525\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_1}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.525\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_2}  
+  \label{fig:sub-second}
+\end{subfigure}
+
+\begin{subfigure}{.525\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_3}  
+  \label{fig:sub-third}
+\end{subfigure}
+\begin{subfigure}{.525\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_4}  
+  \label{fig:sub-fourth}
+\end{subfigure}
+\end{figure}
+\newgeometry{margin=0.4in}
+
+\begin{figure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_5}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_6}  
+  \label{fig:sub-second}
+\end{subfigure}
+
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_7}  
+  \label{fig:sub-third}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_8}  
+  \label{fig:sub-fourth}
+\end{subfigure}
+\end{figure}
+\restoregeometry
+\newgeometry{margin=1.47in}
+\section{Podsumowanie}
+Wartoœci wielomianu interpolacyjnego dla coraz gêœciej roz³o¿onych punktów coraz bardziej zbli¿aj¹
+siê do wartoœci interpolowanej funkcji jednak z coraz bardziej widoczna oscylacj¹ na krañcach. Dodatkowo dla optymalnego roz³o¿enia wêz³ów (w zerach
+wielomianu Czebyszewa) otrzymane wyniki znacznie lepiej odzwierciedlaj¹ funkcjê. \\
+Dla 20 wêz³ów i przy zastosowaniu optymalizacji, wartoœci wielomianu interpolacyjnego prawie idealnie
+pokrywaj¹ siê z funkcj¹. W przypadku wêz³ów
+równoodleg³ych sytuacja poprawi³a siê jedynie na œrodku przedzia³u, na koñcach dochodzi³o do coraz wiêkszych oscylacji (skoków wzmacniaj¹ siê przy wzroœcie liczby wêz³ów), które
+sprawiaj¹, ¿e oszacowanie funkcji nie jest ju¿ tak dok³adne. Jest to tzw. efekt Rungego czyli pogorszenie jakoœci interpolacji wielomianowej, mimo zwiêkszenia
+liczby jej wêz³ów.
+Nie widzimy tego efektu w drugiej wersji. Przy wêz³ach wyznaczonych przez miejsca zerowe
+wielomianu Czebyszewa które zagêszczaj¹ siê na krañcach przedzia³u, mo¿emy dok³adniej oszacowaæ postaæ
+szukanej funkcji. Wêz³ów jest zdecydowanie
+wiêcej przy krañcach przedzia³u, dziêki czemu nie dochodzi do sytuacji z pierwszej wersji. Dziêki zastosowaniu optymalizacji roz³o¿enia wêz³ów czas potrzebny do wykonania obliczeñ jest krótki, z czego mo¿na wysnuæ wniosek ¿e
+wybrana metoda jest skuteczna w rozwi¹zaniu postawionego problemu.\\
+\begin{figure}[ht]
+\begin{subfigure}{.525\textwidth}
+  \centering
+  \includegraphics[width=1.03\linewidth]{Figure_9}  
+  \label{fig:sub-third}
+\end{subfigure}
+\begin{subfigure}{.525\textwidth}
+  \centering
+  \includegraphics[width=1.03\linewidth]{Figure_10}  
+  \label{fig:sub-fourth}
+\end{subfigure}
+  \caption{Porównanie interpolacji Newtona dla kolejnych wêz³ów}
+\end{figure}\\
+Podsumowuj¹c, ma³a liczba wêz³ów w metodzie Newtona nie przybli¿a funkcji wystarczaj¹co dobrze i nie jest op³acalne jej
+stosowanie. Jeœli jest taka mo¿liwoœæ, powinno siê tak¿e stosowaæ optymalizacjê dla ich po³o¿eñ, np. stosuj¹c
+wielomian Czebyszewa dla jak najlepszej interpolacji funkcji.
+
+\section{Literatura}
+\begin{description}
+\item {[1]} Tomasz Chwiej, Interpolacja
+\\
+\textit{http://home.agh.edu.pl/\~chwiej/mn/interpolacja\_2021.pdf}
+\item {[2]} Kwmimkm, Interpolacja funkcji\\
+\textit{http://dydaktyka.polsl.pl/kwmimkm/mn\-wyklad2.pdf}
+\item {[3]} Wikipedia. Wielomiany Czebyszewa\\
+\textit{https://pl.wikipedia.org/wiki/Wielomiany\_Czebyszewa}
+\end{description}
+
+
+\end{document}

@@ -1,0 +1,10 @@
+\contentsline {section}{\numberline {1}Wst\k ep teoretyczny}{2}%
+\contentsline {subsection}{\numberline {1.1}Aproksymacja funkcji}{2}%
+\contentsline {subsection}{\numberline {1.2}Aproksymacja Padego}{3}%
+\contentsline {subsubsection}{\numberline {1.2.1}Aproksymacja Padego funkcji f(x)=exp($-x^2$)}{5}%
+\contentsline {subsubsection}{\numberline {1.2.2}Aproksymacja Padego funkcji f(x)=cos(x)}{6}%
+\contentsline {subsubsection}{\numberline {1.2.3}Aproksymacja Padego funkcji f(x)=sin(x)}{7}%
+\contentsline {section}{\numberline {2}Zadanie do wykonania}{7}%
+\contentsline {section}{\numberline {3}Wyniki}{8}%
+\contentsline {section}{\numberline {4}Podsumowanie}{12}%
+\contentsline {section}{\numberline {5}Literatura}{14}%

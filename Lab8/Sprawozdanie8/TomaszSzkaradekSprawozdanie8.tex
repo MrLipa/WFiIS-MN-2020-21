@@ -1,0 +1,433 @@
+\documentclass[11pt,oneside]{article}
+
+
+
+\usepackage[cp1250]{inputenc}
+\usepackage{polski}
+\usepackage{indentfirst} %wcienia od pierwszego akapitu
+\usepackage{amsfonts}    %czcionki np funkcja do pogrubienie dla np N
+\usepackage{amsmath} %zawiera np begin cases
+\usepackage[dvipsnames]{xcolor} %kolory dvipsnames wiecej kolorów
+\usepackage{graphicx} %np includeggraphics do obrazkow
+\usepackage{caption} %np caption czyli podpisy pod obrazkiem
+\usepackage{epstopdf} %np do obrazki wektorowe na pdf
+\usepackage{scrextend}
+\usepackage{geometry} %zmienia marginesy
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{multicol}
+\usepackage{listings}
+
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\R}[1]{\textcolor{red}{#1}}
+\newcommand{\G}[1]{\textcolor{OliveGreen}{#1}}
+\newcommand{\B}[1]{\textcolor{blue}{#1}}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert} 
+
+
+
+\begin{document}
+
+
+\newgeometry{margin=0.8in}
+\begin{flushright}
+\textbf{Wydzia³:} Fizyki i Informatyki Stosowanej\\
+\textbf{Kierunek:} Informatyka Stosowana\\
+\textbf{Rok:} 2020/21\\
+\textbf{Semsetr}: letni\\
+\textbf{Typ:} stacjonarne\\
+\textbf{Nr albumu:} 401984\\
+\textbf{Data:} 26.04.2021\\
+\end{flushright}
+
+
+\begin{center}
+\includegraphics[scale=0.17]{AGH}
+\\[0.3cm]
+\begin{LARGE}
+\textsf{Sprawozdanie - Laboratorium nr 8\\
+Interpolacja funkcjami sklejanymi poprzez wyznaczenie
+wartoœci drugich pochodnych w wêz³ach.
+\\[1cm]}
+\end{LARGE}
+\end{center}
+
+
+\tableofcontents
+\vspace*{\fill}
+
+
+\begin{LARGE}
+\begin{flushleft}
+\textsl{opracowa³:\\
+Tomasz Szkaradek}
+\end{flushleft}
+\end{LARGE}
+
+
+
+\clearpage
+\newpage
+\restoregeometry
+\pagestyle{fancy} 
+\cfoot{\thepage\ of \pageref{LastPage}}
+\newgeometry{margin=1.28in}
+
+\section{Wstêp teoretyczny}
+\subsection{Interpolacja}
+Interpolacja jest to metoda numeryczna, która polega na wyznaczaniu w danym przedziale tzw. funkcji interpolacyjnej F, która przyjmuje w nim z góry zadane wartoœci w ustalonych punktach nazywanych wêz³ami.\\
+Niech bêdzie dany przedzia³ [a,b] $\subset R^1$ oraz skoñczony ci¹g  n + 1 ró¿nych punktów 
+\begin{equation}
+a=x_{0}<x_{1}< \dots <x_{n}=b
+\end{equation}\\
+Wyrazy $x_{0},\dots ,x_{n}$ powy¿szego ci¹gu nazywane bêd¹ wêz³ami.\\
+Wartoœci funkcji y=f(x) w tych punktach to:
+\begin{align*}\label{eq:pareto mle2}
+f(x_0)=y_0, \\
+f(x_1)=y_1, \\
+\cdots, \\
+f(x_n)=y_n
+\end{align*}
+Problem interpolacji sprowadza siê do znalezienia funkcji interpoluj¹cej F(x),
+która w wêz³ach przyjmuje wartoœci takie jak funkcja y=f(x)
+czyli funkcja interpolowana
+(której postaæ funkcyjna mo¿e nie byæ nawet znana).
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=0.40\linewidth]{Figure_n}  
+\caption{Przyk³adowa interpolacja F(x)}
+\end{center}
+\end{figure}
+
+Interpolacje najczêœciej przeprowadza siê korzystaj¹c z wielomianów algebraicznych, wielomianów trygonometrycznych lub funkcji sklejanych.
+Interpolacja wykorzystywana jest do zagêszczania tablic i efektywniejszego rozwi¹zywania równañ nieliniowych dla stablicowanych wartoœci funkcji z okreœlonymi po³o¿eniami wêz³ów, w postaci wielomianowej do
+lokalnego przybli¿ania dowolnych funkcji, co u³atwia rozwi¹zywanie modeli fizycznych, a tak¿e do ca³kowania
+numerycznego i modelowania powierzchni w dwóch i trzech wymiarach.
+
+\newpage
+\subsection{Interpolacja funkcjami sklejanymi}
+Klasyczne funkcje sklejane wywodz¹ siê z praktyki in¿ynierskiej. Przez wiele lat
+do kreœlenia elementów konstrukcyjnych w przemyœle okrêtowym i samochodowym u¿ywano elastycznej listewki drewnianej nazywanej giêtk¹. Linia³ taki, prowadzony przez zadane punkty za pomoc¹ stosownych ciê¿arków ugina siê wzd³u¿ krzywej „najg³adszej”.\\
+Pojêcie g³adkoœci krzywej uœciœlimy dla krzywych o równaniu y = f(x),\\
+gdzie f $\in$ $C^2$ [a, b]. Krzywizna takiej krzywej w punkcie x wynosi
+\begin{equation}
+\kappa (x)= \dfrac{f''(x)}{\sqrt{1+f'(x)^2}^3}
+\end{equation}
+Niech równie¿ bêd¹ dane wartoœci $y_0, y_1, \cdots, y_n$ w punktach tego podzia³u. \\
+Funkcja $f \in C^2[a, b]$ interpoluj¹ca punkty $(x_i, y_i)$ (i = 0, 1, $\cdot$ , n) jest „najg³adsza”
+w tym sensie, ¿e spoœród wszystkich funkcji klasy $C^2$ [a, b] interpoluj¹cych te punkty daje najmniejsz¹ wartoœæ tzw. krzywizny ca³kowitej [1, 5]:\\
+\begin{equation}
+\int_{a}^{b} f''(x)^2dx
+\end{equation}
+W praktyce trudno jest szukaæ rozwi¹zania zagadnienia interpolacji w postaci funkcji „najg³adszej” z powodu skomplikowanego wyra¿enia opisuj¹cego
+krzywiznê
+W interpolacja funkcjami sklejanymi bedziemy d¹¿yæ do przybli¿ania nieznanej funkcji wielomianami niskiego stopnia.
+W przedziale [a, b] mamy $n+1$ punktów takich, ¿e:
+\begin{equation}
+a = x_0 < x_1 < \cdots < x_{n-1} = b.
+\end{equation}
+Punkty te okreœlaj¹ podzia³ przedzia³u [a, b] na $n$ podprzedzia³ów. Funkcjê $s(x)$ okreœlon¹ na przedziale [a, b] nazywamy funkcj¹ sklejan¹ stopnia $m$ (gdzie $m \geq 1$) je¿eli:
+\begin{description}
+\item[1)] $s(x)$ jest wielomianem stopnia conajwy¿ej $m$ na ka¿dym podprzedziale $(x_i; x_{i+1})$\\
+$i = 0, 1, . . ., n-1$,
+\item[2)] $s(x) \in C^m$.
+\end{description}
+Punkty $x_i$ nazywamy wêz³ami funkcji sklejanej. W ka¿dym przedziale $(x_i, x_{i+1})$ funkcja $s(x)$ jest wielomianem stopnia conajwy¿ej $m$:
+\begin{equation}
+\begin{array}{c c}
+s(x) = c_{im}x^m + c_{im-1}x^{m-1} + \cdots + c_{i1}x + c_{i0},& x \in (x_i;x_{i+1}).
+\end{array}
+\end{equation}
+Funkcja interpoluj¹ca jest kombinacj¹ liniow¹ elementów bazy ${s_i(x)}$
+\begin{equation}
+\begin{array}{c c}
+s(x) = \displaystyle\sum_{i=0}^{n-1} c_i s_i(x), & x \in [a, b]
+\end{array}
+\end{equation}
+\newpage
+\subsection{Funkcja sklejane trzeciego stopnia}
+Funkcjê $s(x)$ nazywamy interpolacyjn¹ funkcj¹ sklejan¹ stopnia trzeciego dla funkcji $f(x)$, je¿eli:
+
+\begin{equation}
+\begin{array}{c c c}
+s(x_i) = f(x_i) = y_i, & i = 0, 1, \cdots, n;& n \geq 2
+\end{array}
+\end{equation}
+Do okreœlenia funkcji $s(x)$ stopnia trzeciego konieczne jest wyznaczenie $(n+3)$ parametrów. Poniewa¿ iloœæ wêz³ów jest równa $n+1$ pozostaj¹ 2 stopnie swobody. Musimy na³o¿yæ dwa dodatkowe warunki. Rodzaj tych warunków zale¿y od funkcji $f(x)$ lub znajomoœci jej zachowania w pobli¿u koñców przedzia³u [a, b]. S¹ trzy rodzaje warunków. 
+\begin{enumerate}
+\item{ 1 rodzaj warunków - 1 pochodna:
+\begin{equation}
+\begin{array}{c}
+s^{(1)} (a + 0) = \alpha_1 \\
+s^{(1)} (b - 0 ) = \beta_1
+\end{array}
+\end{equation} }
+\item{ 2 rodzaj warunków - 2 pochodna:
+\begin{equation}
+\begin{array}{c}
+s^{(2)} (a + 0) = \alpha_2 \\
+s^{(2)} (b - 0 ) = \beta_2
+\end{array}
+\end{equation} }
+\end{enumerate}
+gdzie: $\alpha_1, \alpha_2, \beta_1, \beta_2$ s¹ ustalonymi liczbami.
+\par Trzeci rodzaj warunków stosuje siê dla funkcji okresowych (warunek na 1 i 2 pochodn¹):
+\begin{equation}
+\begin{array}{c c}
+s^{(i)}(a+0) = s^{(i)}(b-0),& i = 1, 2 
+\end{array}
+\end{equation}
+\subsection{Interpolacja funkcjami sklejanymi poprzez wyznaczenie wartoœci drugich pochodnych w wêz³ach}
+Oznaczmy $M_j = s^{(2)}(x_j), j=0, 1, . . . , n$. Zgodnie z za³o¿eniem druga pochodna funkcji $s(x)$ jest ci¹g³a i liniowa w ka¿dym z pod przedzia³ów $[x_{i-1}, x_i]$. Mo¿emy wiêc zapisaæ:
+\begin{equation}
+\begin{array}{c}
+s^{(2)}_{i-1} (x) = M_{i-1} \frac{x_i-x}{h_i} + M_i \frac{x-x_i}{h_i} \\
+x \in [x_i-1, x_i] \\
+h_i = x_i - x_{i-1}
+\end{array}
+\end{equation}
+Po dwukrotnym sca³kowaniu powy¿szego wyra¿enia:
+\begin{equation}
+s_{i-1}(x) = M_{i-1} \frac{(x_i-x)^3}{6h_i} + M_i\frac{(x-x_{i-1})^3}{h_j} + A_i(x-x_{i-1}) + B_i
+\end{equation}
+Sta³e A i B mo¿na wyliczyæ w korzystaj¹c z warunku interpolacji:
+\begin{equation}
+\begin{array}{c}
+s_{i-1}(x_i-1) = M_{i-1} \frac{h^2_i}{6} + B_i = y_{i-1} \\
+s_{i-1}(x_i) = M_i \frac{h^2_i}{6} + A_i h_i + B_i = y_i
+\end{array}
+\end{equation}
+i otrzymujemy:
+\begin{equation}
+\begin{array}{c}
+B_i = y_{i-1} - M_{i-1} \frac{h^2_i}{6} \\
+A_i = \frac{y_i - y_{i-1}}{h_i} - \frac{h_i}{6} (M_i - M_{i-1}).
+\end{array}
+\end{equation}
+W punkcie $x_i$ pochodna musi byæ ci¹g³a:
+\begin{equation}
+\begin{array}{c}
+s^{(1)}_{i-1}(x_i) = s^{(1)}_{i}(x_i) \\
+s^{(1)}_{i-1}(x_i - 0) = \frac{h_i}{6} M-{i-1} + \frac{h_i}{3} M_i + \frac{y_i - y_{i-1}}{h_i}\\
+s^{(1)}_{i}(x_i + 0) = - \frac{h_{i+1}}{3} M-{i} - \frac{h_{i+1}}{6} M_{i+1} + \frac{y_{i+1} - y_{i-1}}{h_{i+1}}
+\end{array}
+\end{equation}
+Na podstawie powy¿szych równañ dla ka¿dego z wêz³ów uzyskamy $(n-1)$ równañ, które mo¿na zapisaæ w postaci:
+\begin{equation}
+\begin{array}{c c}
+\mu_i M_{i-1} + 2M_i + \lambda_i M_{i+1} = d_i, & i = 1, 2, . . ., n-1 \\
+ & \\
+\lambda_i = \frac{h_{i+1}}{h_i + h_{i+1}}, & \mu_i = 1 - \lambda_i\\
+ & \\
+d_i = \frac{6}{h_+h_{i+1}}(\frac{y_{i+1} - y_i}{h_{i+1}} - \frac{y_{i} - y_{i-1}}{h_{i}}) = 6f(x_{i-1};x_i;x_{i+1}) \\
+\end{array}
+\end{equation}
+Do ca³ego równania nale¿y do³¹czyæ jeszcze 2 równania wynikaj¹ce z dodatkowych warunków. Dla warunków z 1 pochodn¹ (1.2):
+\begin{equation}
+\begin{array}{c c}
+2M_0 + M_1 = d_0 & d_0 = \frac{6}{h_1}(\frac{y_1 - y_0}{h_1} - \alpha_1)\\
+ & \\
+ M_{n-1} + 2M_n = d_n & d_n = \frac{6}{h_1}(\beta_1 - \frac{y_n - y_{n-1}}{h_n})\\
+  & \\
+\lambda_i = \frac{h_{i+1}}{h_i + h_{i+1}}, & \mu_i = 1 - \lambda_i
+\end{array}
+\end{equation}
+Dla warunków z 2 pochodn¹:
+\begin{equation}
+\begin{array}{c c}
+M_0 -= \alpha_2 & M_n = \beta_2
+\end{array}
+\end{equation}
+Finalnie, otrzymujemy uk³ad równañ, który mo¿na przedstawiæ w postaci macierzowej:
+\begin{equation}
+\begin{bmatrix}
+2 & 1 & 0 & \cdots & 0 \\
+\mu_1 & 2 & \lambda_1 & \cdots & 0 \\
+0 & \mu_2 & 2 & \cdots & 0\\
+\vdots & & & & \vdots \\
+0 & \cdots & & 2 & \lambda_{n-1} \\
+0 & \cdots& & 1 & 2
+\end{bmatrix}
+\begin{bmatrix}
+M_0 \\
+M_1 \\
+\vdots \\
+\vdots \\
+M_{n-1} \\
+M_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+d_0 \\
+d_1 \\
+\vdots \\ 
+\vdots \\ 
+d_{n-1} \\
+d_n
+\end{bmatrix}
+\end{equation}
+Macierz wspó³czynników uk³adu jest macierz¹ silnie diagonalnie dominuj¹c¹. Modu³y elementów na diagonali s¹ wiêksze od sumy modu³ów pozosta³ych elementów le¿¹cych w tym samym wierszu. Uk³ady te maj¹ wiêc jednoznaczne rozwi¹zanie - istnieje dok³adnie jedna interpolacyjna funkcja sklejana stopnia trzeciego spe³niaj¹ca przyjête warunki dodatkowe. 
+Po rozwi¹zaniu uk³adu równañ i znalezieniu wspó³czynników $M_i$ wyznaczamy funkcjê sklejan¹ wg wzoru:
+\begin{equation}
+s_{i-1}(x) = M_{i-1} \frac{(x_i - x)^3}{6h_i} + M_i{(x - x_{i-1})^3}{6h_i} + A_i(x-x_{i-1}) + B_i
+\end{equation}
+
+\section{Zadanie do wykonania}
+Naszym zadaniem by³o napisanie programu do interpolacji funkcji przy pomocy funkcji sklejanych bêd¹cych wielomianami 3 stopnia poprzez wyznaczenie wartoœci drugich pochodnych w wêz³ach.\\
+W tym celu mieliœmy napisaæ procedurê do wyznaczania
+wartoœci drugich pochodnych w wêz³ach wyzM, w której obliczaliœmy macierz drugich pochodnych. Nastêpn¹
+procedur¹ by³o wyzSx, która s³u¿y³a do wyznaczania wartoœci funkcji w po³o¿eniu miêdzywêz³owym. Za
+pomoc¹ tych procedur mieliœmy przeprowadziæ interpolacjê
+dwóch funkcji:
+\begin{align}
+f(x)=\dfrac{1}{1+x^2}
+\end{align}
+\begin{align}
+f(x)=cos(2x)
+\end{align}
+dla n = 5, 8, 21 wêz³ów w przedziale x $\in$ [-5, 5]. Do obliczeñ braliœmy pod uwagê n równoodleg³ych  wêz³ów wygenerowanych za pomoc¹ funkcji linespace które generowane s¹ zgodnie ze wzorem
+\begin{align}
+x_w=x_{min}+\Delta x \cdot i
+\end{align}
+gdzie:\\
+$
+i= 1,2, \cdots , n\\
+\Delta x = \dfrac{x_{min}+x_{max}}{n}\\
+$
+$x_{min}$ to lewy kraniec przedzia³u interpolacji\\
+$x_{max}$ to prawy kraniec przedzia³u interpolacji\\
+Wartoœæ funkcji interpoluj¹cej dla x który znajduje siê miedzy danymi wêz³ami \\
+tj. x $\in [x_{i-1}, x_i]$ wyznaczamy wed³ug poni¿szego przepisu:
+\begin{equation}
+s_{i-1}(x) = M_{i-1} \frac{(x_i-x)^3}{6h_i} + M_i\frac{(x-x_{i-1})^3}{h_j} + A_i(x-x_{i-1}) + B_i
+\end{equation}
+gdzie A i B to sta³e ca³kowania podane na wstêpie.\\
+Za warunki brzegowe przyjêliœmy 
+$
+\alpha =\beta = 0
+$\\
+Wykorzystuj¹c metod¹ wyzM otrzymujemy wektory odleg³oœci miedzy wêz³owych h, wektor $\lambda$, $\mu$ oraz $d$ (obliczone wed³ug wzorów podanych we wstêpie teoretycznym) a nastêpnie za ich pomoc¹ wektor drugich pochodnych m rozwi¹zuj¹c równanie:
+$$
+AM=d
+$$
+Dodatkowo, dla $f_1(x)$ oraz n = 10 nale¿a³o wyznaczyæ wartoœci drugich pochodnych z zaimplementowanej przez nas
+procedury i porównaæ je z wartoœciami liczonymi zgodnie z poni¿szym wzorem dla $\Delta x$ = 0.01
+\begin{equation}
+\frac{d^2f}{dx^2} \approx \frac{f(x-\Delta x) - 2 f(x)+ f(x + \delta x)}{(\Delta x)^2},
+\end{equation}
+Oba wektory rozwi¹zañ nanieœliœmy na wykres i porównaliœmy 
+\section{Wyniki}
+Ca³y program zosta³ napisany w jêzyku Python. \\
+Za pomoc¹ funkcji bibliotecznej matplotlib wyrysowaliœmy wykresy.
+Zosta³y one umieszczone poni¿ej na których widaæ, ¿e wraz ze wzrostem liczby wêz³ów zwiêksza siê dok³adnoœæ oszacowania
+funkcji, bez Efektu Rungego tzn. charakterystycznych odchyleñ na krañcach przedzia³u.
+\begin{figure}[ht]
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1.1\linewidth]{Figure_1}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1.1\linewidth]{Figure_2}  
+  \label{fig:sub-second}
+\end{subfigure}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1.1\linewidth]{Figure_3}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1.1\linewidth]{Figure_4}  
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Wyniki interpolacji funkcji $f_1(x) = \dfrac{1}{1+x^2}$ funkcjami sklejanymi dla n wêz³ów}
+\end{figure}
+\newgeometry{margin=0.22in}
+\begin{figure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_5}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_6}  
+  \label{fig:sub-second}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_7}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_8}  
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Wyniki interpolacji funkcji $f_1(x) = cos(2x)$ funkcjami sklejanymi dla n wêz³ów}
+\end{figure}
+\begin{figure}[ht]
+\begin{center}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.9\linewidth]{Figure_9}  
+  \label{fig:sub-first}
+\end{subfigure}
+\end{center}
+\caption{Wartoœci drugich pochodnych wyznaczone algorytmem s³u¿¹cym do interpolacji funkcji $f_1(x) = \dfrac{1}{1+x^2}$ funkcjami sklejanymi dla n = 10 wêz³ów zestawione z wartoœciami wyliczonymi z ilorazu ró¿nicowego (wzór 25)}
+\end{figure}
+\restoregeometry
+\newgeometry{margin=1.28in}
+
+\section{Podsumowanie}
+Podsumowuj¹c mo¿na powiedzieæ ¿e wyniki dla odpowiednio du¿ej liczby wêz³ów pokrywaj¹ siê niemal idealnie z interpolowan¹ funkcj¹.
+Nie istnieje zauwa¿alny efekt Rungego na granicach przedzia³ów interpolacji, jednak mo¿na zauwa¿yæ
+¿e w³aœnie na granicach przedzia³ów funkcja interpoluj¹ca najbardziej odstaje od funkcji interpolowanej. 
+W porównaniu do metody interpolacji Newtona metoda funkcji sklejanych zdaje siê lepiej odwzorowywaæ dane funkcje, nie widaæ efektu „pofalowania” wykresu funkcji interpoluj¹cej dla
+niewystarczaj¹cej liczby wêz³ów. Zwiêkszanie liczby wêz³ów znacz¹co upodabnia wykres funkcji interpoluj¹cej do wykresu funkcji interpolowanej.
+Zdaje siê tez nasuwaæ wniosek, ¿e wybrana metoda jest skuteczniejsza szybsza i bardziej wydajna ni¿
+odpowiadaj¹ca jej metoda Newtona
+Spogl¹daj¹c na wykresy, zw³aszcza te o wiêkszej liczbie wêz³ów i maj¹c na uwadze niewielki czas
+trwania obliczeñ mo¿na wysun¹æ wniosek o dobrej skutecznoœci wybranej metody do rozwi¹zania
+postawionego problemu. Na dodatek nie ma potrzeby stosowania odpowiedniego algorytmu dobieraj¹cego po³o¿enia wêz³ów (np. jako zera Wielomianów Czebyszewa).
+
+Na Rysunku 4 mo¿na zaobserwowaæ jawne polepszenie interpolacji wraz ze wzrostem liczby wêz³ów n. Dla $f_2$ i n = 5 wykres interpolacji znacznie odbiega od teoretycznego kszta³tu mo¿emy to zauwa¿yæ na podstawie porównania b³êdu $\epsilon_{max}=1.68$ tj. najwiêksza ró¿nica wartoœci pomiêdzy wartoœci¹ teoretyczn¹ a obliczon¹. Dla n = 8 widzimy polepszenie jakoœci interlokucji poprzez zmniejszenie siê  $\epsilon_{max}=0.72$, przy n = 21 wynik
+okaza³ siê prawie dok³adnie pasowaæ do funkcji interpolowanej.
+Na dodatek w naszym przypadku nie zaobserwowano efektu Rungego.
+
+Na wykresie pochodnych widzimy niewielkie rozchodzenia wartoœci numerycznych oraz analitycznych.
+Jak mo¿na zauwa¿yæ z wykresu 9 zastosowana metoda
+wyznaczania 2 pochodnej odbiega od jej „dok³adniejszej wersji” dla argumentów
+bliskich wartoœci¹ do 0. Jednak dla argumentów oddalonych od 0, wartoœci zdaj¹ siê coraz bardziej pokrywaæ.
+
+\section{Literatura}
+\begin{description}
+\item {[1]} Tomasz Chwiej, Interpolacja
+\\
+\textit{http://home.agh.edu.pl/\~chwiej/mn/interpolacja\_2021.pdf}
+\item {[2]} Wikipedia, Interpolacja funkcjami sklejanymi\\
+\textit{https://pl.wikipedia.org/wiki/Interpolacja\_funkcjami\_sklejanymi}
+\item {[3]} Kazimierz Jakubczyk
+ Interpolacja funkcjami sklejanymi\\
+\textit{http://kaj.uniwersytetradom.pl/docs/Splines.pdf}
+\end{description}
+
+
+\end{document}

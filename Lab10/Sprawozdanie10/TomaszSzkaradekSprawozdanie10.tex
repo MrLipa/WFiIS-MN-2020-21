@@ -1,0 +1,377 @@
+\documentclass[11pt,oneside]{article}
+
+
+
+\usepackage[cp1250]{inputenc}
+\usepackage{polski}
+\usepackage{indentfirst} %wcienia od pierwszego akapitu
+\usepackage{amsfonts}    %czcionki np funkcja do pogrubienie dla np N
+\usepackage{amsmath} %zawiera np begin cases
+\usepackage[dvipsnames]{xcolor} %kolory dvipsnames wiecej kolorów
+\usepackage{graphicx} %np includeggraphics do obrazkow
+\usepackage{caption} %np caption czyli podpisy pod obrazkiem
+\usepackage{epstopdf} %np do obrazki wektorowe na pdf
+\usepackage{scrextend}
+\usepackage{geometry} %zmienia marginesy
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{multicol}
+\usepackage{listings}
+
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\R}[1]{\textcolor{red}{#1}}
+\newcommand{\G}[1]{\textcolor{OliveGreen}{#1}}
+\newcommand{\B}[1]{\textcolor{blue}{#1}}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert} 
+
+
+
+\begin{document}
+
+
+\newgeometry{margin=0.8in}
+\begin{flushright}
+\textbf{Wydzia³:} Fizyki i Informatyki Stosowanej\\
+\textbf{Kierunek:} Informatyka Stosowana\\
+\textbf{Rok:} 2020/21\\
+\textbf{Semsetr}: letni\\
+\textbf{Typ:} stacjonarne\\
+\textbf{Nr albumu:} 401984\\
+\textbf{Data:} 17.05.2021\\
+\end{flushright}
+
+
+\begin{center}
+\includegraphics[scale=0.17]{AGH}
+\\[0.3cm]
+\begin{LARGE}
+\textsf{Sprawozdanie - Laboratorium nr 10\\
+Minimalizacja wartoœci funkcji metod¹ interpolacji kwadratowej Powella
+\\[1cm]}
+\end{LARGE}
+\end{center}
+
+
+\tableofcontents
+\vspace*{\fill}
+
+
+\begin{LARGE}
+\begin{flushleft}
+\textsl{opracowa³:\\
+Tomasz Szkaradek}
+\end{flushleft}
+\end{LARGE}
+
+
+
+\clearpage
+\newpage
+\restoregeometry
+\pagestyle{fancy} 
+\cfoot{\thepage\ of \pageref{LastPage}}
+\newgeometry{margin=1.28in}
+
+\section{Wstêp teoretyczny}
+\subsection{Optymalizacja}
+Optymalizacja – metoda wyznaczania najlepszego (optymalnego) rozwi¹zania (poszukiwanie ekstremum funkcji) z punktu widzenia okreœlonego kryterium (wskaŸnika) jakoœci (np. kosztu, drogi, wydajnoœci).
+Zadaniem optymalizacji jest poszukiwanie minimum lub maksimum funkcji.
+Problem ten w praktyce polega na poszukiwaniu minimum, czyli punktu dla którego zachodzi:
+\begin{equation}
+f: \mathbb{R}^n \to \mathbb{R}
+\end{equation}
+\begin{equation}
+min f(\textbf{x}) = f(\textbf{x}^{*}) \Leftrightarrow \bigwedge_{x \in \mathbb{R}^n} f(\textbf{x}^{*}) < f(\textbf{x})
+\end{equation}
+\begin{equation}
+\textbf{x} = [x_1, x_2, . . . , x_n]^{T}.
+\end{equation}
+z odpowiednimi warunkami: \\
+$g_j(\textbf{x}) \leq 0, j = 1, 2, . . . , m$\\ $h_j(\textbf{x}), j = 1, 2, . . . , r$\\
+gdzie funkcje $f(x), g(x), h(x)$ s¹ funkcjami sklejanymi oraz $f(x)$ jest tzw. funkcja celu, której minimum szukamy\\
+funkcje $g(x), h(x)$ okreœlaj¹ warunki, jakie musi spe³niaæ rozwi¹zanie, ograniczaj¹ przestrzeñ dopuszczalnych rozwi¹zañ.
+\begin{figure}[ht]
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_1}  
+  \label{fig:sub-first}
+  \caption{Przyk³ad jednowymiarowy}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_2}  
+  \label{fig:sub-second}
+  \caption{Przyk³ad dwuwymiarowy}
+\end{subfigure}
+\end{figure}
+\newpage
+\subsection{Ekstrumum funkcji}
+S³owo extremum pochodzi z ³aciny i oznacza skraj. S¹ dwa rodzaje ekstremów funkcji minimum i maksimum.\\
+Mówimy, ¿e funkcja f ma w punkcie $x_0\in R$ maximum lokalne (maximum lokalne w³aœciwe), je¿eli istnieje $\delta>$0 taka, ¿e dla ka¿dego $x\in S(x_0,\delta )$ zachodzi nierównoœæ $f(x)\leq(x_0)$ $( f(x)<f(x_0))$.
+Innymi s³owy wartoœæ funkcji w punkcie $x_0$ w pewnym obszarze przyjmuje najwiêksza wartoœæ\\
+Przypomnienie, ¿e symbol $S(x_0,\delta)$ oznacza s¹siedztwo punktu $x_0$ o promieniu dodatnim $\delta$, czyli $S(x_0,\delta)=O(x_0,\delta)$
+Tak samo mówimy, ¿e funkcja f ma w punkcie $x_0\in R$ minimum lokalne (minimum lokalne w³aœciwe), je¿eli istnieje $\delta >$0 taka, ¿e dla ka¿dego $x\in S(x_0,\delta )$ zachodzi nierównoœæ $f(x) \geq f(x_0)$ $( f(x)>f(x_0))$.\\
+\begin{figure}[ht]
+\begin{center}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_4}  
+  \label{fig:sub-first}
+  \caption{ ekstrema $f(x)=2x^{3}-9x^{2}+12x-3$ }
+\end{subfigure}
+\end{center}
+\end{figure}\\
+Jeœli rozpatrujemy przypadek "globalny" gdy funkcja w $x_0$ osi¹ga wartoœæ najwiêksz¹/najmniejsz¹ to mówimy, ¿e dla $x_0$ funkcja osi¹ga maksimum/minimum globalne.
+\newpage
+\subsection{Metoda interpolacji kwadratowej Powell'a}
+W metodzie interpolacji Powella korzystamy z lokalnego przybli¿enia funkcji wielomianem drugiego
+stopnia . Szukamy trzech punktów $\lambda_0$, $\lambda_1$, $\lambda_2$ takie, ¿e wartoœci funkcji w tych punktach spe³niaj¹ warunek $f(\lambda_0) > f(\lambda_1) > f(\lambda_2)$. Szukamy równania wielomianu kwadratowego przechodz¹cego przez punkty $(\lambda_0, f(\lambda_0)), (\lambda_1, f(\lambda_1)) \text{ i } (\lambda_2, f(\lambda_2))$.\\
+W tym celu zapisujemy ogólne równanie wielomianu kwadratowego przechodz¹cego przez $\lambda_0, \lambda_1$ oraz $\lambda_2$:
+\begin{align}
+p_2(\lambda) = a_0 + a_1(\lambda - \lambda_0) + a_2(\lambda - \lambda_0)(\lambda - \lambda_1)
+\end{align}
+\begin{figure}[ht]
+\begin{center}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_3}  
+  \label{fig:sub-first}
+  \caption{Wyznaczanie przybli¿onego rozwi¹zania w metodzie Powell'a}
+\end{subfigure}
+\end{center}
+\end{figure}
+Nastêpnie szukamy wspó³czynników tego wielomianu:
+$$p_2(\lambda_0) = f(\lambda_0) = a_0$$
+$$p_2(\lambda_1) = f(\lambda_1) = a_0 + a_1(\lambda_1 - \lambda_0)$$
+$$p_2(\lambda_2) = f(\lambda_2) = a_0 + a_1(\lambda_2 - \lambda_0) + a_2(\lambda_2 - \lambda_0)(\lambda_2 - \lambda_1)$$
+Otrzymujemy uk³ad trzech równañ, który rozwi¹zujemy, aby znaleŸæ wspó³czynniki szukanego wielomianu:
+$$F[\lambda_0] = a_0 = f(\lambda_0)$$
+$$F[\lambda_0, \lambda_1] = a_1 = \dfrac{f(\lambda_1) - f(\lambda_0)}{\lambda_1 - \lambda_0}$$
+$$F[\lambda_0, \lambda_1, \lambda_2]=a_2 = \dfrac{1}{\lambda_2 - \lambda_1}(\dfrac{f(\lambda_2) - f(\lambda_0)}{\lambda_2 - \lambda_0} - \dfrac{f(\lambda_1) - f(\lambda_0)}{\lambda_1 - \lambda_0})$$
+gdzie kolejno:
+$F[\lambda_0]$ to wartoœæ funkcji w punkcie\\
+$F[\lambda_0,\lambda_1]$ iloraz ró¿nicowy 1 rzêdu\\
+$F[\lambda_0,\lambda_1,\lambda_2]$  iloraz ró¿nicowy 2 rzêdu
+\newpage
+Teraz szukamy argumentu, dla którego ten wielomian kwadratowy osi¹ga minimum. Poniewa¿ zgodnie z naszymi za³o¿eniami, minimum znajduje siê tam, gdzie pochodna równa jest zero.\\
+Narzucamy warunek zerowania siê pochodnej:
+\begin{align}
+p_2'(\lambda)=0 \Rightarrow a_1 + a_2(\lambda- \lambda_1 + \lambda - \lambda_0)=0
+\end{align}
+rozwi¹zuj¹c to równanie ze wzglêdu na x otrzymamy 
+\begin{align}
+\lambda_m=\dfrac{\lambda_0+\lambda_1}{2}-\dfrac{a_1}{2a_2}=\dfrac{\lambda_0+\lambda_1}{2}-\dfrac{F[\lambda_0,\lambda_1]}{2F[\lambda_0,\lambda_1,\lambda_2]}
+\end{align}
+Aby znaleziony punkt by³ rzeczywistym
+minimum, iloraz ($F[\lambda_0,\lambda_1,\lambda_2]$) musi
+spe³niaæ warunek
+\begin{align}
+F[\lambda_0,\lambda_1,\lambda_2]>0
+\end{align}
+W punkcie $\lambda_m$ wielomian kwadratowy $p_2$(x) osi¹ga minimum. Poniewa¿ q(x) jest przybli¿eniem funkcji f(x), której minimum szukamy, $\lambda_m$ jest przybli¿eniem wartoœci, w której funkcja f(x) osi¹ga minimum. Spoœród punktów $(\lambda_0, \lambda_1, \lambda_2, \lambda_m)$, zatrzymujemy trzy najlepsze (innymi s³owy wyrzucamy punkt, w którym wartoœæ funkcji f(x) jest najwiêksza) i ponownie dokonujemy interpolacji kwadratowej dla tych trzech punktów i szukamy minimum otrzymanego wielomianu. Procedura ta powtarzana jest do momentu, kiedy osi¹gniêta zostanie ¿¹dana dok³adnoœæ.\\
+Algorytm Powella, który zosta³ zarysowany powy¿ej znajduje minimum szybciej ni¿ np. metoda z³otego podzia³u, jeœli funkcja f(x) nie jest skrzywiona.\\
+Dla mocno niesymetrycznych funkcji, lepsz¹ metod¹ okazuje siê metoda z³otego podzia³u.
+\newpage
+\section{Zadanie do wykonania}
+Naszym zadaniem by³o znaleŸæ minimum wartoœci funkcji metodê interpolacji Powella\\
+W tym celu napisaliœmy procedurê do znajdywania ekstremum funkcji podanej jako argument oraz 3 kolejnych wartoœci x\\
+Za pomoc¹ tej procedury mieliœmy zbadaæ najmniejsz¹ wartoœæ funkcji:
+\begin{align}
+f_1(x) = ln(x^5 + 3x^2 + x + 9)
+\end{align}
+Jako punkty startowe przyjêliœmy kolejno: \\
+$x_1 = -0.5$, \\
+$x_2 = x_1 + h$, \\
+$x_3 = x_2 + h$, \\
+gdzie h = 0.01 \\
+Nastêpnie musimy wykonaæ 10 iteracji (bêdzie to doœæ trudne ze wzglêdu wystêpowanie wyj¹tku dzielenia przez zero a wiec przyjêliœmy 8 iteracji co te¿ daje poprawny wynik) szukaj¹c kolejno punktu $x_m$ wed³ug wzorów podanych na wstêpie teoretycznym.\\
+Znajdujemy wœród 3 wartoœci x punkt który jest najbardziej oddalony od wartoœci $x_m$, zostaje on zast¹piony w kolejnej iteracji przez $x_m$. Nowa trójka zostaje posortowana wzglêdem wartoœci funkcji. \\
+Po posortowaniu powtarzamy podane wy¿ej operacje.\\
+Podczas ka¿dej z tych iteracji zapisujemy do przygotowanych uprzednio kontenerów wartoœci $x_1, x_2, x_3, x_m, F[x_1, x_2], F[x_1, x_2, x_3]$ z których potem sporz¹dzimy wykresy.\\
+Mo¿emy tez zmodyfikowaæ nasz program tj. warunek stopu zmieniæ na taki który zatrzymuje iterowanie do momentu a¿ odleg³oœæ $x_m$ od najdalszej wartoœci z trójki x-ów bêdzie mniejsza od zadanek dok³adnoœci eps.\\
+
+Powy¿sze rachunki powtarzamy dla innych warunków pocz¹tkowych lecz na tej samej funkcji:\\
+$x_1 = -0.9$, \\
+$x_2 = x_1 + h$, \\
+$x_3 = x_2 + h$, \\
+gdzie h = 0.01\\
+
+Na koniec zmieniamy nasz¹ funkcje wejœciowa na:
+\begin{align}
+f_2(x) =x^6
+\end{align}
+Jako punkty startowe przyjêliœmy:\\
+$x_1 = 1.5$, \\
+$x_2 = x_1 + h$, \\
+$x_3 = x_2 + h$, \\
+gdzie h = 0.01\\
+Tutaj musimy wykonaæ 100 iteracji (nie wystêpuje problem dzielenia przez zero) oraz zapisaæ $x_1, x_2, x_3, x_m
+, F[x_1, x_2], F[x_1, x_2, x_3]$ do podanych kontenerów.
+\section{Wyniki}
+\begin{itemize}
+\item Wykresy dla funkcji $f_1(x) = ln(x^5 + 3x^2 + x + 9)$\\
+oraz punktów startowych:\\
+$x_1 = -0.5$, \\
+$x_2 = -0.49$, \\
+$x_3 = -0.48$, \\
+\begin{figure}[ht]
+\begin{center}
+\begin{subfigure}{.95\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_5}  
+  \label{fig:sub-first}
+  \caption{Wykres przy 8 iteracjach}
+\end{subfigure}
+\end{center}
+\end{figure}
+\end{itemize}
+\newgeometry{margin=0.08in}
+\begin{figure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_7}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_8}  
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Wykresy ilorazów ró¿nicowych przy kolejnych iteracjach}
+\end{figure}
+\begin{figure}[ht]
+\begin{center}
+\begin{subfigure}{.8\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_6}  
+  \label{fig:sub-first}
+\end{subfigure}
+\end{center}
+\end{figure}
+\newpage
+\newgeometry{margin=1.28in}
+\begin{itemize}
+\item Wykresy dla funkcji $f_1(x) = ln(x^5 + 3x^2 + x + 9)$\\
+oraz punktów startowych:\\
+$x_1 = -0.9$, \\
+$x_2 = -0.89$, \\
+$x_3 = -0.88$, \\
+\begin{figure}[ht]
+\begin{center}
+\begin{subfigure}{.95\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_9}  
+  \label{fig:sub-first}
+  \caption{Wykres przy 9 iteracjach}
+\end{subfigure}
+\end{center}
+\end{figure}
+\end{itemize}
+\newgeometry{margin=0.08in}
+\begin{figure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_11}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_12}  
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Wykresy ilorazów ró¿nicowych przy kolejnych iteracjach}
+\end{figure}
+\begin{figure}[ht]
+\begin{center}
+\begin{subfigure}{.8\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_10}  
+  \label{fig:sub-first}
+\end{subfigure}
+\end{center}
+\end{figure}
+\newpage
+\newgeometry{margin=1.28in}
+\begin{itemize}
+\item Wykresy dla funkcji $f_2(x) = x^6$\\
+oraz punktów startowych:\\
+$x_1 = 1.5$, \\
+$x_2 = 1.51$, \\
+$x_3 = 1.52$, \\
+\begin{figure}[ht]
+\begin{center}
+\begin{subfigure}{.95\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_13}  
+  \label{fig:sub-first}
+  \caption{Wykres przy 100 iteracjach}
+\end{subfigure}
+\end{center}
+\end{figure}
+\end{itemize}
+\newgeometry{margin=0.08in}
+\begin{figure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_15}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_16}  
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Wykresy ilorazów ró¿nicowych przy kolejnych iteracjac}
+\end{figure}
+\begin{figure}[ht]
+\begin{center}
+\begin{subfigure}{.8\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_14}  
+  \label{fig:sub-first}
+\end{subfigure}
+\end{center}
+\end{figure}
+\newpage
+\newgeometry{margin=1.28in}
+
+\section{Podsumowanie}
+Korzystaj¹c z metody Powella uda³o nam siê znaleŸæ ekstrema zadanej funkcji w ma³ej liczbie iteracji, z du¿¹ dok³adnoœci¹. Po pierwszych dwóch przyk³adach mo¿emy stwierdziæ i¿ wybrane punkty startowe mia³y  wp³ywu na iloœæ iteracji.\\
+W pierwszym przypadku znaleŸliœmy ekstremum(minimum) po 8 iteracjach 
+czyli stosunkowo szybko z du¿¹ dok³adnoœci¹. Warto wspomnieæ te¿ o tym i¿ przy $k>8$ iteracjach wystêpowa³ problem z dzieleniem przez zero przy wyznaczaniu $x_m$\\
+W drugim przypadku wyznaczyliœmy maksimum równie¿ dla tej samej funkcji.\\
+W obu przypadkach mo¿emy zauwa¿yæ d¹¿enie pierwszej pochodnej do zera kiedy to nast¹pi oznacza to ¿e uzyskaliœmy ¿¹dan¹ dok³adnoœæ w³aœnie dlatego mo¿emy stwierdziæ i¿ kolejne wartoœci $x_m$ zamierzaj¹ w kierunku malej¹cego ilorazu ró¿nicowego \\
+Wnioskuj¹c po wynikach dla pierwszej funkcji mo¿emy stwierdziæ i¿ algorytm jest wstanie z du¿¹ dok³adnoœci¹ wyznaczyæ dowolne ekstrema lokalne.\\
+W drugim przypadku dok³adne wyznaczenie ekstremum zajmuje nam 100 iteracji czyli znaczenie wiêcej ni¿ poprzednio.\\
+Jest to oczywiœcie spowodowane widocznie mniejszymi zmianami ilorazu ró¿nicowego miedzy kolejnymi iteracjami\\
+Metoda Powella okaza³a siê szybk¹ i dok³adn¹ metod¹ dla pierwszego rozwa¿anego przez nas przypadku, jednak dla
+innych najczêœciej dla wielomianów wysokiego stopnia metoda okazuje siê byæ mniej efektywna, ze wzglêdu na to, ¿e iloraz ró¿nicowy takich funkcji znacznie wolniej siê zmienia \\
+Alogorytm Powella znajduje minimum
+szybciej ni¿ metoda z³otego podzia³u, jeœli funkcja f(x) nie jest skrzywiona.\\
+Dla mocno niesymetrycznych funkcji, metoda z³otego podzia³u pozostaje jednak lepsza.
+
+\section{Literatura}
+\begin{description}
+\item {[1]} Tomasz Chwiej, Interpolacja
+\\
+\textit{http://home.agh.edu.pl/~chwiej/mn/minimalizacja\_2021.pdff}
+\item {[2]} Wikipedia, Ekstremum funkcji
+\\
+\textit{https://pl.wikipedia.org/wiki/Ekstremum\_funkcji}
+\end{description}
+
+
+
+\end{document}

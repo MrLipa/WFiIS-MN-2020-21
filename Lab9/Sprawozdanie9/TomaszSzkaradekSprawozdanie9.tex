@@ -1,0 +1,477 @@
+\documentclass[11pt,oneside]{article}
+
+
+
+\usepackage[cp1250]{inputenc}
+\usepackage{polski}
+\usepackage{indentfirst} %wcienia od pierwszego akapitu
+\usepackage{amsfonts}    %czcionki np funkcja do pogrubienie dla np N
+\usepackage{amsmath} %zawiera np begin cases
+\usepackage[dvipsnames]{xcolor} %kolory dvipsnames wiecej kolorów
+\usepackage{graphicx} %np includeggraphics do obrazkow
+\usepackage{caption} %np caption czyli podpisy pod obrazkiem
+\usepackage{epstopdf} %np do obrazki wektorowe na pdf
+\usepackage{scrextend}
+\usepackage{geometry} %zmienia marginesy
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{multicol}
+\usepackage{listings}
+
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\R}[1]{\textcolor{red}{#1}}
+\newcommand{\G}[1]{\textcolor{OliveGreen}{#1}}
+\newcommand{\B}[1]{\textcolor{blue}{#1}}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert} 
+
+
+
+\begin{document}
+
+
+\newgeometry{margin=0.8in}
+\begin{flushright}
+\textbf{Wydzia³:} Fizyki i Informatyki Stosowanej\\
+\textbf{Kierunek:} Informatyka Stosowana\\
+\textbf{Rok:} 2020/21\\
+\textbf{Semsetr}: letni\\
+\textbf{Typ:} stacjonarne\\
+\textbf{Nr albumu:} 401984\\
+\textbf{Data:} 10.05.2021\\
+\end{flushright}
+
+
+\begin{center}
+\includegraphics[scale=0.17]{AGH}
+\\[0.3cm]
+\begin{LARGE}
+\textsf{Sprawozdanie - Laboratorium nr 9\\
+Aproksymacja Pade funkcji exp($-x^2$)
+\\[1cm]}
+\end{LARGE}
+\end{center}
+
+
+\tableofcontents
+\vspace*{\fill}
+
+
+\begin{LARGE}
+\begin{flushleft}
+\textsl{opracowa³:\\
+Tomasz Szkaradek}
+\end{flushleft}
+\end{LARGE}
+
+
+
+\clearpage
+\newpage
+\restoregeometry
+\pagestyle{fancy} 
+\cfoot{\thepage\ of \pageref{LastPage}}
+\newgeometry{margin=1.28in}
+
+\section{Wstêp teoretyczny}
+\subsection{Aproksymacja funkcji}
+Aproksymacja - procedura zastêpowania jednej funkcji (funkcja aproksymowana) inn¹ funkcj¹ (funkcja
+aproksymuj¹ca) w taki sposób, aby funkcje te niewiele siê ró¿ni³y w sensie okreœlonej normy. Najczêœciej aproksymacjê stosuje siê do przedstawienia pewnej funkcji f(x) w innej, zazwyczaj prostszej postaci  umo¿liwiaj¹cej efektywne rozwi¹zanie postawionego problemu. Z tak¹ sytuacj¹ mamy do czynienia na przyk³ad :
+\begin{itemize}
+\item przy obliczaniu ca³ek oznaczonych z funkcji, które nie daj¹ siê sca³kowaæ œciœle
+\item przy rozwi¹zywaniu równañ ró¿niczkowych zwyczajnych i cz¹stkowych, kiedy poszukuje siê niewiadomych funkcji
+\item przy opracowywaniu wyników pomiarów znanych tylko na dyskretnym zbiorze punktów (np. w meteorologii)
+\end{itemize}
+Aproksymacja mo¿e byæ dokonywana na ró¿ne sposoby i dlatego mo¿na poszukiwaæ aproksymacji optymalnej w œciœle okreœlonym sensie.\\
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=0.80\linewidth]{Figure_n}  
+\caption{Ró¿nica miedzy interpolacj¹ a aproksymacj¹}
+\end{center}
+\end{figure}\\
+Aproksymacje mo¿na wykorzystaæ, gdy nie istnieje funkcja analityczna pozwalaj¹ca na wyznaczenie wartoœci dla dowolnego
+z jej argumentów, a jednoczeœnie wartoœci funkcji s¹ dla pewnego zbioru jej argumentów znane. Aproksymacja
+funkcji powoduje pojawienie siê b³êdów, zwanych b³êdami aproksymacji, jednak du¿¹ jej zalet¹ w stosunku
+do interpolacji jest fakt, ¿e aby dobrze przybli¿yæ funkcjê, funkcja aproksymuj¹ca nie musi byæ wielomianu
+wysokiego stopnia. Jedn¹ z najpopularniejszych miar b³êdu aproksymacji jest œredni b³¹d kwadratowy.
+Istnieje wiele metod aproksymacji np.: aproksymacja liniowa, œredniokwadratowa, jednostajna czy Padego.
+
+\subsection{Aproksymacja Padego}
+Aproksymacja Padego – metoda aproksymacji funkcji za pomoc¹ funkcji wymiernych danego
+rzêdu. Czêsto daje lepszy wynik ni¿ szereg Taylora dla tej samej liczby wspó³czynników, kiedy
+funkcja posiada bieguny.
+Funkcjê aproksymowan¹ przybli¿amy funkcj¹ wymiern¹ tj. ilorazu dwóch wielomianów. Dla danej funkcji f i dwóch liczb naturalnych M, N $\in \mathbb{N}_0$, przybli¿eniem Padégo rzêdu (M, N) jest funkcja wymierna:
+\begin{align}
+R_{N,M}=\dfrac{a_0+a_1x+a_2x^2+\cdots +a_Nx^N}{b_0+b_1x+b_2x^2+ \cdots + b_Mx^M}
+\end{align}
+której pochodne równaj¹ siê pochodnym f(x) do najwy¿szego mo¿liwego rzêdu:
+$$
+f(0)=R(0)
+$$
+$$
+f'(0)=R'(0)
+$$
+$$
+f''(0)=R''(0)
+$$
+$$
+f'''(0)=R'''(0)
+$$
+$$
+\cdots = \cdots
+$$
+$$
+f^{(M+N)}(0)=R^{(N+M)}(0)
+$$
+Niech poszukiwane przybli¿enie ma postaæ:
+\begin{align}
+R_{N,M}=\frac{P_N(x)}{Q_M(x)}
+\end{align}
+gdzie:
+\begin{align}
+P_N(x)=a_0+a_1x+a_2x^2+\cdots +a_Nx^N
+\end{align}
+\begin{align}
+Q_M(x)=b_0+b_1x+b_2x^2+ \cdots + b_Mx^M
+\end{align}
+przy czym $b_0$ = 1 oraz n = N + M\\
+Nale¿y znaleŸæ n+1 wspó³czynników $P_N$ oraz $Q_M$ tak aby w $x_0$ = 0 funkcje aproksymowana i
+aproksymuj¹ca mia³y jak najwiêcej równych pochodnych.\\
+Dlatego musimy rozwin¹æ f(x) w szereg Maclaurina
+\begin{align}
+f(x)=\sum_{i=0}^{\infty}c_ix^i
+\end{align}
+Przyjmijmy, ze N + M + 1 = n + 1, czyli tyle, ile wyrazów zawiera szereg Maclaurina funkcji f(x) do rzêdu n.\newpage
+Obliczamy b³¹d aproksymacji (w celu otrzymania zale¿noœci wspó³czynniki $a_i$ oraz $b_i$):
+\begin{align}
+f(x)-R_{N,M}=\dfrac{(\sum_{i=0}^{\infty}c_ix^i)(\sum_{i=0}^{M}b_ix)-\sum_{i=0}^{N}a_ix^i}{\sum_{i=0}^{M}b_ix^i}
+\end{align}
+Wykorzystujemy warunki z ci¹g³oœci¹ pochodnych w x=0
+\begin{align}
+f^{(m)}(x)|_{x=0}-R_{N,M}^{(m)}(x)|_{x=0}=0, \quad m=0,1,2, \cdots, M+N
+\end{align}
+Powy¿szy warunek bêdzie spe³niony, gdy licznik zapiszemy jako
+\begin{align}
+(\sum_{i=0}^{\infty}c_ix^i)(\sum_{i=0}^{M}b_ix^i)-\sum_{i=0}^{N}a_ix^i = \sum_{j=1}^{\infty}d_{n+j}x^{n+j}
+\end{align}
+Dla warunku:
+\begin{align}
+f(0)-R_{N,M}=0
+\end{align}
+dostajemy równanie
+\begin{align}
+(b_0+b_1x+ \cdots + b_Mx^M)(c_0+c_1x+ \cdots)=(a_0+a_1x+ \cdots + a_Nx^N)
+\end{align}
+z którego wydobywamy zale¿noœci
+$$
+a_0=b_0c_0
+$$
+$$
+a_1=b_0c_1+b_1c_0
+$$
+$$
+a_2=b_0c_2+b_1c_1+b_2c_0
+$$
+$$
+\cdots =\cdots
+$$
+i ostatecznie wzór ogólny
+\begin{align}
+a_r=\sum_{j=0}^r=c_{r-j}b_j, \quad r=0,1,2, \cdots ,N
+\end{align}
+Wykorzystujemy te¿ za³o¿enie o równoœci pochodnych
+(do rzêdu N+M+1) co daje dodatkow¹ zale¿noœæ
+\begin{align}
+\sum_{j=0}^{M}=c_{N+M-s-j}b_j=0 \quad s=0,1,2,\cdots ,M-1
+\end{align}
+\newpage
+Sposób postêpowania:
+\begin{enumerate}
+\item Wyznaczamy wspó³czynniki szeregu McLaurina.
+Numerycznie dok³adnie – tylko przy u¿yciu liczb dualnych,
+ilorazy ró¿nicowe s¹ niedok³adne.
+W niektórych przypadkach (rzadko) mo¿liwe jest wykorzystanie
+wzoru analitycznego na pochodne.
+\item Tworzymy uk³ad równañ, którego rozwi¹zanie to wspó³czynniki $b_i$
+\end{enumerate}
+\begin{align}
+\begin{bmatrix}
+c_{N-M+1} & c_{N-M+2}  & \cdots & c_{N} \\
+c_{N-M+2} & c_{N-M+3}  & \cdots & c_{N+1} \\
+\cdots & \cdots  & \ddots & \vdots \\
+c_{N} & c_{N+1}  & \cdots & c_{N+M-1} 
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+b_{M}\\
+b_{M-1}\\
+\vdots \\
+b_{1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+-c_{N+1}\\
+-c_{N+1}\\
+\vdots \\
+-c_{N+M}
+\end{bmatrix}
+\end{align}
+Teraz mo¿emy wyznaczyæ kolejno wspó³czynniki a
+\begin{align}
+a_i=\sum_{j=0}^i=c_{i-j}b_j, \quad i=0,1, \cdots ,N
+\end{align}
+\subsubsection{Aproksymacja Padego funkcji f(x)=exp($-x^2$)}
+Rozwa¿my tak¹ funkcjê:
+\begin{align}
+exp(-x^2), [-5,5]
+\end{align}
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=0.60\linewidth]{Figure_15}  
+\caption{Wykres funkcji f(x)=exp($-x^2$)}
+\end{center}
+\end{figure}\\
+\newpage
+Funkcja jest parzysta, wiêc wielomiany
+w liczniku i w mianowniku $R_{N,M}$ bêd¹
+mia³y niezerowe wspó³czynniki tylko przy
+jednomianach o wyk³adnikach parzystych.
+Wspó³czynniki szeregu Maclaurina ($c_k$) otrzymujemy bezpoœrednio z rozwiniêcia funkcji exp($-x^2$)
+\begin{align}
+e^{-x^2}=\sum_{p=0}^{\infty}\frac{(-x^2)^p}{p!}=\sum_{p=0}^{\infty}(-1)^p\frac{x^{2p}}{p!}=\sum_{p=0}^{\infty}c_k x^k
+\end{align}
+\subsubsection{Aproksymacja Padego funkcji f(x)=cos(x)}
+Rozwa¿my tak¹ funkcjê:
+\begin{align}
+cos(x), [-5,5]
+\end{align}
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=0.60\linewidth]{Figure_14}  
+\caption{Wykres funkcji f(x)=cos(x)}
+\end{center}
+\end{figure}\\
+Funkcja jest parzysta, wiêc wielomiany
+w liczniku i w mianowniku $R_{N,M}$ bêd¹
+mia³y niezerowe wspó³czynniki tylko przy
+jednomianach o wyk³adnikach parzystych.
+Wspó³czynniki szeregu Maclaurina ($c_k$) otrzymujemy bezpoœrednio z rozwiniêcia funkcji cos(x)
+\begin{align}
+cos(x)=\sum_{n=0}^{\infty}\frac{(-1)^nx^{2n}}{(2n)!}=\sum_{p=0}^{\infty}c_k x^k
+\end{align}
+\newpage
+\subsubsection{Aproksymacja Padego funkcji f(x)=sin(x)}
+Rozwa¿my tak¹ funkcjê:
+\begin{align}
+sin(x), [-2\pi,2\pi]
+\end{align}
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=0.60\linewidth]{Figure_13}  
+\caption{Wykres funkcji f(x)=sin(x)}
+\end{center}
+\end{figure}\\
+Funkcja aproksymowana jest nieparzysta – niezerowe wspó³czynniki wielomianu P
+to te stoj¹ce przy jednomianach o wyk³adnikach nieparzystych.
+Wspó³czynniki szeregu Maclaurina ($c_k$) otrzymujemy bezpoœrednio z rozwiniêcia funkcji sin(x)
+\begin{align}
+sin(x)=\sum_{n=0}^{\infty}\frac{(-1)^nx^{2n+1}}{(2n+1)!}=\sum_{p=0}^{\infty}c_k x^k
+\end{align}
+\section{Zadanie do wykonania}
+Naszym zadaniem podczas laboratoriów by³o dokonanie aproksymacji Padego na funkcji:
+\begin{align}
+e^{-x^2}
+\end{align}
+przyjmuj¹c kolejno za (N,M) nastêpuj¹ce wartoœci:\\
+(2, 2), (4, 4), (6, 6), (2, 4), (2, 6), (2, 8).\\
+Przybli¿enie wykonywaliœmy przy pomocy funkcji wymierne
+\begin{align}
+R_{N,M}=\frac{P_N(x)}{Q_M(x)}=\frac{\sum_{i=0}^N a_i x^i}{\sum_{i=0}^j b_i x^i}
+\end{align}
+Aby wyliczyæ wspó³czynniki a oraz b a w konsekwencji wartoœæ funkcji aproksymuj¹cej wykonaliœmy nastêpuj¹ce kroki:
+\begin{itemize}
+\item Wyznaczamy wspó³czynniki szeregu Maclaurina tj. $c_k$ bezpoœrednio z rozwiniêcia funkcji $e^{-x^2}$ w szereg:
+\begin{align}
+e^x=\sum_{p=0}^{\infty}\frac{x^p}{p!}
+\end{align}
+\begin{align}
+e^{-x^2}=\sum_{p=0}^{\infty}\frac{(-x^2)^p}{p!}=\sum_{p=0}^{\infty}(-1)^p\frac{x^{2p}}{p!}=\sum_{p=0}^{\infty}c_k x^k
+\end{align}
+Wartoœci wspó³czynników $c_k$ zachowujemy w wektorze $\vec{c} = [c_0, c_1,\cdots , c_n]$
+\item Rozwi¹zujemy uk³ad równañ:
+\begin{align}
+A\cdot \vec{x}=\vec{y}
+\end{align}
+gdzie macierz A oraz wektor y tworzymy wed³ug wzoru(13) podanego we wstêpie teoretycznym.
+\begin{align}
+A_{i,j}=c_{N-M+i+j+1}, \quad i,j=0,1,\cdots ,M-1\\
+y_i=-c_{N+1+i}, \quad i,j=0,1,\cdots ,M-1
+\end{align}
+Podczas rozwi¹zywania podanego wy¿ej równania korzystamy z pomocy funkcji linalg.inv (Python) z biblioteki numpy do odwracania macierzy.\\
+Nastêpnie otrzymujemy wektor wspó³czynników b dla wielomianu $Q_M(x)$
+pamiêtaj¹c ¿e:
+\begin{align}
+b_0=1 \text{ oraz } b_{M-i}=x_i \quad i=0,1, \cdots, M-1
+\end{align}
+Ostatecznie otrzymujemy $\vec{b} = [b_0, b_1,\cdots , b_n]$
+\item Wyznaczamy wspó³czynniki wielomianu $P_N(x)$ zgodnie z wzorem:
+\begin{align}
+a_i=\sum_{j=0}^i=c_{i-j}b_j
+\end{align}
+Dziêki czemu otrzymujemy wektor wspó³czynników wielomianu $P_N(x)$ $\vec{a} = [a_0, a_1,\cdots , a_n]$
+\item Na sam koniec funkcj¹ linespace tworzymy (n=100) punktów $x \in [-5, 5]$ a nastêpnie wyliczmy dla nich wartoœæ teoretyczna $f(x)=e^{-x^2}$. Nastêpnie wyliczamy wartoœci wielomiany $R_{N,M}$ dla tych samych punktów x a na sam koniec nanosimy nasze dane na wykres za pomoc¹ biblioteki matplotlib
+\end{itemize}
+\section{Wyniki}
+Ca³y program zosta³ napisany w jêzyku Python.
+Za pomoc¹ funkcji bibliotecznej matplotlib wyrysowaliœmy wykresy.
+Zosta³y one umieszczone poni¿ej na których widaæ, ¿e  im wiêksze s¹ stopnie wielomianów N oraz M, tym bardziej dok³adne przybli¿enie dostaniemy.
+\newpage
+\newgeometry{margin=0.05in}
+\begin{figure}[ht]
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_1}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_2}  
+  \label{fig:sub-second}
+\end{subfigure}
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_3}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_4}  
+  \label{fig:sub-second}
+\end{subfigure}
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_5}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_6}  
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Wykresy dla funkcji f(x)=exp($-x^2$)}
+\end{figure}
+\newpage
+\begin{figure}[ht]
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_7}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_8}  
+  \label{fig:sub-second}
+\end{subfigure}
+\begin{center}
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_9}  
+  \label{fig:sub-first}
+\end{subfigure}
+\end{center}
+\caption{Wykresy dla funkcji f(x)=cos(x)}
+\end{figure}
+\newpage
+\begin{figure}[ht]
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_10}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_11}  
+  \label{fig:sub-second}
+\end{subfigure}
+\begin{center}
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Figure_12}  
+  \label{fig:sub-first}
+\end{subfigure}
+\end{center}
+\caption{Wykresy dla funkcji f(x)=sin(x)}
+\end{figure}
+\newpage
+\newgeometry{margin=1.28in}
+\section{Podsumowanie}
+Metoda aproksymacji Pade pozwala na uzyskanie funkcji zbli¿onej do funkcji oryginalnej przy
+jednym warunku: im wiêksze s¹ stopnie wielomianów N oraz M, tym bardziej dok³adne przybli¿enie
+dostaniemy.\\
+Dla coraz wy¿szych N funkcja aproksymuj¹ca $R_{N,M}(x)$ coraz dok³adniej aproksymuje funkcjê f(x).
+Najdok³adniejsza aproksymacja ma miejsce w pobli¿u zera, a dla coraz dalszych wartoœci argumentów
+x funkcja aproksymuj¹ca staje siê coraz mniej dok³adna. Wyniki s¹ równie¿ zgodne z przyk³adowymi
+podanymi w poleceniu zadania
+\begin{figure}[ht]
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{_22}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{_28}  
+  \label{fig:sub-second}
+\end{subfigure}
+\end{figure}\\
+oraz tymi podanego przez prowadz¹cego:
+\begin{figure}[ht]
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{22}  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.51\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{28}  
+  \label{fig:sub-second}
+\end{subfigure}
+\end{figure}\\
+\newpage
+Jak mo¿na zauwa¿yæ na powy¿szych wykresach funkcja aproksymuj¹ca ca³kiem dok³adnie oddaje
+funkcjê aproksymowan¹, zw³aszcza przy dobrym wyborze parametrów. Bior¹c równie¿ pod uwagê
+krótki czas obliczeñ, mo¿na wysnuæ wniosek o skutecznoœci wybranej metody przy rozwi¹zywaniu tego
+typu problemu.\\
+Na wykresach przedstawionych w wynikach wyraŸnie widaæ, ¿e dok³adnoœæ wzrasta wraz z
+zwiêkszeniem N oraz M. Na Rysunku 6 dla funkcji f(x) = cos(x) dla N = 6, M = 6 oraz na Rysunku 7 dla funkcji f(x) = sin(x) dla N = 7, M = 7 mo¿na nawet stwierdziæ, ¿e przybli¿enie oraz orygina³ siê pokrywaj¹.
+Jak oczekiwano z za³o¿eñ, zalet¹ takiego typu przybli¿enia s¹ mniejsze b³êdy ni¿ w aproksymacji wielomianem stopnia N
+(otrzymanych np. z rozwiniêæ Taylora czy Maclaurina).
+Fakt, ¿e aproksymacja niekoniecznie musi przechodziæ przez punkty zadane wêz³ami, sprzyja kolejnym wykresom.  Interpolacja nie ma sensu, gdy mamy do czynienia z jak¹kolwiek mo¿liwoœci¹ wystêpowania b³êdu np. pomiarowego.\\
+Aproksymacja funkcji jest narzêdziem przydatnym, gdy do analizowanych danych potrzebne jest
+ich przybli¿enie za pomoc¹ funkcji. \\
+Aproksymacja wielomianowa pozwala na szybkie i dok³adne wyznaczenie funkcji, gdy znamy jej wartoœci w
+danym zbiorze. Jej du¿¹ zalet¹ jest fakt, ¿e do przybli¿enia wartoœci funkcji nie potrzebny jest wielomian wysokiego stopnia oraz fakt, ¿e wêz³y mog¹ byæ równoodleg³e, a mimo to oszacowanie funkcji nie straci na dok³adnoœci.
+\newpage
+\section{Literatura}
+\begin{description}
+\item {[1]} Tomasz Chwiej, Aproksymacja
+\\
+\textit{http://home.agh.edu.pl/~chwiej/mn/aproksymacja\_1819.pdf}
+\item {[2]} Wikipedia, Aproksymacja\\
+\textit{https://pl.wikipedia.org/wiki/Aproksymacja}
+
+\end{description}
+
+
+\end{document}
