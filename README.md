@@ -1,1 +1,1 @@
-Labolatorium Metody numeryczne
+Labolatorium Metody Numeryczne
